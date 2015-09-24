@@ -24,10 +24,10 @@ var db = mongoose.connect(config.db, function(err) {
 var app = require('./config/express')(db);
 
 // Start the app by listening on <port>
-app.listen(config.port);
+app.listen(config.port, config.ip);
 
 // Expose app
 var exports = module.exports = app;
 
 // Logging initialization
-console.log('MEAN.JS application started on port ' + config.port);
+console.log('MEAN.JS application started on port ' + config.port + ' with IP ' + config.ip);

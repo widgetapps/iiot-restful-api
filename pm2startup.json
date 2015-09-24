@@ -1,0 +1,12 @@
+{
+  "apps" : [{
+    "name"        : "terepac-api",
+    "script"      : "server.js",
+    "watch"       : true,
+    "cwd"         : "/opt/www/terepac-api",
+    "env": {
+      "NODE_ENV": "production",
+      "IP": "10.240.0.2"
+    }
+  }]
+}
