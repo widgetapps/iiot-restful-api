@@ -9,6 +9,10 @@ var mongoose = require('mongoose'),
 /**
  * Device Schema
  */
+
+
+    // Interval that the device reports to the cloud
+// Need a device type: hydrant | hub (might be hub types)
 var DeviceSchema = new Schema({
     created: {
         type: Date,

@@ -9,6 +9,8 @@ var mongoose = require('mongoose'),
 /**
  * Sensor Schema
  */
+    // EGU = Engineering Units (SCADA)
+// Add enabled field. This is for buffer all/post roll
 var SensorSchema = new Schema({
     created: {
         type: Date,
