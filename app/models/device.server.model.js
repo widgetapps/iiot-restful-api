@@ -9,17 +9,25 @@ var mongoose = require('mongoose'),
 /**
  * Device Schema
  */
-
-
-    // Interval that the device reports to the cloud
-// Need a device type: hydrant | hub (might be hub types)
 var DeviceSchema = new Schema({
     created: {
-        type: Date,
-        default: Date.now
+        type: Date
+    },
+    updated: {
+        type: Date
+    },
+    serialNumber: {
+        type: String,
+        unique: true
+    },
+    type: {
+        type: String
+    },
+    code: {
+        type: String
     },
     descriptor: {
-        type: Storage
+        type: String
     },
     client: {
         type: Schema.ObjectId,
@@ -27,4 +35,18 @@ var DeviceSchema = new Schema({
     }
 });
 
-mongoose.model('Device', DeviceSchema);
+DeviceSchema.pre('save', function(next) {
+    // get the current date
+    var currentDate = new Date();
+
+    // change the updated field to current date
+    this.updated = currentDate;
+
+    // if created doesn't exist, add to that field
+    if (!this.created)
+        this.created = currentDate;
+
+    next();
+});
+
+module.exports = mongoose.model('Device', DeviceSchema);
