@@ -18,7 +18,7 @@ var ClientSchema = new Schema({
         descriptor: {
             type: String
         },
-        key: {
+        id: {
             type: String
         },
         secret: {
@@ -53,13 +53,13 @@ var ClientSchema = new Schema({
             type: String
         },
         lastName: {
-            type: Schema
+            type: String
         },
         email: {
             type: String
         },
         phone: {
-            type: Storage
+            type: String
         }
     },
     devices: [{
