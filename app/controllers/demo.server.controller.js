@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
 
 
 exports.ciscodata = function(req, res) {
-    Device.findOne({ serialNumber: '1' }, function(err, device) {
+    Device.findOne({ serialNumber: '6' }, function(err, device) {
         console.log(device);
         Measurement.find({
                 device: device._id,
