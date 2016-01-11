@@ -17,6 +17,9 @@ var MeasurementSchema = new Schema({
     updated: {
         type: Date
     },
+    sensor: {
+        type: String
+    },
     data: {
         unit: {
             type: String
