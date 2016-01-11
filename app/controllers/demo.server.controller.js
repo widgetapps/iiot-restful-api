@@ -43,11 +43,11 @@ exports.ciscodata = function(req, res) {
                                 if (accelcurrentcount === 0)
                                     accelrow[0] = {v: moment(measurements[key].created).utcOffset('-04:00').format('mm:ss')};
                                 if (measurements[key].sensor === 'aclx')
-                                    accelrow[1] = {v: measurements[key].data.values.average};
+                                    accelrow[1] = {v: measurements[key].data.values.max};
                                 if (measurements[key].sensor === 'acly')
-                                    accelrow[2] = {v: measurements[key].data.values.average};
+                                    accelrow[2] = {v: measurements[key].data.values.max};
                                 if (measurements[key].sensor === 'aclz')
-                                    accelrow[3] = {v: measurements[key].data.values.average};
+                                    accelrow[3] = {v: measurements[key].data.values.max};
 
                                 accelcurrentcount++;
                             }
