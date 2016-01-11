@@ -12,13 +12,15 @@ var mongoose = require('mongoose'),
  */
 var MeasurementSchema = new Schema({
     created: {
-        type: Date
+        type: Date,
+        index: true
     },
     updated: {
         type: Date
     },
     sensor: {
-        type: String
+        type: String,
+        index: true
     },
     data: {
         unit: {
@@ -41,7 +43,8 @@ var MeasurementSchema = new Schema({
     },
     device: {
         type: Schema.ObjectId,
-        ref: 'Device'
+        ref: 'Device',
+        index: true
     }
 });
 

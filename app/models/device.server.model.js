@@ -11,14 +11,16 @@ var mongoose = require('mongoose'),
  */
 var DeviceSchema = new Schema({
     created: {
-        type: Date
+        type: Date,
+        index: true
     },
     updated: {
         type: Date
     },
     serialNumber: {
         type: String,
-        unique: true
+        unique: true,
+        index: true
     },
     type: {
         type: String
@@ -31,7 +33,8 @@ var DeviceSchema = new Schema({
     },
     client: {
         type: Schema.ObjectId,
-        ref: 'Client'
+        ref: 'Client',
+        index: true
     }
 });
 
