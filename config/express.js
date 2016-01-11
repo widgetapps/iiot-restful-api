@@ -14,6 +14,7 @@ var fs = require('fs'),
 	methodOverride = require('method-override'),
 	cookieParser = require('cookie-parser'),
 	helmet = require('helmet'),
+	cors = require('cors'),
 	mongoStore = require('connect-mongo')({
 		session: session
 	}),
@@ -83,6 +84,8 @@ module.exports = function(db) {
 
 	// CookieParser should be above session
 	app.use(cookieParser());
+
+    app.use(cors());
 
 	// Express MongoDB session storage
 	app.use(session({
