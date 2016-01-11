@@ -12,6 +12,11 @@ var mongoose = require('mongoose'),
 
 
 exports.ciscodata = function(req, res) {
+    var tzoffset = '-05:00';
+    if (moment().isDST()) {
+        tzoffset = '-04:00';
+    }
+
     Device.findOne({ serialNumber: '6' }, function(err, device) {
         console.log(device);
         Measurement.find({
@@ -32,7 +37,7 @@ exports.ciscodata = function(req, res) {
                     switch(measurements[key].sensor) {
                         case 'shck':
                             vibration.push({c: [
-                                {v: moment(measurements[key].created).utcOffset('-04:00').format('mm:ss')},
+                                {v: moment(measurements[key].created).utcOffset(tzoffset).format('mm:ss')},
                                 {v: measurements[key].data.values.average * 10} // Multiply by 10 for better viz
                             ]});
                             break;
