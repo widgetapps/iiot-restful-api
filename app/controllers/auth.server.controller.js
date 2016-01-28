@@ -37,16 +37,17 @@ exports.authenticate = function(req, res) {
             if (!user.authenticate(req.body.password)) {
                 res.json({ success: false, message: 'Authentication failed. Wrong password.' });
             } else {
-
-                Client.findById(user._id, function(err, client) {
+                console.log(user._id);
+                Client.findById(user.client, function(err, client) {
                     if (err) throw err;
 
                     if (!client) {
                         res.json({ success: false, message: 'No client associated with user.' });
                     } else if (client) {
 
-                        delete user.password;
-                        delete user.salt;
+                        // Don't store private stuff in the jwt
+                        user.password = undefined;
+                        user.salt = undefined;
 
                         var token = jwt.sign(user, client.apikey.secret, {
                             expiresIn: '1d'

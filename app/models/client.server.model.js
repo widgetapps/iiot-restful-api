@@ -76,4 +76,18 @@ var ClientSchema = new Schema({
     }]
 });
 
+ClientSchema.pre('save', function(next) {
+    // get the current date
+    var currentDate = new Date();
+
+    // change the updated field to current date
+    this.updated = currentDate;
+
+    // if created doesn't exist, add to that field
+    if (!this.created)
+        this.created = currentDate;
+
+    next();
+});
+
 mongoose.model('Client', ClientSchema);
