@@ -16,7 +16,8 @@ var ClientSchema = new Schema({
     },
     apikey: {
         id: {
-            type: String
+            type: String,
+            index: true
         },
         secret: {
             type: String
