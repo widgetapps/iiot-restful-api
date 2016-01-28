@@ -30,4 +30,4 @@ app.listen(config.port, config.ip);
 var exports = module.exports = app;
 
 // Logging initialization
-console.log('MEAN.JS application started on port ' + config.port + ' with IP ' + config.ip);
+console.log('Terepac ONE API started on port ' + config.port + ' with IP ' + config.ip);

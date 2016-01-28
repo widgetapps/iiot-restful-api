@@ -37,32 +37,22 @@ var UserSchema = new Schema({
 		default: '',
 		validate: [validateLocalStrategyProperty, 'Please fill in your last name']
 	},
-	displayName: {
-		type: String,
-		trim: true
-	},
 	email: {
 		type: String,
 		trim: true,
+		index: true,
         required: 'Please fill in an email address',
-        unique: 'testing error message',
+        unique: 'Email already in the database',
 		validate: [validateLocalStrategyProperty, 'Please fill in your email'],
 		match: [/.+\@.+\..+/, 'Please fill a valid email address']
-	},
-    phone: {
-        type: String
-    },
-	username: {
-		type: String,
-		unique: 'testing error message',
-		required: 'Please fill in a username',
-		trim: true,
-        index: true
 	},
 	password: {
 		type: String,
 		default: '',
 		validate: [validateLocalStrategyPassword, 'Password should be longer']
+	},
+	phone: {
+		type: String
 	},
 	salt: {
 		type: String
@@ -84,9 +74,9 @@ var UserSchema = new Schema({
         type: Boolean,
         default: false
     },
-    company: {
+    client: {
         type: Schema.ObjectId,
-        ref: 'Company',
+        ref: 'Client',
         index: true
     },
 	updated: {

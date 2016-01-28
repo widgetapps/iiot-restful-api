@@ -18,7 +18,6 @@ var fs = require('fs'),
 	mongoStore = require('connect-mongo')({
 		session: session
 	}),
-	flash = require('connect-flash'),
 	config = require('./config'),
 	consolidate = require('consolidate'),
 	path = require('path');
@@ -36,9 +35,6 @@ module.exports = function(db) {
 	app.locals.title = config.app.title;
 	app.locals.description = config.app.description;
 	app.locals.keywords = config.app.keywords;
-	app.locals.facebookAppId = config.facebook.clientID;
-	app.locals.jsFiles = config.getJavaScriptAssets();
-	app.locals.cssFiles = config.getCSSAssets();
 
 	// Passing the request url to environment locals
 	app.use(function(req, res, next) {
@@ -98,9 +94,6 @@ module.exports = function(db) {
 		})
 	}));
 
-	// connect flash for flash messages
-	app.use(flash());
-
 	// Use helmet to secure Express headers
 	app.use(helmet.xframe());
 	app.use(helmet.xssFilter());
@@ -111,8 +104,15 @@ module.exports = function(db) {
 	// Setting the app router and static folder
 	app.use(express.static(path.resolve('./public')));
 
-	// Globbing routing files
-	config.getGlobbedFiles('./app/routes/**/*.js').forEach(function(routePath) {
+    // Globbing public routing files (needs to be first)
+    config.getGlobbedFiles('./app/routes/public/*.js').forEach(function(routePath) {
+        require(path.resolve(routePath))(app);
+    });
+
+    // Do token authentication here
+
+	// Globbing secured routing files
+	config.getGlobbedFiles('./app/routes/secured/*.js').forEach(function(routePath) {
 		require(path.resolve(routePath))(app);
 	});
 
@@ -125,36 +125,13 @@ module.exports = function(db) {
 		console.error(err.stack);
 
 		// Error page
-		res.status(500).render('500', {
-			error: err.stack
-		});
+		res.status(500).json({message: "Server error: " +  err.stack});
 	});
 
 	// Assume 404 since no middleware responded
 	app.use(function(req, res) {
-		res.status(404).render('404', {
-			url: req.originalUrl,
-			error: 'Not Found'
-		});
+		res.status(404).json({message: "Resource not found"});
 	});
-
-	if (process.env.NODE_ENV === 'secure') {
-		// Log SSL usage
-		console.log('Securely using https protocol');
-
-		// Load SSL key and certificate
-		var privateKey = fs.readFileSync('./config/sslcerts/key.pem', 'utf8');
-		var certificate = fs.readFileSync('./config/sslcerts/cert.pem', 'utf8');
-
-		// Create HTTPS Server
-		var httpsServer = https.createServer({
-			key: privateKey,
-			cert: certificate
-		}, app);
-
-		// Return HTTPS server instance
-		return httpsServer;
-	}
 
 	// Return Express server instance
 	return app;

@@ -15,9 +15,6 @@ var ClientSchema = new Schema({
         default: Date.now
     },
     apikey: {
-        descriptor: {
-            type: String
-        },
         id: {
             type: String
         },
@@ -62,9 +59,16 @@ var ClientSchema = new Schema({
             type: String
         }
     },
-    devices: [{
+    reseller: {
+        type: Boolean
+    },
+    resellerParent: {
         type: Schema.ObjectId,
-        ref: 'Device'
+        ref: 'Client'
+    },
+    resellerClients: [{
+        type: Schema.ObjectId,
+        ref: 'Client'
     }],
     users: [{
         type: Schema.ObjectId,

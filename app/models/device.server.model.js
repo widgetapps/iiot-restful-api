@@ -12,7 +12,8 @@ var mongoose = require('mongoose'),
 var DeviceSchema = new Schema({
     created: {
         type: Date,
-        index: true
+        index: true,
+        required: true
     },
     updated: {
         type: Date
@@ -20,7 +21,8 @@ var DeviceSchema = new Schema({
     serialNumber: {
         type: String,
         unique: true,
-        index: true
+        index: true,
+        required: true
     },
     type: {
         type: String
@@ -31,6 +33,21 @@ var DeviceSchema = new Schema({
     descriptor: {
         type: String
     },
+    acl: [{
+        client: {
+            type: Schema.ObjectId,
+            ref: 'Client'
+        },
+        scope: {
+            type: String,
+            enum: ['system','user'],
+            default: 'system'
+        },
+        permission: {
+            type: String,
+            enum: ['r','w']
+        }
+    }],
     client: {
         type: Schema.ObjectId,
         ref: 'Client',

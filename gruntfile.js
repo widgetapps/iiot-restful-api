@@ -3,7 +3,6 @@
 module.exports = function(grunt) {
 	// Unified Watch Object
 	var watchFiles = {
-		serverViews: ['app/views/**/*.*'],
 		serverJS: ['gruntfile.js', 'server.js', 'config/**/*.js', 'app/**/*.js'],
 		mochaTests: ['app/tests/**/*.js']
 	};
@@ -12,60 +11,11 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		watch: {
-			serverViews: {
-				files: watchFiles.serverViews,
-				options: {
-					livereload: true
-				}
-			},
 			serverJS: {
 				files: watchFiles.serverJS,
 				tasks: ['jshint'],
 				options: {
 					livereload: true
-				}
-			},
-			clientViews: {
-				files: watchFiles.clientViews,
-				options: {
-					livereload: true,
-				}
-			},
-			clientJS: {
-				files: watchFiles.clientJS,
-				tasks: ['jshint'],
-				options: {
-					livereload: true
-				}
-			},
-			clientCSS: {
-				files: watchFiles.clientCSS,
-				tasks: ['csslint'],
-				options: {
-					livereload: true
-				}
-			}
-		},
-		csslint: {
-			options: {
-				csslintrc: '.csslintrc',
-			},
-			all: {
-				src: watchFiles.clientCSS
-			}
-		},
-		uglify: {
-			production: {
-				options: {
-					mangle: false
-				},
-				files: {
-				}
-			}
-		},
-		cssmin: {
-			combine: {
-				files: {
 				}
 			}
 		},
@@ -74,8 +24,7 @@ module.exports = function(grunt) {
 				script: 'server.js',
 				options: {
 					nodeArgs: ['--debug'],
-					ext: 'js,html',
-					watch: watchFiles.serverViews.concat(watchFiles.serverJS)
+					ext: 'js,html'
 				}
 			}
 		},
@@ -92,13 +41,6 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		ngAnnotate: {
-			production: {
-				files: {
-					'public/dist/application.js': '<%= applicationJavaScriptFiles %>'
-				}
-			}
-		},
 		concurrent: {
 			default: ['nodemon', 'watch'],
 			debug: ['nodemon', 'watch', 'node-inspector'],
@@ -110,9 +52,6 @@ module.exports = function(grunt) {
 		env: {
 			test: {
 				NODE_ENV: 'test'
-			},
-			secure: {
-				NODE_ENV: 'secure'
 			}
 		},
 		mochaTest: {
@@ -139,9 +78,6 @@ module.exports = function(grunt) {
 	grunt.task.registerTask('loadConfig', 'Task that loads the config into a grunt option.', function() {
 		var init = require('./config/init')();
 		var config = require('./config/config');
-
-		grunt.config.set('applicationJavaScriptFiles', config.assets.js);
-		grunt.config.set('applicationCSSFiles', config.assets.css);
 	});
 
 	// Default task(s).
@@ -150,14 +86,8 @@ module.exports = function(grunt) {
 	// Debug task.
 	grunt.registerTask('debug', ['lint', 'concurrent:debug']);
 
-	// Secure task(s).
-	grunt.registerTask('secure', ['env:secure', 'lint', 'concurrent:default']);
-
-	// Lint task(s).
-	grunt.registerTask('lint', ['jshint', 'csslint']);
-
 	// Build task(s).
-	grunt.registerTask('build', ['lint', 'loadConfig', 'ngAnnotate', 'uglify', 'cssmin']);
+	grunt.registerTask('build', ['lint', 'loadConfig']);
 
 	// Test task.
 	grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);
