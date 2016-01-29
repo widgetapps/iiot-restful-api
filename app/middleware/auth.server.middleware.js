@@ -18,7 +18,9 @@ module.exports = function(req, res, next) {
         }).exec(function(err, client) {
             jwt.verify(token, client.apikey.secret, function(err, decoded) {
                 if (err) {
-                    res.json({ success: false, message: 'Failed to authenticate token.' });
+                    res.status(412).send({
+                        message: 'Invalid token.'
+                    });
                 } else {
                     // if everything is good, save to request for use in other routes
                     req.decoded = decoded;
@@ -28,9 +30,8 @@ module.exports = function(req, res, next) {
         });
 
     } else {
-        res.status(403).send({
-            success: false,
-            message: 'No token and/or client ID provided.'
+        res.status(417).send({
+            message: 'Required headers missing.'
         });
     }
 };

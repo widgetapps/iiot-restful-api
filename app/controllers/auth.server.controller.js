@@ -32,17 +32,23 @@ exports.authenticate = function(req, res) {
         if (err) throw err;
 
         if (!user) {
-            res.json({ success: false, message: 'Authentication failed. User not found.' });
+            res.status(404).send({
+                message: 'Authentication failed. User not found.'
+            });
         } else if (user) {
             if (!user.authenticate(req.body.password)) {
-                res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+                res.status(404).send({
+                    message: 'Authentication failed. Incorrect password.'
+                });
             } else {
                 console.log(user._id);
                 Client.findById(user.client, function(err, client) {
                     if (err) throw err;
 
                     if (!client) {
-                        res.json({ success: false, message: 'No client associated with user.' });
+                        res.status(409).send({
+                            message: 'No client associated with user, your are an orphan!'
+                        });
                     } else if (client) {
 
                         // Don't store private stuff in the jwt
@@ -55,8 +61,7 @@ exports.authenticate = function(req, res) {
 
                         // return the information including token as JSON
                         res.json({
-                            success: true,
-                            message: 'Enjoy your token!',
+                            message: 'Authentication successful.',
                             token: token
                         });
                     }

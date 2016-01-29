@@ -73,4 +73,4 @@ exports.ciscodata = function(req, res) {
                 });
             });
     });
-}
+};

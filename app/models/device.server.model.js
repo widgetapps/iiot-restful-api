@@ -25,13 +25,44 @@ var DeviceSchema = new Schema({
         required: true
     },
     type: {
-        type: String
+        type: String,
+        enum: ['hydrant','machine'],
+        required: true
     },
     code: {
         type: String
     },
     descriptor: {
         type: String
+    },
+    settings: {
+        normalrate: {
+            type: Number
+        },
+        highlimit: {
+            type: Number
+        },
+        lowlimit: {
+            type: Number
+        },
+        deadband: {
+            type: Number
+        },
+        bufferallduration: {
+            type: Number
+        },
+        preroll: {
+            type: Number
+        },
+        postroll: {
+            type: Number
+        },
+        starttime: {
+            type: Date
+        },
+        stoptime: {
+            type: Date
+        }
     },
     acl: [{
         client: {
