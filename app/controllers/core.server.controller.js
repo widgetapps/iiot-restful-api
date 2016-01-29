@@ -13,29 +13,6 @@ exports.index = function(req, res) {
 	res.json({message: 'Hi there, I\'m a Terepac ONE server. Isn\'t that weird?'});
 };
 
-exports.addUser = function(req, res) {
-    var user = new User({
-        firstName: 'Darryl',
-        lastName: 'Patterson',
-        email: 'darryl.patterson@terepac.com',
-        password: 'ijoinedterepacin2014',
-        phone: '4167866116',
-        provider: 'local',
-        roles: ['user','admin','manager'],
-        active: true,
-        client: mongoose.Types.ObjectId('56abdebcf331efa3b7f0b956')
-    });
-
-    user.save(function(err, userData){
-        if (err) {
-            res.json({message: 'Error adding user', err: err});
-            return;
-        }
-
-        res.json({message: 'Data Added', userData: userData});
-    });
-};
-
 exports.addData = function(req, res) {
 
     var client = new Client({
