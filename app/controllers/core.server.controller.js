@@ -25,7 +25,16 @@ exports.addUser = function(req, res) {
         active: true,
         client: ObjectId('56abdebcf331efa3b7f0b956')
     });
-}
+
+    user.save(function(err, userData){
+        if (err) {
+            res.json({message: 'Error adding user', err: err});
+            return;
+        }
+
+        res.json({message: 'Data Added', userData: userData});
+    });
+};
 
 exports.addData = function(req, res) {
 
