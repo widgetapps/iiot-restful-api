@@ -1,0 +1,324 @@
+#%RAML 0.8
+title: Terepac ONE
+version: 0.1a
+baseUri: https://api.terepac.one
+securitySchemes:
+  - jwt:
+      description: Secured with a JSON Web Token
+      type: x-jwt
+      describedBy:
+        headers:
+          x-access-token:
+            type: string
+            description: A JWT access token. Get the JWT using /authenticate
+          x-client-id:
+            type: string
+            description: Your unique client ID.
+        responses:
+          417:
+            body:
+              application/json:
+                example: |
+                  {
+                    "code": "417",
+                    "message": "invalid api key"
+                  }
+documentation:
+  - title: Welcome
+    content: |
+      The Terepac ONE RESTful API uses JSON Web Tokens to authenticate each
+      request. Each secured request requires the following 2 HTTP headers:
+      ```
+      x-client-id: [client ID]
+      x-access-token: [jwt]
+      ```
+      As we are only in alpha right now, only Terepac partners can get a
+      client ID. If you are a partner, please contact
+      [Darryl Patterson](mailto:darryl.patterson@terepac.com).
+      Please see the AUTHENTICATION documentation to find out how to get
+      your JWT.
+
+/demo/cisco/data:
+  displayName: CISCO DEMO DATA
+  description: |
+    Terepac is being featured at the [Cisco IoE Innovation Centre](http://www.cisco.com/web/CA/innovationcenter/toronto/index.html)
+    in Toronto.
+    Our display has one of our devices on an actuator which captures
+    accelerometer data and displays it on an iPad on site. This data is being
+    made publically available via this API. This data is formatted as input
+    for a Google Line Chart.
+  get:
+    description: |
+      Retrieves the last one minute of sensor data from the Cisco IoE
+      Innovation Centre.
+    body:
+      application/json:
+        example: |
+          { }
+    responses:
+      200:
+        description: Returns JSON data for the last minute of data formatted for
+                     direct input into a Google Line Chart.
+        body:
+          application/json:
+            example: |
+              {
+                "response": "OK",
+                "accel": [{"c":[{"v":"39:49"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"39:51"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"39:54"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"39:56"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"39:59"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:01"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:04"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:06"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:08"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:11"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:13"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:16"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:18"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:20"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:23"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:25"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:28"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:30"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:33"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:35"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:37"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:40"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:42"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:45"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:47"},{"v":-96},{"v":3},{"v":9}]}],
+                "vibration": [{"c":[{"v":"39:49"},{"v":20}]},{"c":[{"v":"39:51"},{"v":20}]},{"c":[{"v":"39:54"},{"v":20}]},{"c":[{"v":"39:56"},{"v":20}]},{"c":[{"v":"39:59"},{"v":20}]},{"c":[{"v":"40:01"},{"v":20}]},{"c":[{"v":"40:04"},{"v":20}]},{"c":[{"v":"40:06"},{"v":20}]},{"c":[{"v":"40:08"},{"v":20}]},{"c":[{"v":"40:11"},{"v":20}]},{"c":[{"v":"40:13"},{"v":20}]},{"c":[{"v":"40:16"},{"v":20}]},{"c":[{"v":"40:18"},{"v":20}]},{"c":[{"v":"40:20"},{"v":20}]},{"c":[{"v":"40:23"},{"v":20}]},{"c":[{"v":"40:25"},{"v":20}]},{"c":[{"v":"40:28"},{"v":20}]},{"c":[{"v":"40:30"},{"v":20}]},{"c":[{"v":"40:33"},{"v":20}]},{"c":[{"v":"40:35"},{"v":20}]},{"c":[{"v":"40:37"},{"v":20}]},{"c":[{"v":"40:40"},{"v":20}]},{"c":[{"v":"40:42"},{"v":20}]},{"c":[{"v":"40:45"},{"v":20}]},{"c":[{"v":"40:47"},{"v":20}]}]
+              }
+/authentication:
+  displayName: AUTHENTICATION
+  description: |
+    Pass on the email address and password as JSON. The system will return
+    a JWT that will be used for future secured API requests.
+
+    If there is an issue with the client ID or JWT, the system will return
+    an error as a JSON document. Here are the two possible error responses:
+    ```
+    HTTP status code 412
+    {
+      message: 'Invalid token.'
+    }
+    ```
+    ```
+    HTTP status code 417
+    {
+      message: 'Required headers missing.'
+    }
+    ```
+  post:
+    description: |
+      Authenticates the user and returns a JSON Web Token to be used for future
+      secured API requests.
+    body:
+      application/json:
+        example: |
+          {
+            "email": "john@example.com",
+            "password": "super_secret"
+          }
+    responses:
+      200:
+        description: Authenticate was successful.
+        body:
+          application/json:
+            example: |
+              {
+                "message": "Authentication successful.",
+                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ"
+              }
+      404:
+        description: The email and/or the password were incorrect.
+        body:
+          application/json:
+            example: |
+              {
+                "message": "Authentication failed. User not found."
+              }
+      409:
+        description: There is no client associated with the user. Contact Terepac to get this fixed.
+        body:
+          application/json:
+            example: |
+              {
+                "message": "No client associated with user, your are an orphan!"
+              }
+/devices:
+  displayName: DEVICES
+  description: |
+    Lets you manipulate your devices and access the measurement data.
+  securedBy: [jwt]
+  get:
+    description: |
+      Allows you to get a list of all of your devices.
+    body:
+      application/json:
+        example: |
+          { }
+    responses:
+      200:
+        description: Returns an array of all of your devices.
+        body:
+          application/json:
+            example: |
+              [
+                {
+                  "created": "2016-01-29T16:04:27.000Z",
+                  "updated": "2016-01-29T16:04:27.000Z",
+                  "serialNumber": "15",
+                  "type": "hydrant",
+                  "code": "Client assigned code",
+                  "descriptor": "Client assigned descriptor"
+                }
+              ]
+  /{id}:
+    description: |
+      Allows you to work with an individual device.
+    securedBy: [jwt]
+    uriParameters:
+      id:
+        description: The device's serial number
+        type: string
+    get:
+      description: |
+        Returns a single device.
+      body:
+        application/json:
+          example: |
+            { }
+      responses:
+        200:
+          description: Returns a device.
+          body:
+            application/json:
+              example: |
+                {
+                  "created": "2016-01-29T16:04:27.000Z",
+                  "updated": "2016-01-29T16:04:27.000Z",
+                  "serialNumber": "15",
+                  "type": "hydrant",
+                  "code": "Client assigned code",
+                  "descriptor": "Client assigned descriptor"
+                }
+        404:
+          description: Device not found.
+          body:
+            application/json:
+              example: |
+                {
+                  "message": "Device not found"
+                }
+    put:
+      description: |
+        Allows you to edit an existing device.
+      body:
+        application/json:
+          example: |
+            {
+              "code": "Client assigned code",
+              "descriptor": "Client assigned descriptor"
+            }
+      responses:
+        200:
+          description: Device saved.
+          body:
+            application/json:
+              example: |
+                {
+                  "message": "Decice saved."
+                }
+        404:
+          description: Device not found.
+          body:
+            application/json:
+              example: |
+                {
+                  "message": "Device not found"
+                }
+    /settings:
+      securedBy: [jwt]
+      get:
+        description: |
+          Allows you to get the settings for a device.
+        body:
+          application/json:
+            example: |
+              { }
+        responses:
+          200:
+            description: Returns the settings for a device.
+            body:
+              application/json:
+                example: |
+                  {
+                    "serialNumber": "15",
+                    "code": "Client assigned code",
+                    "normalrate": 0,
+                    "highlimit": 0,
+                    "lowlimit": 0,
+                    "deadband": 0,
+                    "bufferallduration": 0,
+                    "preroll": 0,
+                    "postroll": 0,
+                    "starttime": "2016-01-29T16:04:27.000Z",
+                    "stoptime": "2016-01-29T16:04:27.000Z"
+                  }
+          404:
+            description: Device not found.
+            body:
+              application/json:
+                example: |
+                  {
+                    "message": "Device not found"
+                  }
+      put:
+        description: |
+          Allows you to set the settings for a device.
+        body:
+          application/json:
+            example: |
+              {
+                "normalrate": 0,
+                "highlimit": 0,
+                "lowlimit": 0,
+                "deadband": 0,
+                "bufferallduration": 0,
+                "preroll": 0,
+                "postroll": 0,
+                "starttime": "2016-01-29T16:04:27.000Z",
+                "stoptime": "2016-01-29T16:04:27.000Z"
+              }
+        responses:
+          200:
+            description: Successful
+            body:
+              application/json:
+                example: |
+                  {
+                    "message": "Settings have been saved"
+                  }
+          404:
+            description: Device not found.
+            body:
+              application/json:
+                example: |
+                  {
+                    "message": "Device not found"
+                  }
+    /measurements:
+      securedBy: [jwt]
+      get:
+        description: |
+          Returns a list of measurements.
+        body:
+          application/json:
+            example: |
+              {
+                "start": "2016-01-29T16:04:27.000Z",
+                "end": "2016-01-29T16:04:27.000Z",
+                "sensors": ["temperature"]
+              }
+        responses:
+          200:
+            description: An array of measurements
+            body:
+              application/json:
+                example: |
+                  [{
+                    "created": "2016-01-29T16:04:27.000Z",
+                    "sensor": "temperature",
+                    "unit": "celcius",
+                    "minimum": 0,
+                    "maximum": 0,
+                    "average": 0,
+                    "current": 0
+                  }]
+          404:
+            description: Device not found.
+            body:
+              application/json:
+                example: |
+                  {
+                    "message": "Device not found"
+                  }
