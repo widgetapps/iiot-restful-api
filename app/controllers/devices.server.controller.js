@@ -45,7 +45,7 @@ exports.getOne = function(req, res) {
 
 exports.getSettings = function(req, res) {
     var clientId = req.user.client;
-    req.params.serialNumber;
+    var serialNumber = req.params.serialNumber;
 
     Device.findOne(
         { serialNumber: serialNumber, client: clientId }, {
@@ -71,9 +71,16 @@ exports.getSettings = function(req, res) {
 
 exports.getMeasurements = function(req, res) {
     var clientId = req.user.client;
-    req.params.serialNumber;
+    var serialNumber = req.params.serialNumber;
 
     Device.findOne({ serialNumber: serialNumber }, function(err, device) {
+        Measurement.find({
+                device: device._id,
+                created: {'$gte': moment().subtract(1, 'minute'), '$lte': moment()}
+            })
+            .sort('created')
+            .exec(function (err, measurements) {
 
+            });
     });
 };
