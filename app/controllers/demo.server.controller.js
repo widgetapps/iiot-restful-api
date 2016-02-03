@@ -10,6 +10,93 @@ var mongoose = require('mongoose'),
     _ = require('lodash'),
     moment = require('moment');
 
+exports.guelphdata = function(req, res) {
+    var sensors = ['temp', 'aclx', 'acly', 'aclz', 'shck'];
+
+    var tzoffset = '-05:00';
+    if (moment().isDST()) {
+        tzoffset = '-04:00';
+    }
+
+    var serialNumber = req.params.serialNumber;
+
+    Device.findOne({ serialNumber: serialNumber }, function(err, device) {
+        if (!device || err) {
+            res.status(404).send({
+                message: 'Device  not found'
+            });
+            return;
+        }
+        Measurement.find({
+                device: device._id,
+                sensor: {$in: sensors},
+                created: {'$gte': moment().subtract(1, 'hour'), '$lte': moment()}
+            })
+            .sort('created')
+            .exec(function (err, measurements) {
+                if (err) {
+                    return res.status(400).send({
+                        message: errorHandler.getErrorMessage(err)
+                    });
+                } else {
+
+                    var temperature = [];
+                    var accel = [];
+                    var accelrow = [];
+                    var accelcurrentcount = 0;
+
+                    _.each(measurements, function(measurement, key) {
+                        try {
+                            measurements[key] = JSON.parse(measurements[key]);
+                        } catch (err) {}
+
+                        switch (measurements[key].sensor) {
+                            case 'temp':
+                                temperature.push({c: [
+                                    {v: moment(measurements[key].created).utcOffset(tzoffset).format('HH:mm:ss')},
+                                    {v: measurements[key].data.values.max}
+                                ]});
+                                break;
+                            case 'aclx':
+                            case 'acly':
+                            case 'aclz':
+                            case 'shck':
+                                if (accelcurrentcount < 4) {
+                                    if (accelcurrentcount === 0)
+                                        accelrow[0] = {v: moment(measurements[key].created).utcOffset(tzoffset).format('HH:mm:ss')};
+
+                                    if (measurements[key].sensor === 'aclx')
+                                        accelrow[1] = {v: measurements[key].data.values.max};
+                                    if (measurements[key].sensor === 'acly')
+                                        accelrow[2] = {v: measurements[key].data.values.max};
+                                    if (measurements[key].sensor === 'aclz')
+                                        accelrow[3] = {v: measurements[key].data.values.max};
+                                    if (measurements[key].sensor === 'shck') {
+                                        // Multiply by 10 for better viz
+                                        accelrow[4] = {v: measurements[key].data.values.average * 10};
+                                    }
+
+                                    accelcurrentcount++;
+                                }
+                                break;
+                        }
+
+                        if (accelrow.length === 5) {
+                            accel.push({c: accelrow});
+                            accelrow = [];
+                            accelcurrentcount = 0;
+                        }
+                    });
+
+                    res.json({
+                        response: 'OK',
+                        temperature: temperature,
+                        accel: accel
+                    });
+                }
+            });
+    });
+};
 
 exports.ciscodata = function(req, res) {
     var tzoffset = '-05:00';
@@ -18,7 +105,12 @@ exports.ciscodata = function(req, res) {
     }
 
     Device.findOne({ serialNumber: '6' }, function(err, device) {
-        console.log(device);
+        if (!device || err) {
+            res.status(404).send({
+                message: 'Device  not found'
+            });
+            return;
+        }
         Measurement.find({
                 device: device._id,
                 created: {'$gte': moment().subtract(1, 'minute'), '$lte': moment()}
@@ -28,7 +120,6 @@ exports.ciscodata = function(req, res) {
 
                 var accel     = [];
                 var vibration = [];
-
                 var accelrow = [];
                 var accelcurrentcount = 0;
 
