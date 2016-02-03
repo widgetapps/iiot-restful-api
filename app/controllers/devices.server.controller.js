@@ -57,6 +57,32 @@ exports.getOne = function(req, res) {
     });
 };
 
+exports.updateDevice = function(req, res) {
+    var clientId = mongoose.Types.ObjectId(req.user.client);
+    var serialNumber = req.params.serialNumber;
+
+    Device.update(
+        { serialNumber: serialNumber, $or: [{client: clientId}, {acl: clientId}] },
+        {
+            $set: {
+                code: req.body.code,
+                descriptor: req.body.descriptor
+            }
+        }, function(err, device) {
+            if (!device || err) {
+                res.status(404).send({
+                    message: 'No device found.'
+                });
+                return;
+            }
+
+            res.json({
+                message: 'Device saved.'
+            });
+        }
+    );
+};
+
 exports.getSettings = function(req, res) {
     var clientId = mongoose.Types.ObjectId(req.user.client);
     var serialNumber = req.params.serialNumber;
@@ -88,6 +114,39 @@ exports.getSettings = function(req, res) {
                 stoptime: device.stoptime
             });
     });
+};
+
+exports.updateSettings = function(req, res) {
+    var clientId = mongoose.Types.ObjectId(req.user.client);
+    var serialNumber = req.params.serialNumber;
+
+    Device.update(
+        { serialNumber: serialNumber, $or: [{client: clientId}, {acl: clientId}] },
+        {
+            $set: {
+                'settings.normalrate': req.body.normalrate,
+                'settings.highlimit': req.body.highlimit,
+                'settings.lowlimit': req.body.lowlimit,
+                'settings.deadband': req.body.deadband,
+                'settings.bufferallduration': req.body.bufferallduration,
+                'settings.preroll': req.body.preroll,
+                'settings.postroll': req.body.postroll,
+                'settings.starttime': new Date(req.body.starttime),
+                'settings.stoptime': new Date(req.body.stoptime)
+            }
+        }, function(err, device) {
+            if (!device || err) {
+                res.status(404).send({
+                    message: 'No device found.'
+                });
+                return;
+            }
+
+            res.json({
+                message: 'Settings have been saved'
+            });
+        }
+    );
 };
 
 exports.getMeasurements = function(req, res) {
