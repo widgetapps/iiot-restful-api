@@ -11,7 +11,7 @@ var mongoose = require('mongoose'),
     moment = require('moment');
 
 exports.list = function(req, res) {
-    var clientId = req.user.client;
+    var clientId = mongoose.Types.ObjectId(req.user.client);
 
     Device.find({$or: [{client: clientId}, {acl: clientId}]},
         {
@@ -34,7 +34,7 @@ exports.list = function(req, res) {
 };
 
 exports.getOne = function(req, res) {
-    var clientId = req.user.client;
+    var clientId = mongoose.Types.ObjectId(req.user.client);
     var serialNumber = req.params.serialNumber;
 
     Device.findOne(
@@ -58,7 +58,7 @@ exports.getOne = function(req, res) {
 };
 
 exports.getSettings = function(req, res) {
-    var clientId = req.user.client;
+    var clientId = mongoose.Types.ObjectId(req.user.client);
     var serialNumber = req.params.serialNumber;
 
     Device.findOne(
@@ -91,7 +91,7 @@ exports.getSettings = function(req, res) {
 };
 
 exports.getMeasurements = function(req, res) {
-    var clientId = req.user.client;
+    var clientId = mongoose.Types.ObjectId(req.user.client);
     var serialNumber = req.params.serialNumber;
 
     Device.findOne({ serialNumber: serialNumber, $or: [{client: clientId}, {acl: clientId}] }, function(err, device) {
