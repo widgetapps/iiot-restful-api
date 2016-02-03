@@ -38,35 +38,6 @@ documentation:
       Please see the AUTHENTICATION documentation to find out how to get
       your JWT.
 
-/demo/cisco/data:
-  displayName: CISCO DEMO DATA
-  description: |
-    Terepac is being featured at the [Cisco IoE Innovation Centre](http://www.cisco.com/web/CA/innovationcenter/toronto/index.html)
-    in Toronto.
-    Our display has one of our devices on an actuator which captures
-    accelerometer data and displays it on an iPad on site. This data is being
-    made publically available via this API. This data is formatted as input
-    for a Google Line Chart.
-  get:
-    description: |
-      Retrieves the last one minute of sensor data from the Cisco IoE
-      Innovation Centre.
-    body:
-      application/json:
-        example: |
-          { }
-    responses:
-      200:
-        description: Returns JSON data for the last minute of data formatted for
-                     direct input into a Google Line Chart.
-        body:
-          application/json:
-            example: |
-              {
-                "response": "OK",
-                "accel": [{"c":[{"v":"39:49"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"39:51"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"39:54"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"39:56"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"39:59"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:01"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:04"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:06"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:08"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:11"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:13"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:16"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:18"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:20"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:23"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:25"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:28"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:30"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:33"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:35"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:37"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:40"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:42"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:45"},{"v":-97},{"v":3},{"v":9}]},{"c":[{"v":"40:47"},{"v":-96},{"v":3},{"v":9}]}],
-                "vibration": [{"c":[{"v":"39:49"},{"v":20}]},{"c":[{"v":"39:51"},{"v":20}]},{"c":[{"v":"39:54"},{"v":20}]},{"c":[{"v":"39:56"},{"v":20}]},{"c":[{"v":"39:59"},{"v":20}]},{"c":[{"v":"40:01"},{"v":20}]},{"c":[{"v":"40:04"},{"v":20}]},{"c":[{"v":"40:06"},{"v":20}]},{"c":[{"v":"40:08"},{"v":20}]},{"c":[{"v":"40:11"},{"v":20}]},{"c":[{"v":"40:13"},{"v":20}]},{"c":[{"v":"40:16"},{"v":20}]},{"c":[{"v":"40:18"},{"v":20}]},{"c":[{"v":"40:20"},{"v":20}]},{"c":[{"v":"40:23"},{"v":20}]},{"c":[{"v":"40:25"},{"v":20}]},{"c":[{"v":"40:28"},{"v":20}]},{"c":[{"v":"40:30"},{"v":20}]},{"c":[{"v":"40:33"},{"v":20}]},{"c":[{"v":"40:35"},{"v":20}]},{"c":[{"v":"40:37"},{"v":20}]},{"c":[{"v":"40:40"},{"v":20}]},{"c":[{"v":"40:42"},{"v":20}]},{"c":[{"v":"40:45"},{"v":20}]},{"c":[{"v":"40:47"},{"v":20}]}]
-              }
 /authentication:
   displayName: AUTHENTICATION
   description: |
