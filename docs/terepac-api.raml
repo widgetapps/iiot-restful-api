@@ -3,8 +3,8 @@ title: Terepac ONE
 version: 0.1a
 baseUri: https://api.terepac.one
 securitySchemes:
-  - jwt:
-      description: Secured with a JSON Web Token
+  - JWT:
+      description: A JSON Web Token & Client ID must be sent in the request header.
       type: x-jwt
       describedBy:
         headers:
@@ -26,7 +26,7 @@ securitySchemes:
 documentation:
   - title: Welcome
     content: |
-      The Terepac ONE RESTful API uses JSON Web Tokens to authenticate each
+      The Terepac ONE RESTful API uses JSON Web Tokens (JWT) to authenticate each
       request. Each secured request requires the following 2 HTTP headers:
       ```
       x-client-id: [client ID]
@@ -122,13 +122,13 @@ documentation:
           application/json:
             example: |
               {
-                "message": "No client associated with user, your are an orphan!"
+                "message": "No client associated with user."
               }
 /devices:
   displayName: DEVICES
   description: |
     Lets you manipulate your devices and access the measurement data.
-  securedBy: [jwt]
+  securedBy: [JWT]
   get:
     description: |
       Allows you to get a list of all of your devices.
@@ -155,7 +155,7 @@ documentation:
   /{id}:
     description: |
       Allows you to work with an individual device.
-    securedBy: [jwt]
+    securedBy: [JWT]
     uriParameters:
       id:
         description: The device's serial number
@@ -217,7 +217,7 @@ documentation:
                   "message": "Device not found"
                 }
     /settings:
-      securedBy: [jwt]
+      securedBy: [JWT]
       get:
         description: |
           Allows you to get the settings for a device.
@@ -287,7 +287,7 @@ documentation:
                     "message": "Device not found"
                   }
     /measurements:
-      securedBy: [jwt]
+      securedBy: [JWT]
       get:
         description: |
           Returns a list of measurements.

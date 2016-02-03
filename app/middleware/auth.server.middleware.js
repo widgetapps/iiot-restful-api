@@ -23,7 +23,7 @@ module.exports = function(req, res, next) {
                     });
                 } else {
                     // if everything is good, save to request for use in other routes
-                    req.decoded = decoded;
+                    req.user = decoded;
                     next();
                 }
             });
