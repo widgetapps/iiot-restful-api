@@ -279,11 +279,15 @@ documentation:
                   [{
                     "created": "2016-01-29T16:04:27.000Z",
                     "sensor": "temperature",
-                    "unit": "celcius",
-                    "minimum": 0,
-                    "maximum": 0,
-                    "average": 0,
-                    "current": 0
+                    "data": {
+                       "unit": "celcius",
+                       "values": {
+                           "min": 50,
+                           "max": 80,
+                           "average":65,
+                           "current": 55
+                       }
+                     }
                   }]
           404:
             description: Device not found.

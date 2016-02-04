@@ -162,7 +162,12 @@ exports.getMeasurements = function(req, res) {
         }
         Measurement.find({
                 device: device._id,
-                created: {'$gte': moment().subtract(1, 'minute'), '$lte': moment()}
+                created: {'$gte': moment(req.body.start), '$lte': moment(req.body.end)},
+                sensor: {$in: req.body.sensors}
+            },{
+                created: 1,
+                sensor: 1,
+                data: 1
             })
             .sort('created')
             .exec(function (err, measurements) {
@@ -172,6 +177,8 @@ exports.getMeasurements = function(req, res) {
                     });
                     return;
                 }
+
+                res.json(measurements);
 
             });
     });
