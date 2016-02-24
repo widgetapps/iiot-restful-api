@@ -51,7 +51,7 @@ exports.devicedata = function(req, res) {
     Device.findOne({ serialNumber: serialNumber }, function(err, device) {
         if (!device || err) {
             res.status(404).send({
-                message: 'Device  not found'
+                message: 'Device  not found',
             });
             return;
         }
@@ -66,7 +66,10 @@ exports.devicedata = function(req, res) {
             .exec(function (err, measurements) {
                 if (err) {
                     return res.status(400).send({
-                        message: 'ERROR: ' + errorHandler.getErrorMessage(err)
+                        message: 'ERROR: ' + errorHandler.getErrorMessage(err),
+                        device: device._id,
+                        sensor: {$in: sensors},
+                        created: JSON.stringify(query.created)
                     });
                 } else {
 
