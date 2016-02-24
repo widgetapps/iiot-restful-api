@@ -29,6 +29,11 @@ var DeviceSchema = new Schema({
         enum: ['hydrant','machine'],
         required: true
     },
+    sensors: [{
+        type: String,
+        enum: ['temp', 'accl', 'humi', 'lght'],
+        required: true
+    }],
     code: {
         type: String
     },
