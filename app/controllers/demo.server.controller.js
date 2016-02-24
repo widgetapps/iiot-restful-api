@@ -69,7 +69,7 @@ exports.devicedata = function(req, res) {
                         message: 'ERROR: ' + errorHandler.getErrorMessage(err),
                         device: device._id,
                         sensor: {$in: sensors},
-                        created: JSON.stringify(query.created)
+                        created: query.created
                     });
                 } else {
 
