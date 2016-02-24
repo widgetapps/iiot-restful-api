@@ -27,9 +27,9 @@ exports.devicedata = function(req, res) {
         });
         return;
     }
-    if (req.query.duration < 1 || req.query.duration > 12) {
+    if (req.query.duration && (parseInt(req.query.duration) < 1 || parseInt(req.query.duration) > 12)) {
         res.status(400).send({
-            message: 'Duration out of range '
+            message: 'Duration out of range'
         });
         return;
     }
@@ -66,7 +66,7 @@ exports.devicedata = function(req, res) {
             .exec(function (err, measurements) {
                 if (err) {
                     return res.status(400).send({
-                        message: errorHandler.getErrorMessage(err)
+                        message: 'ERROR: ' + errorHandler.getErrorMessage(err)
                     });
                 } else {
 
