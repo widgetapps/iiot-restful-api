@@ -17,7 +17,7 @@ exports.devicelist = function(req, res) {
             type: 1,
             code: 1
         },{
-            sort: {serialNumber: 1}
+            sort: {code: 1}
         }, function(err, devices) {
             if (devices.length == 0 || err) {
                 res.status(404).send({
