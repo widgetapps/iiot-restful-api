@@ -35,6 +35,17 @@ var DeviceSchema = new Schema({
     descriptor: {
         type: String
     },
+    testmode: {
+        type: Boolean
+    },
+    debug: {
+        active: {
+            type: Boolean
+        },
+        host: {
+            type: String
+        }
+    },
     settings: {
         normalrate: {
             type: Number
