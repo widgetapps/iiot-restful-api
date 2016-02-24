@@ -27,9 +27,9 @@ exports.devicedata = function(req, res) {
         });
         return;
     }
-    if (req.query.duration && (parseInt(req.query.duration) < 1 || parseInt(req.query.duration) > 12)) {
+    if (!req.query.duration || (req.query.duration && (parseInt(req.query.duration) < 1 || parseInt(req.query.duration) > 12))) {
         res.status(400).send({
-            message: 'Duration out of range'
+            message: 'Duration missing or out of range'
         });
         return;
     }
@@ -37,9 +37,9 @@ exports.devicedata = function(req, res) {
     if (req.query.startDate == 'now') {
         query.created = {'$gte': moment().subtract(req.query.duration, req.query.period), '$lte': moment()};
     } else {
-        if (!moment(req.query.startDate).isValid()) {
+        if (!req.query.startDate || !moment(req.query.startDate).isValid()) {
             res.status(400).send({
-                message: 'Invalid start date'
+                message: 'Missing or invalid start date'
             });
             return;
         }
