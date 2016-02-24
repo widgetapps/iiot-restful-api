@@ -60,7 +60,7 @@ exports.devicedata = function(req, res) {
         Measurement.find({
                 device: device._id,
                 sensor: {$in: sensors},
-                created: JSON.stringify(query.created)
+                created: query.created
             })
             .sort('created')
             .exec(function (err, measurements) {
