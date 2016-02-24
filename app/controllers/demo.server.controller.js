@@ -10,6 +10,26 @@ var mongoose = require('mongoose'),
     _ = require('lodash'),
     moment = require('moment');
 
+exports.devicelist = function(req, res) {
+    Device.find({},
+        {
+            serialNumber: 1,
+            type: 1,
+            code: 1
+        },{
+            sort: {serialNumber: 1}
+        }, function(err, devices) {
+            if (devices.length == 0 || err) {
+                res.status(404).send({
+                    message: 'No devices found.'
+                });
+                return;
+            }
+
+            res.json(devices);
+        });
+}
+
 exports.devicedata = function(req, res) {
     // ?startDate=ISODATE|now&period=d&duration=4
 
