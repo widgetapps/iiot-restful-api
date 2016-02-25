@@ -40,6 +40,20 @@ exports.devicedata = function(req, res) {
     }
     var query = {};
 
+    if (req.query.sensor) {
+        switch(req.query.sensor) {
+            case 'temp':
+                sensors = ['temp'];
+                break;
+            case 'humi':
+                sensors = ['humi'];
+                break;
+            case 'accl':
+                sensors = ['aclx', 'acly', 'aclz', 'shck'];
+                break;
+        }
+    }
+
     var validPeriods = ['h','d','w','m'];
     if (!_.contains(validPeriods, req.query.period)){
         res.status(400).send({
@@ -71,7 +85,7 @@ exports.devicedata = function(req, res) {
     Device.findOne({ serialNumber: serialNumber }, function(err, device) {
         if (!device || err) {
             res.status(404).send({
-                message: 'Device  not found',
+                message: 'Device  not found'
             });
             return;
         }
