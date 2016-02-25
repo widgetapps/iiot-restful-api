@@ -54,7 +54,7 @@ exports.devicedata = function(req, res) {
         }
     }
 
-    var validPeriods = ['h','d','w','m'];
+    var validPeriods = ['h','d','w','M'];
     if (!_.contains(validPeriods, req.query.period)){
         res.status(400).send({
             message: 'Invalid period'
@@ -77,7 +77,7 @@ exports.devicedata = function(req, res) {
             });
             return;
         }
-        query.created = {'$gte': moment(req.query.startDate), '$lte': moment().add(req.query.duration, req.query.period)};
+        query.created = {'$gte': moment(req.query.startDate), '$lte': moment(req.query.startDate).add(req.query.duration, req.query.period)};
     }
 
     var serialNumber = req.params.serialNumber;
