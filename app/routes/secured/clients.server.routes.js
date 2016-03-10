@@ -2,11 +2,7 @@
 
 module.exports = function(app) {
 	// Root routing
-    var api = require('../../../app/controllers/api.server.controller');
-    var devices = require('../../../app/controllers/devices.server.controller');
-
-    app.route('/hello')
-        .get(api.hello);
+    var clients = require('../../../app/controllers/clients.server.controller');
 
     app.route('/devices')
         .get(devices.list);
