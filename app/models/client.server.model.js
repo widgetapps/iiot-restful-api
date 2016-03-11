@@ -14,6 +14,10 @@ var ClientSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    updated: {
+        type: Date,
+        default: Date.now
+    },
     apikey: {
         id: {
             type: String,
@@ -61,7 +65,8 @@ var ClientSchema = new Schema({
         }
     },
     reseller: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     resellerParent: {
         type: Schema.ObjectId,

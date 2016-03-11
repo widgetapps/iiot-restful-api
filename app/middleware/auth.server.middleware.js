@@ -6,7 +6,6 @@ module.exports = function(req, res, next) {
     var Client = mongoose.model('Client');
     var jwt = require('jsonwebtoken');
 
-    console.log('A secured request!');
     var token = req.headers['x-access-token'];
     var clientId = req.headers['x-client-id'];
 
@@ -18,8 +17,9 @@ module.exports = function(req, res, next) {
         }).exec(function(err, client) {
             jwt.verify(token, client.apikey.secret, function(err, decoded) {
                 if (err) {
-                    res.status(412).send({
-                        message: 'Invalid token.'
+                    res.status(401).send({
+                        message: 'The supplied x-access-token (JWT) is not valid.',
+                        ref: 'https://developers.terepac.one/#authentication'
                     });
                 } else {
                     // if everything is good, save to request for use in other routes
@@ -30,8 +30,9 @@ module.exports = function(req, res, next) {
         });
 
     } else {
-        res.status(417).send({
-            message: 'Required headers missing.'
+        res.status(401).send({
+            message: 'One or both of the required headers (x-client-id, x-access-token) are missing.',
+            ref: 'https://developers.terepac.one/#authentication'
         });
     }
 };

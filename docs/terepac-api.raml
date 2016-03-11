@@ -47,15 +47,15 @@ documentation:
     If there is an issue with the client ID or JWT, the system will return
     an error as a JSON document. Here are the two possible error responses:
     ```
-    HTTP status code 412
+    HTTP status code 401
     {
-      message: 'Invalid token.'
+      message: 'The supplied x-access-token (JWT) is not valid.'
     }
     ```
     ```
-    HTTP status code 417
+    HTTP status code 401
     {
-      message: 'Required headers missing.'
+      message: 'One or both of the required headers (x-client-id, x-access-token) are missing.'
     }
     ```
   post:
