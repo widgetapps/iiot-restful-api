@@ -162,8 +162,8 @@ exports.getMeasurements = function(req, res) {
         }
         Measurement.find({
                 device: device._id,
-                created: {'$gte': moment(req.body.start), '$lte': moment(req.body.end)},
-                sensor: {$in: req.body.sensors}
+                created: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)},
+                sensor: {$in: req.query.sensors}
             },{
                 created: 1,
                 sensor: 1,
@@ -171,9 +171,9 @@ exports.getMeasurements = function(req, res) {
             })
             .sort('created')
             .exec(function (err, measurements) {
-                if (measurements.length == 0 || err) {
+                if (err || measurements.length == 0) {
                     res.status(404).send({
-                        message: 'No measurements found.'
+                        message: 'No measurements found. Did you include the start, end & sensors params?'
                     });
                     return;
                 }

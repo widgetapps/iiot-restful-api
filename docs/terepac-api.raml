@@ -262,14 +262,13 @@ documentation:
       get:
         description: |
           Returns a list of measurements.
-        body:
-          application/json:
-            example: |
-              {
-                "start": "2016-01-29T16:04:27.000Z",
-                "end": "2016-01-29T16:04:27.000Z",
-                "sensors": ["temp", "pres", "humi", "aclx", "acly", "aclz", "shck"]
-              }
+        queryParameters:
+          start:
+            example: start=2016-01-29T16:04:27.000Z
+          end:
+            example: end=2016-01-29T16:04:27.000Z
+          sensors:
+            example: sensors=temp&sensors=pres&sensors=humi&sensors=aclx&sensors=acly&&sensors=aclz&&sensors=shck
         responses:
           200:
             description: An array of measurements

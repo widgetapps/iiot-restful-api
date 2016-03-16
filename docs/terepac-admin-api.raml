@@ -1,0 +1,38 @@
+title: Terepac ONE
+version: 0.1a
+baseUri: https://api.terepac.one/admin
+securitySchemes:
+  - JWT:
+      description: A JSON Web Token & Client ID must be sent in the request header.
+      type: x-jwt
+      describedBy:
+        headers:
+          x-access-token:
+            type: string
+            description: A JWT access token. Get the JWT using /authenticate
+          x-client-id:
+            type: string
+            description: Your unique client ID.
+        responses:
+          417:
+            body:
+              application/json:
+                example: |
+                  {
+                    "code": "417",
+                    "message": "invalid api key"
+                  }
+documentation:
+  - title: Welcome
+    content: |
+      The Terepac ONE RESTful API uses JSON Web Tokens (JWT) to authenticate each
+      request. Each secured request requires the following 2 HTTP headers:
+      ```
+      x-client-id: [client ID]
+      x-access-token: [jwt]
+      ```
+      As we are only in alpha right now, only Terepac partners can get a
+      client ID. If you are a partner, please contact
+      [Darryl Patterson](mailto:darryl.patterson@terepac.com).
+      Please see the AUTHENTICATION documentation to find out how to get
+      your JWT.
