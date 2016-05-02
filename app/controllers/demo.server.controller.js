@@ -15,7 +15,8 @@ exports.devicelist = function(req, res) {
         {
             serialNumber: 1,
             type: 1,
-            code: 1
+            code: 1,
+            descriptor: 1
         },{
             sort: {code: 1}
         }, function(err, devices) {
