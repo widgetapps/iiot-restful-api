@@ -35,9 +35,9 @@ exports.devicedata = function(req, res) {
     // ?startDate=ISODATE|now&period=d&duration=4
 
     var sensors = ['temp', 'aclx', 'acly', 'aclz', 'shck', 'humi'];
-    var tzoffset = '-05:00';
-    if (moment().isDST()) {
-        //tzoffset = '-04:00';
+    var tzoffset = '-04:00';
+    if (!moment().isDST()) {
+        tzoffset = '-05:00';
     }
     var query = {};
 
@@ -178,9 +178,9 @@ exports.devicedata = function(req, res) {
 exports.guelphdata = function(req, res) {
     var sensors = ['temp', 'aclx', 'acly', 'aclz', 'shck'];
 
-    var tzoffset = '-05:00';
-    if (moment().isDST()) {
-        //tzoffset = '-04:00';
+    var tzoffset = '-04:00';
+    if (!moment().isDST()) {
+        tzoffset = '-05:00';
     }
 
     var serialNumber = req.params.serialNumber;
@@ -264,9 +264,9 @@ exports.guelphdata = function(req, res) {
 };
 
 exports.ciscodata = function(req, res) {
-    var tzoffset = '-05:00';
-    if (moment().isDST()) {
-        //tzoffset = '-04:00';
+    var tzoffset = '-04:00';
+    if (!moment().isDST()) {
+        tzoffset = '-05:00';
     }
 
     Device.findOne({ serialNumber: '6' }, function(err, device) {
