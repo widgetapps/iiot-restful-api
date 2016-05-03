@@ -122,13 +122,13 @@ exports.devicedata = function(req, res) {
                         switch (measurements[key].sensor) {
                             case 'temp':
                                 temperature.push({c: [
-                                    {v: moment(measurements[key].created).utcOffset(tzoffset).format('HH:mm:ss')},
+                                    {v: moment(measurements[key].created).format('HH:mm:ss')},
                                     {v: measurements[key].data.values.max}
                                 ]});
                                 break;
                             case 'humi':
                                 humidity.push({c: [
-                                    {v: moment(measurements[key].created).utcOffset(tzoffset).format('HH:mm:ss')},
+                                    {v: moment(measurements[key].created).format('HH:mm:ss')},
                                     {v: measurements[key].data.values.max}
                                 ]});
                                 break;
@@ -138,7 +138,7 @@ exports.devicedata = function(req, res) {
                             case 'shck':
                                 if (accelcurrentcount < 4) {
                                     if (accelcurrentcount === 0)
-                                        accelrow[0] = {v: moment(measurements[key].created).utcOffset(tzoffset).format('HH:mm:ss')};
+                                        accelrow[0] = {v: moment(measurements[key].created).format('HH:mm:ss')};
 
                                     if (measurements[key].sensor === 'aclx')
                                         accelrow[1] = {v: measurements[key].data.values.max};
