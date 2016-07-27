@@ -9,7 +9,8 @@ var mongoose = require('mongoose'),
     Device = mongoose.model('Device'),
     _ = require('lodash'),
     moment = require('moment'),
-    jwt = require('jsonwebtoken');
+    jwt = require('jsonwebtoken'),
+    randomstring = require('randomstring');
 
 /**
  * Module dependencies.
