@@ -42,10 +42,12 @@ exports.insert = function(req, res) {
         return;
     }
 
-    var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+;":,.<>/?';
-
     var client = new Client(req.body);
-    client.apikey.id = randomstring.generate(32);
+    client.apikey.id = randomstring.generate({
+        length: 32,
+        charset: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+;":,.<>/?'
+    });
+
     client.apikey.secret = randomstring.generate({
         length: 30,
         charset: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+;":,.<>/?'

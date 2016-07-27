@@ -110,7 +110,7 @@ module.exports = function(db) {
     });
 
     // Do token authentication here
-    var auth = require('../app/middleware/auth.server.middleware')
+    var auth = require('../app/middleware/auth.server.middleware');
     app.use(auth);
 
 	// Globbing secured routing files

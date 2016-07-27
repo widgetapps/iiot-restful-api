@@ -33,7 +33,7 @@ documentation:
       x-access-token: [jwt]
       ```
       As we are only in alpha right now, only Terepac partners can get a
-      client ID. If you are a partner, please contact
+      login. If you are a partner, please contact
       [Darryl Patterson](mailto:darryl.patterson@terepac.com).
       Please see the AUTHENTICATION documentation to find out how to get
       your JWT.
@@ -60,8 +60,10 @@ documentation:
     ```
   post:
     description: |
-      Authenticates the user and returns a JSON Web Token to be used for future
-      secured API requests.
+      Authenticates the user and returns a JSON Web Token and a client ID to be
+      used for future secured API requests. The client ID is randomly generated
+      32 character string and is returned for every successful authentication.
+      This means that your client ID will change for every new authentication.
     body:
       application/json:
         example: |
@@ -77,6 +79,7 @@ documentation:
             example: |
               {
                 "message": "Authentication successful.",
+                "clientId": "kjhkjh%jkhgj&876K&q9f@6pq*16gTx8",
                 "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ"
               }
       404:

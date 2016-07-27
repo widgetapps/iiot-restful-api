@@ -92,6 +92,7 @@ exports.devicedata = function(req, res) {
         }
         query.device = device._id;
         query.sensor = {$in: sensors};
+         
         Measurement.find({
                 device: device._id,
                 sensor: {$in: sensors},
