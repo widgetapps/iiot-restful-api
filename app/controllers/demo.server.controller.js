@@ -20,7 +20,7 @@ exports.devicelist = function(req, res) {
         },{
             sort: {code: 1}
         }, function(err, devices) {
-            if (devices.length == 0 || err) {
+            if (devices.length === 0 || err) {
                 res.status(404).send({
                     message: 'No devices found.'
                 });
@@ -29,7 +29,7 @@ exports.devicelist = function(req, res) {
 
             res.json(devices);
         });
-}
+};
 
 exports.devicedata = function(req, res) {
     // ?startDate=ISODATE|now&period=d&duration=4
@@ -69,7 +69,7 @@ exports.devicedata = function(req, res) {
         return;
     }
 
-    if (req.query.startDate == 'now') {
+    if (req.query.startDate === 'now') {
         query.created = {'$gte': moment().subtract(req.query.duration, req.query.period), '$lte': moment()};
     } else {
         if (!req.query.startDate || !moment(req.query.startDate).isValid()) {
@@ -174,7 +174,7 @@ exports.devicedata = function(req, res) {
             });
     });
 
-}
+};
 
 exports.guelphdata = function(req, res) {
     var sensors = ['temp', 'aclx', 'acly', 'aclz', 'shck'];

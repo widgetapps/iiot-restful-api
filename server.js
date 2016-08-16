@@ -1,4 +1,7 @@
 'use strict';
+
+// require('events').EventEmitter.prototype._maxListeners = 0;
+
 /**
  * Module dependencies.
  */

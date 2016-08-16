@@ -64,4 +64,4 @@ exports.addData = function(req, res) {
             res.json({message: 'Data Added', clientData: clientData, userData: userData});
         });
     });
-}
+};

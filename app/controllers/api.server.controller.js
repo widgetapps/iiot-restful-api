@@ -4,5 +4,5 @@
  * Module dependencies.
  */
 exports.hello = function(req, res) {
-    res.json({message: "Allo allo"});
+    res.json({message: 'Allo allo'});
 };

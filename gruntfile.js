@@ -13,18 +13,27 @@ module.exports = function(grunt) {
 		watch: {
 			serverJS: {
 				files: watchFiles.serverJS,
-				tasks: ['jshint'],
+                tasks: ['jshint'],
 				options: {
 					livereload: true
 				}
 			}
 		},
+        jshint: {
+            all: {
+                src: watchFiles.serverJS,
+                options: {
+                    jshintrc: true
+                }
+            }
+        },
 		nodemon: {
 			dev: {
 				script: 'server.js',
 				options: {
 					nodeArgs: ['--debug'],
-					ext: 'js,html'
+					ext: 'js,html',
+					watch: watchFiles.serverJS
 				}
 			}
 		},
@@ -81,13 +90,13 @@ module.exports = function(grunt) {
 	});
 
 	// Default task(s).
-	grunt.registerTask('default', ['lint', 'concurrent:default']);
+	grunt.registerTask('default', ['concurrent:default']);
 
 	// Debug task.
-	grunt.registerTask('debug', ['lint', 'concurrent:debug']);
+	grunt.registerTask('debug', ['concurrent:debug']);
 
 	// Build task(s).
-	grunt.registerTask('build', ['lint', 'loadConfig']);
+	grunt.registerTask('build', ['loadConfig']);
 
 	// Test task.
 	grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);

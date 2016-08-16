@@ -22,7 +22,7 @@ exports.list = function(req, res) {
             code: 1,
             descriptor: 1
     }, function(err, devices) {
-            if (devices.length == 0 || err) {
+            if (devices.length === 0 || err) {
                 res.status(404).send({
                     message: 'No devices found.'
                 });
@@ -171,7 +171,7 @@ exports.getMeasurements = function(req, res) {
             })
             .sort('created')
             .exec(function (err, measurements) {
-                if (err || measurements.length == 0) {
+                if (err || measurements.length === 0) {
                     res.status(404).send({
                         message: 'No measurements found. Did you include the start, end & sensors params?'
                     });

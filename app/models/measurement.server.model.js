@@ -18,6 +18,9 @@ var MeasurementSchema = new Schema({
     updated: {
         type: Date
     },
+    timestamp: {
+        type: Date
+    },
     sensor: {
         type: String,
         index: true

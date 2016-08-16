@@ -22,8 +22,8 @@ var fs = require('fs'),
 	consolidate = require('consolidate'),
 	path = require('path');
 
-module.exports = function(db) {
-	// Initialize express app
+	module.exports = function(db) {
+		// Initialize express app
 	var app = express();
 
 	// Globbing model files
@@ -84,6 +84,7 @@ module.exports = function(db) {
     app.use(cors());
 
 	// Express MongoDB session storage
+		/*
 	app.use(session({
 		saveUninitialized: true,
 		resave: true,
@@ -93,6 +94,7 @@ module.exports = function(db) {
 			collection: config.sessionCollection
 		})
 	}));
+	*/
 
 	// Use helmet to secure Express headers
 	app.use(helmet.xframe());
@@ -127,12 +129,12 @@ module.exports = function(db) {
 		console.error(err.stack);
 
 		// Error page
-		res.status(500).json({message: "Server error: " +  err.stack});
+		res.status(500).json({message: 'Server error: ' +  err.stack});
 	});
 
 	// Assume 404 since no middleware responded
 	app.use(function(req, res) {
-		res.status(404).json({message: "Resource not found"});
+		res.status(404).json({message: 'Resource not found'});
 	});
 
 	// Return Express server instance

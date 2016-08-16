@@ -49,6 +49,9 @@ var DeviceSchema = new Schema({
         },
         host: {
             type: String
+        },
+        port: {
+            type: Number
         }
     },
     settings: {

@@ -15,18 +15,25 @@ module.exports = function(req, res, next) {
         },{
             apikey: 1
         }).exec(function(err, client) {
-            jwt.verify(token, client.apikey.secret, function(err, decoded) {
-                if (err) {
-                    res.status(401).send({
-                        message: 'The supplied x-access-token (JWT) is not valid.',
-                        ref: 'https://developers.terepac.one/#authentication'
-                    });
-                } else {
-                    // if everything is good, save to request for use in other routes
-                    req.user = decoded;
-                    next();
-                }
-            });
+            if (client === null) {
+                res.status(401).send({
+                    message: 'Client not found',
+                    ref: 'https://developers.terepac.one/#authentication'
+                });
+            } else {
+                jwt.verify(token, client.apikey.secret, function(err, decoded) {
+                    if (err) {
+                        res.status(401).send({
+                            message: 'The supplied x-access-token (JWT) is not valid.',
+                            ref: 'https://developers.terepac.one/#authentication'
+                        });
+                    } else {
+                        // if everything is good, save to request for use in other routes
+                        req.user = decoded;
+                        next();
+                    }
+                });
+            }
         });
 
     } else {

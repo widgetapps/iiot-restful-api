@@ -56,32 +56,14 @@ exports.authenticate = function(req, res) {
                         user.password = undefined;
                         user.salt = undefined;
 
-                        // Generate the new client ID
-                        var clientId = randomstring.generate({
-                            length: 32,
-                            charset: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!@#$%^&*()_+;":,.<>/?'
+                        var token = jwt.sign(user, client.apikey.secret, {
+                            expiresIn: '1d'
                         });
 
-                        // save the client ID
-                        client.apikey.id = clientId;
-                        client.save(function(err) {
-
-                            if (err) {
-                                res.status(409).send({
-                                   message: 'Error saving the client ID'
-                                });
-                                return;
-                            }
-                            var token = jwt.sign(user, client.apikey.secret, {
-                                expiresIn: '1d'
-                            });
-
-                            // return the information, including token, as JSON
-                            res.json({
-                                message: 'Authentication successful.',
-                                clientId: clientId,
-                                token: token
-                            });
+                        // return the information, including token, as JSON
+                        res.json({
+                            message: 'Authentication successful.',
+                            token: token
                         });
                     }
                 });
