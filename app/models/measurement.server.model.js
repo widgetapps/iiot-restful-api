@@ -19,7 +19,8 @@ var MeasurementSchema = new Schema({
         type: Date
     },
     timestamp: {
-        type: Date
+        type: Date,
+        index: true
     },
     sensor: {
         type: String,
@@ -50,6 +51,8 @@ var MeasurementSchema = new Schema({
         index: true
     }
 });
+
+MeasurementSchema.index({created: 1, device: 1, sensor: 1});
 
 MeasurementSchema.pre('save', function(next) {
     // get the current date
