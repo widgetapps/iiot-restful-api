@@ -19,6 +19,7 @@ exports.list = function(req, res) {
             updated: 1,
             serialNumber: 1,
             type: 1,
+            sensors: 1,
             code: 1,
             descriptor: 1
     }, function(err, devices) {
@@ -43,6 +44,7 @@ exports.getOne = function(req, res) {
             updated: 1,
             serialNumber: 1,
             type: 1,
+            sensors: 1,
             code: 1,
             descriptor: 1
         },function(err, device) {
@@ -160,10 +162,26 @@ exports.getMeasurements = function(req, res) {
             });
             return;
         }
+
+        if (!req.query.sensors) {
+            res.status(404).send({
+                message: 'No sensors were provided.'
+            });
+            return;
+        }
+
+        var sensors;
+
+        if (req.query.sensors instanceof Array){
+            sensors = req.query.sensors;
+        } else {
+            sensors = [req.query.sensors];
+        }
+
         Measurement.find({
                 device: device._id,
                 created: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)},
-                sensor: {$in: req.query.sensors}
+                sensor: {$in: sensors}
             },{
                 created: 1,
                 sensor: 1,
