@@ -98,18 +98,15 @@ documentation:
                 "message": "No client associated with user."
               }
 /clients:
-  (role) : ADMIN
   displayName: CLIENTS
   description: |
     Lets you manipulate and access client data and telemetry tags.
   securedBy: [JWT]
   get:
     description: |
-      Allows you to get a list of the clients you are allowed to access.
-    body:
-      application/json:
-        example: |
-          { }
+      Allows you to get a list of the clients you are allowed to access based on
+      the user's role. If the user belongs to a company that's a reseller, an
+      array of the reseller's clients is returned.
     responses:
       200:
         description: Returns an array of clients.
@@ -152,7 +149,8 @@ documentation:
   post:
     (role) : ADMIN
     description: |
-      Allows you to add a new client.
+      Allows you to add a new client. You must be a reseller or be an admin to
+      add a new client.
     body:
       application/json:
         example: |
@@ -230,10 +228,6 @@ documentation:
     get:
       description: |
         Returns a single client.
-      body:
-        application/json:
-          example: |
-            { }
       responses:
         200:
           description: Returns a client.
@@ -281,7 +275,8 @@ documentation:
                 }
     put:
       description: |
-        Allows you to edit a client.
+        Allows you to edit a client. All fields are optional. You cannot change
+        a password with this endpoint (see USERS endpoint).
       body:
         application/json:
           example: |
@@ -347,10 +342,38 @@ documentation:
               example: |
                 {
                   "message": "Client not found"
+                }
     /tags:
       securedBy: [JWT]
       get:
         description: Gets a list of the client's tags.
+        responses:
+          200:
+            description: Returns the available tags for the client.
+            body:
+              application/json:
+                example: |
+                  [
+                    { "tag": "LOCATION_DEVICE_SENSOR" },
+                    { "tag": "LOCATION_DEVICE_SENSOR" },
+                    { "tag": "LOCATION_DEVICE_SENSOR" }
+                  ]
+          401:
+            description: Not authorized.
+            body:
+              application/json:
+                example: |
+                  {
+                    message: "You are not authorized to access this resource."
+                  }
+          404:
+            description: Client not found.
+            body:
+              application/json:
+                example: |
+                  {
+                    "message": "Client not found"
+                  }
       /{tag}:
         securedBy: [JWT]
         uriParameters:
@@ -358,11 +381,44 @@ documentation:
             description: The tag.
             type: string
         get:
-          description: Gets a single tag.
+          description: Gets the telemetry data for a single tag.
+          responses:
+            200:
+              description: Telemetry found.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "tag": "[TAG]",
+                      "timestamp": "[DATE]",
+                      "device": {
+                        "serialNumber": "",
+                        "type": "",
+                        "descriptor": "",
+                        "geolocation": [x, y]
+                      },
+                      "sensor": {
+                        "type": 1,
+                        "typeString": "",
+                        "description": "",
+                        "unit", ""
+                      },
+                      "data": {
+                        "unit": "",
+                        "quality": 1,
+                        "values": {
+                          "min": 5,
+                          "max": 5,
+                          "average": 5,
+                          "current": 5
+                        }
+                      }
+                    }
       /search:
         securedBy: [JWT]
         description: |
-          Allows you to search multiple tags.
+          Allows you to search multiple tags. Returns an array of telemetry
+          data.
         get:
           description: Queries for telemetry using tags.
           queryParameters:
@@ -380,36 +436,524 @@ documentation:
                   example: |
                     [
                       {
-
+                        "tag": "[TAG]",
+                        "timestamp": "[DATE]",
+                        "device": {
+                          "serialNumber": "",
+                          "type": "",
+                          "descriptor": "",
+                          "geolocation": [x, y]
+                        },
+                        "sensor": {
+                          "type": 1,
+                          "typeString": "",
+                          "description": "",
+                          "unit", ""
+                        },
+                        "data": {
+                          "unit": "",
+                          "quality": 1,
+                          "values": {
+                            "min": 5,
+                            "max": 5,
+                            "average": 5,
+                            "current": 5
+                          }
+                        }
                       }
                     ]
+    /locations:
+      securedBy: [JWT]
+      get:
+        description: Gets an array of locations.
+        responses:
+          200:
+            description: Returns an array of locations for this client.
+            body:
+              application/json:
+                example: |
+                  [{
+                    "tagCode": "",
+                    "description": "",
+                    "geolocation": [x, y],
+                    "address": {
+                      "street": "",
+                      "street2": "",
+                      "city": "",
+                      "province": "",
+                      "postalCode": "",
+                      "country": ""
+                    },
+                    "assets": [{
+                      "tagCode": "",
+                      "name": "",
+                      "description": ""
+                    }]
+                  }]
+      post:
+        description: Adds a new location to the client.
+        body:
+          application/json:
+            example: |
+              {
+                "tagCode": "",
+                "description": "",
+                "geolocation": [x, y],
+                "address": {
+                  "street": "",
+                  "street2": "",
+                  "city": "",
+                  "province": "",
+                  "postalCode": "",
+                  "country": ""
+                }
+              }
+        responses:
+          200:
+            description: Location added.
+            body:
+              application/json:
+                example: |
+                  {
+                    "id": "",
+                    "tagCode": "",
+                    "description": "",
+                    "geolocation": [x, y],
+                    "address": {
+                      "street": "",
+                      "street2": "",
+                      "city": "",
+                      "province": "",
+                      "postalCode": "",
+                      "country": ""
+                    }
+                  }
+      /{id}:
+        securedBy: [JWT]
+        get:
+          description: Gets a single location.
+          responses:
+            200:
+              description: A single location.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "id": "",
+                      "tagCode": "",
+                      "description": "",
+                      "geolocation": [x, y],
+                      "address": {
+                        "street": "",
+                        "street2": "",
+                        "city": "",
+                        "province": "",
+                        "postalCode": "",
+                        "country": ""
+                      }
+                    }
+        put:
+          description: Updates a location.
+          body:
+            application/json:
+              example: |
+                {
+                  "tagCode": "",
+                  "description": "",
+                  "geolocation": [x, y],
+                  "address": {
+                    "street": "",
+                    "street2": "",
+                    "city": "",
+                    "province": "",
+                    "postalCode": "",
+                    "country": ""
+                  }
+                }
+          responses:
+            200:
+              description: Location updated.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "id": "",
+                      "tagCode": "",
+                      "description": "",
+                      "geolocation": [x, y],
+                      "address": {
+                        "street": "",
+                        "street2": "",
+                        "city": "",
+                        "province": "",
+                        "postalCode": "",
+                        "country": ""
+                      }
+                    }
+    /assets:
+      securedBy: [JWT]
+      get:
+        description: Gets an array of assets.
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  [{
+                    "id": "",
+                    "tagCode": "",
+                    "name": "",
+                    "description": "",
+                    "location": {
+                      "tagCode": "",
+                      "description": "",
+                      "geolocation": [x, y],
+                      "address": {
+                        "street": "",
+                        "street2": "",
+                        "city": "",
+                        "province": "",
+                        "postalCode": "",
+                        "country": ""
+                      }
+                    }
+                  }]
+      post:
+        description: Adds a new asset.
+        body:
+          application/json:
+            example: |
+              {
+                "tagCode": "",
+                "name": "",
+                "description": ""
+              }
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  {
+                    "id", "",
+                    "tagCode": "",
+                    "name": "",
+                    "description": ""
+                  }
+      /{id}:
+        securedBy: [JWT]
+        get:
+          description: Gets a single asset.
+          responses:
+            200:
+              description: Gets a single asset.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "id", "",
+                      "tagCode": "",
+                      "name": "",
+                      "description": ""
+                    }
+        put:
+          description: Updates an asset.
+          body:
+            application/json:
+              example: |
+                {
+                  "tagCode": "",
+                  "name": "",
+                  "description": ""
+                }
+          responses:
+            200:
+              description: Asset updated.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "id": "",
+                      "tagCode": "",
+                      "name": "",
+                      "description": ""
+                    }
+        /devices:
+          securedBy: [JWT]
+          get:
+            description: Gets an array of devices attached to this asset.
+            responses:
+              200:
+                description: Returns an array of devices.
+                body:
+                  application/json:
+                    example: |
+                      [{
+                        "created": "2016-01-29T16:04:27.000Z",
+                        "updated": "2016-01-29T16:04:27.000Z",
+                        "serialNumber": "15",
+                        "type": "hydrant",
+                        "tagLocation": "",
+                        "tagCode": "Client assigned code",
+                        "descriptor": "Client assigned descriptor",
+                        "geolocation": [x, y],
+                        "sensors":
+                          [
+                            {
+                              "tagCode": "",
+                              "type": 1,
+                              "typeString": "",
+                              "description": "",
+                              "unit": ""
+                            }
+                          ],
+                        "settings": {
+                        }
+                      }]
+          /{id}/add:
+            securedBy: [JWT]
+            post:
+              description: Adds this device to this asset.
+              responses:
+                200:
+                  description: Deviced added to asset.
+                  body:
+                    application/json:
+                      example: |
+                        {
+                          "message": "Device added."
+                        }
+          /{id}/remove:
+            securedBy: [JWT]
+            delete:
+              description: Removes this device from this asset.
+              responses:
+                200:
+                  description: Deviced removed from asset.
+                  body:
+                    application/json:
+                      example: |
+                        {
+                          "message": "Device removed."
+                        }
     /devices:
       securedBy: [JWT]
       get:
-        description: Gets a list of the client's devices.
+        description: Gets an array of the client's devices.
+        responses:
+          200:
+            description: An array of devices.
+            body:
+              application/json:
+                example: |
+                  [{
+                    "created": "2016-01-29T16:04:27.000Z",
+                    "updated": "2016-01-29T16:04:27.000Z",
+                    "serialNumber": "15",
+                    "type": "hydrant",
+                    "tagLocation": "",
+                    "tagCode": "Client assigned code",
+                    "descriptor": "Client assigned descriptor",
+                    "geolocation": [x, y],
+                    "sensors":
+                      [
+                        {
+                          "tagCode": "",
+                          "type": 1,
+                          "typeString": "",
+                          "description": "",
+                          "unit": ""
+                        }
+                      ],
+                    "settings": {
+                    }
+                  }]
       post:
-        description: Adds a new devices to the client.
+        description: Adds a new device to the client.
+        body:
+          application/json:
+            example: |
+              {
+                "serialNumber": "",
+                "type": "",
+                "tagLocation": "",
+                "tagCode": "",
+                "descriptor": "",
+                "geolocation": [x, y],
+                "sensors": [
+                  {
+                    "tagCode": "",
+                    "limits": {
+                      "low": 5,
+                      "high": 10
+                    }
+                  }
+                ]
+                "settings": {}
+              }
+        responses:
+          200:
+            description: Device added.
+            body:
+              application/json:
+                example: |
+                  {
+                    "id": "",
+                    "created": "2016-01-29T16:04:27.000Z",
+                    "updated": "2016-01-29T16:04:27.000Z",
+                    "serialNumber": "",
+                    "type": "",
+                    "tagLocation": "",
+                    "tagCode": "",
+                    "descriptor": "",
+                    "geolocation": [x, y],
+                    "sensors": [
+                      {
+                        "tagCode": "",
+                        "limits": {
+                          "low": 5,
+                          "high": 10
+                        }
+                      }
+                    ]
+                    "settings": {}
+                  }
     /users:
       securedBy: [JWT]
       get:
-        description: Gets a list of the client's users.
+        description: Gets an array of the client's users.
+        responses:
+          200:
+            description: Returns an array of the client's users.
+            body:
+              application/json:
+                example: |
+                  [
+                    {
+                      "id": "",
+                      "created": "2016-01-29T16:04:27.000Z",
+                      "updated": "2016-01-29T16:04:27.000Z",
+                      "firstName": "",
+                      "lastName": "",
+                      "email": "",
+                      "roles": [""],
+                      "active": true
+                    }
+                  ]
       post:
         description: Adds a new user to the client.
+        body:
+          application/json:
+            example: |
+              {
+                "firstName": "",
+                "lastName": "",
+                "email": "",
+                "roles": [""],
+                "active": true
+              }
+        responses:
+          200:
+            description: User added.
+            body:
+              application/json:
+                example: |
+                  {
+                    "id": "",
+                    "created": "2016-01-29T16:04:27.000Z",
+                    "updated": "2016-01-29T16:04:27.000Z",
+                    "firstName": "",
+                    "lastName": "",
+                    "email": "",
+                    "roles": [""],
+                    "active": true
+                  }
+
 /users:
   displayName: USERS
   description: |
     Lets you manipulate users.
   securedBy: [JWT]
   get:
-    description: Gets a list of users.
+    description: Gets an array of users.
+    responses:
+      200:
+        description: Returns as array of users.
+        body:
+          application/json:
+            example: |
+              [
+                {
+                  "id": "",
+                  "created": "2016-01-29T16:04:27.000Z",
+                  "updated": "2016-01-29T16:04:27.000Z",
+                  "firstName": "",
+                  "lastName": "",
+                  "email": "",
+                  "roles": [""],
+                  "active": true
+                }
+              ]
   /{id}:
+    securedBy: [JWT]
     get:
       description: Gets a single user.
+      responses:
+        200:
+          description: Returns a single user.
+          body:
+            application/json:
+              example: |
+                {
+                  "id": "",
+                  "created": "2016-01-29T16:04:27.000Z",
+                  "updated": "2016-01-29T16:04:27.000Z",
+                  "firstName": "",
+                  "lastName": "",
+                  "email": "",
+                  "roles": [""],
+                  "active": true
+                }
     put:
       description: Edits a user (can't change password).
+      body:
+        application/json:
+          example: |
+            {
+              "firstName": "",
+              "lastName": "",
+              "email": "",
+              "roles": [""],
+              "active": true
+            }
+      responses:
+        200:
+          description: User updated.
+          body:
+            application/json:
+              example: |
+                {
+                  "message": "User has been edited."
+                }
     /password:
+      securedBy: [JWT]
       put:
         description: Changes a user's password.
+        body:
+          application/json:
+            example: |
+              {
+                "id": "",
+                "password", ""
+              }
+        responses:
+          200:
+            description: Password changed.
+            body:
+              application/json:
+                example: |
+                  {
+                    "message": "The password has been changed."
+                  }
 /devices:
   displayName: DEVICES
   description: |
@@ -445,10 +989,6 @@ documentation:
     get:
       description: |
         Returns a single device.
-      body:
-        application/json:
-          example: |
-            { }
       responses:
         200:
           description: Returns a device.
@@ -503,10 +1043,6 @@ documentation:
       get:
         description: |
           Allows you to get the settings for a device.
-        body:
-          application/json:
-            example: |
-              { }
         responses:
           200:
             description: Returns the settings for a device.
@@ -586,19 +1122,34 @@ documentation:
             body:
               application/json:
                 example: |
-                  [{
-                    "created": "2016-01-29T16:04:27.000Z",
-                    "sensor": "temperature",
-                    "data": {
-                       "unit": "celcius",
-                       "values": {
-                           "min": 50,
-                           "max": 80,
-                           "average":65,
-                           "current": 55
-                       }
-                     }
-                  }]
+                  [
+                    {
+                      "tag": "[TAG]",
+                      "timestamp": "[DATE]",
+                      "device": {
+                        "serialNumber": "",
+                        "type": "",
+                        "descriptor": "",
+                        "geolocation": [x, y]
+                      },
+                      "sensor": {
+                        "type": 1,
+                        "typeString": "",
+                        "description": "",
+                        "unit", ""
+                      },
+                      "data": {
+                        "unit": "",
+                        "quality": 1,
+                        "values": {
+                          "min": 5,
+                          "max": 5,
+                          "average": 5,
+                          "current": 5
+                        }
+                      }
+                    }
+                  ]
           404:
             description: Device not found.
             body:
