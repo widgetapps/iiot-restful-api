@@ -1,28 +1,31 @@
-#%RAML 0.8
+#%RAML 1.0
 title: Terepac ONE
-version: 0.2a
-baseUri: https://api.terepac.one
+version: v1
+baseUri: https://api.terepac.one/{version}
+annotationTypes:
+  role:
+    enum: [ADMIN]
 securitySchemes:
-  - JWT:
-      description: A JSON Web Token & Client ID must be sent in the request header.
-      type: x-jwt
-      describedBy:
-        headers:
-          x-access-token:
-            type: string
-            description: A JWT access token. Get the JWT using /authenticate
-          x-client-id:
-            type: string
-            description: Your unique client ID.
-        responses:
-          417:
-            body:
-              application/json:
-                example: |
-                  {
-                    "code": "417",
-                    "message": "invalid api key"
-                  }
+  JWT:
+    description: A JSON Web Token & Client ID must be sent in the request header.
+    type: x-jwt
+    describedBy:
+      headers:
+        x-access-token:
+          type: string
+          description: A JWT access token. Get the JWT using /authenticate
+        x-client-id:
+          type: string
+          description: Your unique client ID.
+      responses:
+        417:
+          body:
+            application/json:
+              example: |
+                {
+                  "code": "417",
+                  "message": "invalid api key"
+                }
 documentation:
   - title: Welcome
     content: |
@@ -60,10 +63,7 @@ documentation:
     ```
   post:
     description: |
-      Authenticates the user and returns a JSON Web Token and a client ID to be
-      used for future secured API requests. The client ID is randomly generated
-      32 character string and is returned for every successful authentication.
-      This means that your client ID will change for every new authentication.
+      Authenticates the user and returns a JSON Web Token.
     body:
       application/json:
         example: |
@@ -79,7 +79,6 @@ documentation:
             example: |
               {
                 "message": "Authentication successful.",
-                "clientId": "kjhkjh%jkhgj&876K&q9f@6pq*16gTx8",
                 "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ"
               }
       404:
@@ -98,18 +97,327 @@ documentation:
               {
                 "message": "No client associated with user."
               }
-/devices:
-  displayName: DEVICES
+/clients:
+  (role) : ADMIN
+  displayName: CLIENTS
   description: |
-    Lets you manipulate your devices and access the measurement data.
+    Lets you manipulate and access client data and telemetry tags.
   securedBy: [JWT]
   get:
     description: |
-      Allows you to get a list of all of your devices.
+      Allows you to get a list of the clients you are allowed to access.
     body:
       application/json:
         example: |
           { }
+    responses:
+      200:
+        description: Returns an array of clients.
+        body:
+          application/json:
+            example: |
+              [
+                {
+                  "created": "2016-01-29T16:04:27.000Z",
+                  "updated": "2016-01-29T16:04:27.000Z",
+                  "apikey": {
+                    "id": "[CLIENT_ID]"
+                  },
+                  "companyName": "[COMPANY_NAME]",
+                  "address": {
+                    "street": "[STREET]",
+                    "street2": "[STREET_2]",
+                    "city": "[CITY]",
+                    "province": "[PROVINCE]",
+                    "postalCode": [POSTAL_CODE]"",
+                    "country": "[COUNTRY]"
+                  },
+                  "contact": {
+                    "firstName": "[FIRST_NAME]",
+                    "lastName": "[LAST_NAME]",
+                    "email": "[EMAIL_ADDRESS]",
+                    "phone": "[PHONE_NUMBER]"
+                  },
+                  "reseller": [true|false]
+                }
+              ]
+      401:
+        description: Not authorized.
+        body:
+          application/json:
+            example: |
+              {
+                message: "You are not authorized to access this resource."
+              }
+  post:
+    (role) : ADMIN
+    description: |
+      Allows you to add a new client.
+    body:
+      application/json:
+        example: |
+          {
+            "companyName": "[COMPANY_NAME]",
+            "address": {
+              "street": "[STREET]",
+              "street2": "[STREET_2]",
+              "city": "[CITY]",
+              "province": "[PROVINCE]",
+              "postalCode": [POSTAL_CODE]"",
+              "country": "[COUNTRY]"
+            },
+            "contact": {
+              "firstName": "[FIRST_NAME]",
+              "lastName": "[LAST_NAME]",
+              "email": "[EMAIL_ADDRESS]",
+              "phone": "[PHONE_NUMBER]"
+            },
+            "reseller": [true|false]
+          }
+    responses:
+      200:
+        description: Returns the added client.
+        body:
+          application/json:
+            example: |
+              {
+                "created": "2016-01-29T16:04:27.000Z",
+                "updated": "2016-01-29T16:04:27.000Z",
+                "apikey": {
+                  "id": "[CLIENT_ID]"
+                },
+                "companyName": "[COMPANY_NAME]",
+                "address": {
+                  "street": "[STREET]",
+                  "street2": "[STREET_2]",
+                  "city": "[CITY]",
+                  "province": "[PROVINCE]",
+                  "postalCode": [POSTAL_CODE]"",
+                  "country": "[COUNTRY]"
+                },
+                "contact": {
+                  "firstName": "[FIRST_NAME]",
+                  "lastName": "[LAST_NAME]",
+                  "email": "[EMAIL_ADDRESS]",
+                  "phone": "[PHONE_NUMBER]"
+                },
+                "reseller": [true|false]
+              }
+      400:
+        description: Database error adding the client.
+        body:
+          application/json:
+            example: |
+              {
+                message: "Error inserting the client: [ERROR_MESSAGE]"
+              }
+      401:
+        description: Not authorized.
+        body:
+          application/json:
+            example: |
+              {
+                message: "You are not authorized to access this resource."
+              }
+  /{id}:
+    description: |
+      Allows you to work with an individual client.
+    securedBy: [JWT]
+    uriParameters:
+      id:
+        description: The clients's ObjectId.
+        type: string
+    get:
+      description: |
+        Returns a single client.
+      body:
+        application/json:
+          example: |
+            { }
+      responses:
+        200:
+          description: Returns a client.
+          body:
+            application/json:
+              example: |
+                {
+                  "created": "2016-01-29T16:04:27.000Z",
+                  "updated": "2016-01-29T16:04:27.000Z",
+                  "apikey": {
+                    "id": "[CLIENT_ID]"
+                  },
+                  "companyName": "[COMPANY_NAME]",
+                  "address": {
+                    "street": "[STREET]",
+                    "street2": "[STREET_2]",
+                    "city": "[CITY]",
+                    "province": "[PROVINCE]",
+                    "postalCode": [POSTAL_CODE]"",
+                    "country": "[COUNTRY]"
+                  },
+                  "contact": {
+                    "firstName": "[FIRST_NAME]",
+                    "lastName": "[LAST_NAME]",
+                    "email": "[EMAIL_ADDRESS]",
+                    "phone": "[PHONE_NUMBER]"
+                  },
+                  "reseller": [true|false]
+                }
+        401:
+          description: Not authorized.
+          body:
+            application/json:
+              example: |
+                {
+                  message: "You are not authorized to access this resource."
+                }
+        404:
+          description: Client not found.
+          body:
+            application/json:
+              example: |
+                {
+                  message: "Client not found"
+                }
+    put:
+      description: |
+        Allows you to edit a client.
+      body:
+        application/json:
+          example: |
+            {
+              "companyName": "[COMPANY_NAME]",
+              "address": {
+                "street": "[STREET]",
+                "street2": "[STREET_2]",
+                "city": "[CITY]",
+                "province": "[PROVINCE]",
+                "postalCode": [POSTAL_CODE]"",
+                "country": "[COUNTRY]"
+              },
+              "contact": {
+                "firstName": "[FIRST_NAME]",
+                "lastName": "[LAST_NAME]",
+                "email": "[EMAIL_ADDRESS]",
+                "phone": "[PHONE_NUMBER]"
+              },
+              "reseller": [true|false]
+            }
+      responses:
+        200:
+          description: Client saved.
+          body:
+            application/json:
+              example: |
+                {
+                  "created": "2016-01-29T16:04:27.000Z",
+                  "updated": "2016-01-29T16:04:27.000Z",
+                  "apikey": {
+                    "id": "[CLIENT_ID]"
+                  },
+                  "companyName": "[COMPANY_NAME]",
+                  "address": {
+                    "street": "[STREET]",
+                    "street2": "[STREET_2]",
+                    "city": "[CITY]",
+                    "province": "[PROVINCE]",
+                    "postalCode": [POSTAL_CODE]"",
+                    "country": "[COUNTRY]"
+                  },
+                  "contact": {
+                    "firstName": "[FIRST_NAME]",
+                    "lastName": "[LAST_NAME]",
+                    "email": "[EMAIL_ADDRESS]",
+                    "phone": "[PHONE_NUMBER]"
+                  },
+                  "reseller": [true|false]
+                }
+        401:
+          description: Not authorized.
+          body:
+            application/json:
+              example: |
+                {
+                  message: "You are not authorized to access this resource."
+                }
+        404:
+          description: Client not found.
+          body:
+            application/json:
+              example: |
+                {
+                  "message": "Client not found"
+    /tags:
+      securedBy: [JWT]
+      get:
+        description: Gets a list of the client's tags.
+      /{tag}:
+        securedBy: [JWT]
+        uriParameters:
+          tag:
+            description: The tag.
+            type: string
+        get:
+          description: Gets a single tag.
+      /search:
+        securedBy: [JWT]
+        description: |
+          Allows you to search multiple tags.
+        get:
+          description: Queries for telemetry using tags.
+          queryParameters:
+            tags:
+              example: tags=D001_LOC1_TI,D002_LOC1_EI
+            start:
+              example: start=2016-01-29T16:04:27.000Z
+            end:
+              example: end=2016-01-29T16:04:27.000Z
+          responses:
+            200:
+              description: Returns an array of telemetry data.
+              body:
+                application/json:
+                  example: |
+                    [
+                      {
+
+                      }
+                    ]
+    /devices:
+      securedBy: [JWT]
+      get:
+        description: Gets a list of the client's devices.
+      post:
+        description: Adds a new devices to the client.
+    /users:
+      securedBy: [JWT]
+      get:
+        description: Gets a list of the client's users.
+      post:
+        description: Adds a new user to the client.
+/users:
+  displayName: USERS
+  description: |
+    Lets you manipulate users.
+  securedBy: [JWT]
+  get:
+    description: Gets a list of users.
+  /{id}:
+    get:
+      description: Gets a single user.
+    put:
+      description: Edits a user (can't change password).
+    /password:
+      put:
+        description: Changes a user's password.
+/devices:
+  displayName: DEVICES
+  description: |
+    Lets you manipulate your devices and access telemetry.
+  securedBy: [JWT]
+  get:
+    description: |
+      Allows you to get a list of all of your devices.
     responses:
       200:
         description: Returns an array of all of your devices.
@@ -260,21 +568,21 @@ documentation:
                   {
                     "message": "Device not found"
                   }
-    /measurements:
+    /telemetries:
       securedBy: [JWT]
       get:
         description: |
-          Returns a list of measurements.
+          Returns telemetry data.
         queryParameters:
           start:
             example: start=2016-01-29T16:04:27.000Z
           end:
             example: end=2016-01-29T16:04:27.000Z
           sensors:
-            example: sensors=temp&sensors=pres&sensors=humi&sensors=aclx&sensors=acly&&sensors=aclz&&sensors=shck
+            example: sensors=temp&sensors=pres&sensors=humi&sensors=aclx&sensors=acly&sensors=aclz&sensors=shck
         responses:
           200:
-            description: An array of measurements
+            description: An array of telemetries
             body:
               application/json:
                 example: |

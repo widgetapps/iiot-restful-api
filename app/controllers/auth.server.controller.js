@@ -4,9 +4,9 @@
  * Controller dependencies.
  */
 var mongoose = require('mongoose'),
-    User = mongoose.model('User'),
-    Client = mongoose.model('Client'),
-    Device = mongoose.model('Device'),
+    User = require('@terepac/terepac-models').User,
+    Client = require('@terepac/terepac-models').Client,
+    Device = require('@terepac/terepac-models').Device,
     _ = require('lodash'),
     moment = require('moment'),
     jwt = require('jsonwebtoken'),

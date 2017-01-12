@@ -83,19 +83,6 @@ var fs = require('fs'),
 
     app.use(cors());
 
-	// Express MongoDB session storage
-		/*
-	app.use(session({
-		saveUninitialized: true,
-		resave: true,
-		secret: config.sessionSecret,
-		store: new mongoStore({
-			db: db.connection.db,
-			collection: config.sessionCollection
-		})
-	}));
-	*/
-
 	// Use helmet to secure Express headers
 	app.use(helmet.xframe());
 	app.use(helmet.xssFilter());

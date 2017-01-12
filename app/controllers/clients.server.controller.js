@@ -5,8 +5,8 @@
  */
 var mongoose = require('mongoose'),
     errorHandler = require('./errors.server.controller'),
-    Client = mongoose.model('Client'),
-    User = mongoose.model('User'),
+    Client = require('@terepac/terepac-models').Client,
+    User = require('@terepac/terepac-models').User,
     _ = require('lodash'),
     moment = require('moment'),
     randomstring = require('randomstring');
@@ -87,15 +87,15 @@ exports.getOne = function(req, res) {
             address: 1,
             contact: 1,
             reseller: 1
-        }, function(err, device) {
-            if (!device || err) {
+        }, function(err, client) {
+            if (!client || err) {
                 res.status(404).send({
-                    message: 'No device found.'
+                    message: 'Client not found.'
                 });
                 return;
             }
 
-            res.json(device);
+            res.json(client);
         });
 };
 

@@ -6,7 +6,7 @@
 var mongoose = require('mongoose'),
     errorHandler = require('./errors.server.controller'),
     Measurement = mongoose.model('Measurement'),
-    Device = mongoose.model('Device'),
+    Device = require('@terepac/terepac-models').Device,
     _ = require('lodash'),
     moment = require('moment');
 
