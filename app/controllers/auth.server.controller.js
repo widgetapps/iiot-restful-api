@@ -18,6 +18,7 @@ var mongoose = require('mongoose'),
 exports.authenticate = function(req, res) {
 
     console.log('STARTING AUTHENTICATION...');
+    console.log('EMAIL: ' + req.body.email);
 
     User.findOne({
         email: req.body.email
