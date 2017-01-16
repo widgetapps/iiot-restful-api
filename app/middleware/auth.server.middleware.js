@@ -26,7 +26,7 @@ module.exports = function(req, res, next) {
                         res.status(401).send({
                             message: 'The supplied x-access-token (JWT) is not valid.',
                             ref: 'https://developers.terepac.one/#authentication',
-                            request: JSON.stringify(req.toJSON())
+                            url: req.baseUrl
                         });
                     } else {
                         // if everything is good, save to request for use in other routes
@@ -41,7 +41,7 @@ module.exports = function(req, res, next) {
         res.status(401).send({
             message: 'One or both of the required headers (x-client-id, x-access-token) are missing.',
             ref: 'https://developers.terepac.one/#authentication',
-            request: JSON.stringify(req.toJSON())
+            url: req.baseUrl
         });
     }
 };
