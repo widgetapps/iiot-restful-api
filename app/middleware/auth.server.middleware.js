@@ -40,7 +40,8 @@ module.exports = function(req, res, next) {
     } else {
         res.status(401).send({
             message: 'One or both of the required headers (x-client-id, x-access-token) are missing.',
-            ref: 'https://developers.terepac.one/#authentication'
+            ref: 'https://developers.terepac.one/#authentication',
+            request: JSON.stringify(req)
         });
     }
 };
