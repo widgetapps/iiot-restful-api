@@ -16,6 +16,12 @@ var mongoose = require('mongoose'),
  * Module dependencies.
  */
 exports.authenticate = function(req, res) {
+
+    res.json({
+        message: 'It has been called.'
+    });
+    return;
+
     User.findOne({
         email: req.body.email
     },{
