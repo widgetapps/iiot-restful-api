@@ -38,11 +38,15 @@ exports.authenticate = function(req, res) {
             return;
         }
 
+        console.log('NO ERROR');
+
         if (!user) {
+            console.log('NO USER');
             res.status(404).send({
                 message: 'Authentication failed. User not found.'
             });
         } else {
+            console.log('USER FOUND');
             if (!user.authenticate(req.body.password)) {
                 res.status(404).send({
                     message: 'Authentication failed. Incorrect password.'
