@@ -3,7 +3,7 @@
 module.exports = function(req, res, next) {
 
     var mongoose = require('mongoose');
-    var Client = mongoose.model('Client');
+    var Client = require('@terepac/terepac-models').Client;
     var jwt = require('jsonwebtoken');
 
     var token = req.headers['x-access-token'];
