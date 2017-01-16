@@ -25,7 +25,8 @@ module.exports = function(req, res, next) {
                     if (err) {
                         res.status(401).send({
                             message: 'The supplied x-access-token (JWT) is not valid.',
-                            ref: 'https://developers.terepac.one/#authentication'
+                            ref: 'https://developers.terepac.one/#authentication',
+                            request: JSON.stringify(req)
                         });
                     } else {
                         // if everything is good, save to request for use in other routes
