@@ -14,7 +14,4 @@ module.exports = function(app) {
     app.route('/devices/:serialNumber/settings')
         .get(devices.getSettings)
         .put(devices.updateSettings);
-
-    app.route('/devices/:serialNumber/measurements')
-        .get(devices.getMeasurements);
 };

@@ -5,7 +5,6 @@
  */
 var mongoose = require('mongoose'),
     errorHandler = require('./errors.server.controller'),
-    Measurement = mongoose.model('Measurement'),
     Device = require('@terepac/terepac-models').Device,
     _ = require('lodash'),
     moment = require('moment');
@@ -149,55 +148,4 @@ exports.updateSettings = function(req, res) {
             });
         }
     );
-};
-
-exports.getMeasurements = function(req, res) {
-    var clientId = mongoose.Types.ObjectId(req.user.client);
-    var serialNumber = req.params.serialNumber;
-
-    Device.findOne({ serialNumber: serialNumber, $or: [{client: clientId}, {acl: clientId}] }, function(err, device) {
-        if (!device || err) {
-            res.status(404).send({
-                message: 'No device found.'
-            });
-            return;
-        }
-
-        if (!req.query.sensors) {
-            res.status(404).send({
-                message: 'No sensors were provided.'
-            });
-            return;
-        }
-
-        var sensors;
-
-        if (req.query.sensors instanceof Array){
-            sensors = req.query.sensors;
-        } else {
-            sensors = [req.query.sensors];
-        }
-
-        Measurement.find({
-                device: device._id,
-                created: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)},
-                sensor: {$in: sensors}
-            },{
-                created: 1,
-                sensor: 1,
-                data: 1
-            })
-            .sort('created')
-            .exec(function (err, measurements) {
-                if (err || measurements.length === 0) {
-                    res.status(404).send({
-                        message: 'No measurements found. Did you include the start, end & sensors params?'
-                    });
-                    return;
-                }
-
-                res.json(measurements);
-
-            });
-    });
 };
