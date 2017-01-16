@@ -17,11 +17,6 @@ var mongoose = require('mongoose'),
  */
 exports.authenticate = function(req, res) {
 
-    res.json({
-        message: 'It has been called.'
-    });
-    return;
-
     User.findOne({
         email: req.body.email
     },{
@@ -36,13 +31,18 @@ exports.authenticate = function(req, res) {
         client: 1
     }).exec(function(err, user) {
 
-        if (err) throw err;
+        if (err) {
+            res.status(404).send({
+                message: 'Error finding the user: ' + err
+            });
+            return;
+        }
 
         if (!user) {
             res.status(404).send({
                 message: 'Authentication failed. User not found.'
             });
-        } else if (user) {
+        } else {
             if (!user.authenticate(req.body.password)) {
                 res.status(404).send({
                     message: 'Authentication failed. Incorrect password.'
