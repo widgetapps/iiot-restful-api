@@ -17,6 +17,8 @@ var mongoose = require('mongoose'),
  */
 exports.authenticate = function(req, res) {
 
+    console.log('STARTING AUTHENTICATION...');
+
     User.findOne({
         email: req.body.email
     },{
@@ -30,6 +32,8 @@ exports.authenticate = function(req, res) {
         active: 1,
         client: 1
     }).exec(function(err, user) {
+
+        console.log('QUERY SUCCESSFUL');
 
         if (err) {
             res.status(404).send({
