@@ -56,6 +56,14 @@ exports.authenticate = function(req, res) {
                         user.password = undefined;
                         user.salt = undefined;
 
+                        // Add reseller info to the user
+                        if (client.reseller) {
+                            user.reseller = true;
+                            user.resellerClients = client.resellerClients;
+                        } else {
+                            user.reseller = false;
+                        }
+
                         var token = jwt.sign(user, client.apikey.secret, {
                             expiresIn: '1d'
                         });

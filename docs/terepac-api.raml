@@ -115,92 +115,30 @@ documentation:
             example: |
               [
                 {
-                  "created": "2016-01-29T16:04:27.000Z",
-                  "updated": "2016-01-29T16:04:27.000Z",
+                  "_id": : "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
                   "apikey": {
-                    "id": "[CLIENT_ID]"
+                    "id": "STRING"
                   },
-                  "companyName": "[COMPANY_NAME]",
+                  "companyName": "STRING",
                   "address": {
-                    "street": "[STREET]",
-                    "street2": "[STREET_2]",
-                    "city": "[CITY]",
-                    "province": "[PROVINCE]",
-                    "postalCode": [POSTAL_CODE]"",
-                    "country": "[COUNTRY]"
+                    "street": "STRING",
+                    "street2": "STRING",
+                    "city": "STRING",
+                    "province": "STRING",
+                    "postalCode": "STRING",
+                    "country": "STRING"
                   },
                   "contact": {
-                    "firstName": "[FIRST_NAME]",
-                    "lastName": "[LAST_NAME]",
-                    "email": "[EMAIL_ADDRESS]",
-                    "phone": "[PHONE_NUMBER]"
+                    "firstName": "STRING",
+                    "lastName": "STRING",
+                    "email": "STRING",
+                    "phone": "STRING"
                   },
-                  "reseller": [true|false]
+                  "reseller": BOOLEAN
                 }
               ]
-      401:
-        description: Not authorized.
-        body:
-          application/json:
-            example: |
-              {
-                message: "You are not authorized to access this resource."
-              }
-  post:
-    (role) : ADMIN
-    description: |
-      Allows you to add a new client. You must be a reseller or be an admin to
-      add a new client.
-    body:
-      application/json:
-        example: |
-          {
-            "companyName": "[COMPANY_NAME]",
-            "address": {
-              "street": "[STREET]",
-              "street2": "[STREET_2]",
-              "city": "[CITY]",
-              "province": "[PROVINCE]",
-              "postalCode": [POSTAL_CODE]"",
-              "country": "[COUNTRY]"
-            },
-            "contact": {
-              "firstName": "[FIRST_NAME]",
-              "lastName": "[LAST_NAME]",
-              "email": "[EMAIL_ADDRESS]",
-              "phone": "[PHONE_NUMBER]"
-            },
-            "reseller": [true|false]
-          }
-    responses:
-      200:
-        description: Returns the added client.
-        body:
-          application/json:
-            example: |
-              {
-                "created": "2016-01-29T16:04:27.000Z",
-                "updated": "2016-01-29T16:04:27.000Z",
-                "apikey": {
-                  "id": "[CLIENT_ID]"
-                },
-                "companyName": "[COMPANY_NAME]",
-                "address": {
-                  "street": "[STREET]",
-                  "street2": "[STREET_2]",
-                  "city": "[CITY]",
-                  "province": "[PROVINCE]",
-                  "postalCode": [POSTAL_CODE]"",
-                  "country": "[COUNTRY]"
-                },
-                "contact": {
-                  "firstName": "[FIRST_NAME]",
-                  "lastName": "[LAST_NAME]",
-                  "email": "[EMAIL_ADDRESS]",
-                  "phone": "[PHONE_NUMBER]"
-                },
-                "reseller": [true|false]
-              }
       400:
         description: Database error adding the client.
         body:
@@ -216,6 +154,70 @@ documentation:
             example: |
               {
                 message: "You are not authorized to access this resource."
+              }
+      404:
+        description: Client not found.
+        body:
+          application/json:
+            example: |
+              {
+                message: "Client not found"
+              }
+  post:
+    (role) : ADMIN
+    description: |
+      Allows you to add a new client. You must be a reseller or be an admin to
+      add a new client.
+    body:
+      application/json:
+        example: |
+          {
+            "companyName": "STRING",
+            "address": {
+              "street": "STRING",
+              "street2": "STRING",
+              "city": "STRING",
+              "province": "STRING",
+              "postalCode": "STRING",
+              "country": "STRING"
+            },
+            "contact": {
+              "firstName": "STRING",
+              "lastName": "STRING",
+              "email": "STRING",
+              "phone": "STRING"
+            },
+            "reseller": BOOLEAN
+          }
+    responses:
+      200:
+        description: Returns the added client.
+        body:
+          application/json:
+            example: |
+              {
+                "_id": : "OBJECT_ID",
+                "created": "DATE",
+                "updated": "DATE",
+                "apikey": {
+                  "id": "STRING"
+                },
+                "companyName": "STRING",
+                "address": {
+                  "street": "STRING",
+                  "street2": "STRING",
+                  "city": "STRING",
+                  "province": "STRING",
+                  "postalCode": "STRING",
+                  "country": "STRING"
+                },
+                "contact": {
+                  "firstName": "STRING",
+                  "lastName": "STRING",
+                  "email": "STRING",
+                  "phone": "STRING"
+                },
+                "reseller": BOOLEAN
               }
   /{id}:
     description: |
@@ -235,43 +237,28 @@ documentation:
             application/json:
               example: |
                 {
-                  "created": "2016-01-29T16:04:27.000Z",
-                  "updated": "2016-01-29T16:04:27.000Z",
+                  "_id": : "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
                   "apikey": {
-                    "id": "[CLIENT_ID]"
+                    "id": "STRING"
                   },
-                  "companyName": "[COMPANY_NAME]",
+                  "companyName": "STRING",
                   "address": {
-                    "street": "[STREET]",
-                    "street2": "[STREET_2]",
-                    "city": "[CITY]",
-                    "province": "[PROVINCE]",
-                    "postalCode": [POSTAL_CODE]"",
-                    "country": "[COUNTRY]"
+                    "street": "STRING",
+                    "street2": "STRING",
+                    "city": "STRING",
+                    "province": "STRING",
+                    "postalCode": "STRING",
+                    "country": "STRING"
                   },
                   "contact": {
-                    "firstName": "[FIRST_NAME]",
-                    "lastName": "[LAST_NAME]",
-                    "email": "[EMAIL_ADDRESS]",
-                    "phone": "[PHONE_NUMBER]"
+                    "firstName": "STRING",
+                    "lastName": "STRING",
+                    "email": "STRING",
+                    "phone": "STRING"
                   },
-                  "reseller": [true|false]
-                }
-        401:
-          description: Not authorized.
-          body:
-            application/json:
-              example: |
-                {
-                  message: "You are not authorized to access this resource."
-                }
-        404:
-          description: Client not found.
-          body:
-            application/json:
-              example: |
-                {
-                  message: "Client not found"
+                  "reseller": BOOLEAN
                 }
     put:
       description: |
@@ -281,22 +268,22 @@ documentation:
         application/json:
           example: |
             {
-              "companyName": "[COMPANY_NAME]",
+              "companyName": "STRING",
               "address": {
-                "street": "[STREET]",
-                "street2": "[STREET_2]",
-                "city": "[CITY]",
-                "province": "[PROVINCE]",
-                "postalCode": [POSTAL_CODE]"",
-                "country": "[COUNTRY]"
+                "street": "STRING",
+                "street2": "STRING",
+                "city": "STRING",
+                "province": "STRING",
+                "postalCode": "STRING",
+                "country": "STRING"
               },
               "contact": {
-                "firstName": "[FIRST_NAME]",
-                "lastName": "[LAST_NAME]",
-                "email": "[EMAIL_ADDRESS]",
-                "phone": "[PHONE_NUMBER]"
+                "firstName": "STRING",
+                "lastName": "STRING",
+                "email": "STRING",
+                "phone": "STRING"
               },
-              "reseller": [true|false]
+              "reseller": BOOLEAN
             }
       responses:
         200:
@@ -305,43 +292,28 @@ documentation:
             application/json:
               example: |
                 {
-                  "created": "2016-01-29T16:04:27.000Z",
-                  "updated": "2016-01-29T16:04:27.000Z",
+                  "_id": : "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
                   "apikey": {
-                    "id": "[CLIENT_ID]"
+                    "id": "STRING"
                   },
-                  "companyName": "[COMPANY_NAME]",
+                  "companyName": "STRING",
                   "address": {
-                    "street": "[STREET]",
-                    "street2": "[STREET_2]",
-                    "city": "[CITY]",
-                    "province": "[PROVINCE]",
-                    "postalCode": [POSTAL_CODE]"",
-                    "country": "[COUNTRY]"
+                    "street": "STRING",
+                    "street2": "STRING",
+                    "city": "STRING",
+                    "province": "STRING",
+                    "postalCode": "STRING",
+                    "country": "STRING"
                   },
                   "contact": {
-                    "firstName": "[FIRST_NAME]",
-                    "lastName": "[LAST_NAME]",
-                    "email": "[EMAIL_ADDRESS]",
-                    "phone": "[PHONE_NUMBER]"
+                    "firstName": "STRING",
+                    "lastName": "STRING",
+                    "email": "STRING",
+                    "phone": "STRING"
                   },
-                  "reseller": [true|false]
-                }
-        401:
-          description: Not authorized.
-          body:
-            application/json:
-              example: |
-                {
-                  message: "You are not authorized to access this resource."
-                }
-        404:
-          description: Client not found.
-          body:
-            application/json:
-              example: |
-                {
-                  "message": "Client not found"
+                  "reseller": BOOLEAN
                 }
     /tags:
       securedBy: [JWT]
@@ -353,115 +325,99 @@ documentation:
             body:
               application/json:
                 example: |
-                  [
-                    { "tag": "LOCATION_DEVICE_SENSOR" },
-                    { "tag": "LOCATION_DEVICE_SENSOR" },
-                    { "tag": "LOCATION_DEVICE_SENSOR" }
-                  ]
-          401:
-            description: Not authorized.
-            body:
-              application/json:
-                example: |
-                  {
-                    message: "You are not authorized to access this resource."
-                  }
-          404:
-            description: Client not found.
-            body:
-              application/json:
-                example: |
-                  {
-                    "message": "Client not found"
-                  }
-      /{tag}:
-        securedBy: [JWT]
-        uriParameters:
-          tag:
-            description: The tag.
+                  [{
+                    "_id": : "OBJECT_ID",
+                    "created": "DATE",
+                    "updated": "DATE",
+                    "tag": "STRING",
+                    "active": BOOLEAN,
+                    "activeStart": "DATE",
+                    "historical": {
+                      "start": "DATE",
+                      "end": "DATE"
+                    }
+                  }]
+    /telemetries/search:
+      securedBy: [JWT]
+      description: |
+        Allows you to search multiple tags. Returns an array of telemetry
+        data.
+      get:
+        description: Queries for telemetry using tags.
+        queryParameters:
+          tags:
             type: string
-        get:
-          description: Gets the telemetry data for a single tag.
-          responses:
-            200:
-              description: Telemetry found.
-              body:
-                application/json:
-                  example: |
+            description: A comma delimited list of tags.
+            example: tags=D001_LOC1_TI,D002_LOC1_EI
+          start:
+            type: string
+            description: The start date of the data.
+            example: start=2016-01-29T16:04:27.000Z
+          end:
+            type: string
+            description: The end date of the data.
+            example: end=2016-01-29T16:04:27.000Z
+          asset:
+            type: string
+            description: Include asset data.
+            example: asset=1
+            required: false
+          device:
+            type: string
+            description: Include device data.
+            example: device=1
+            required: false
+          sensor:
+            type: string
+            description: Include sensor data.
+            example: sensor=1
+            required: false
+        responses:
+          200:
+            description: |
+              Returns an array of telemetry data. The data represents
+              the state of the system when the telemetry was captured (asset,
+              device and sensor are copied data).
+            body:
+              application/json:
+                example: |
+                  [
                     {
-                      "tag": "[TAG]",
-                      "timestamp": "[DATE]",
+                      "tag": "STRING",
+                      "timestamp": "DATE",
+                      "asset": {
+                        "tagCode": "STRING",
+                        "name": "STRING",
+                        "description": "STRING",
+                        "location": {
+                          "tagCode": "STRING",
+                          "description": "STRING",
+                          "geolocation": [NUMBER, NUMBER]
+                        }
+                      },
                       "device": {
-                        "serialNumber": "",
-                        "type": "",
-                        "descriptor": "",
-                        "geolocation": [x, y]
+                        "serialNumber": "STRING",
+                        "type": "STRING",
+                        "description": "STRING"
                       },
                       "sensor": {
-                        "type": 1,
-                        "typeString": "",
-                        "description": "",
-                        "unit", ""
+                        "type": NUMBER,
+                        "typeString": "STRING",
+                        "description": "STRING",
+                        "unit": "STRING"
                       },
                       "data": {
-                        "unit": "",
-                        "quality": 1,
+                        "unit": "STRING",
+                        "quality": NUMBER,
                         "values": {
-                          "min": 5,
-                          "max": 5,
-                          "average": 5,
-                          "current": 5
+                          "min": NUMBER,
+                          "max": NUMBER,
+                          "average": NUMBER,
+                          "current": NUMBER
                         }
                       }
                     }
-      /search:
-        securedBy: [JWT]
-        description: |
-          Allows you to search multiple tags. Returns an array of telemetry
-          data.
-        get:
-          description: Queries for telemetry using tags.
-          queryParameters:
-            tags:
-              example: tags=D001_LOC1_TI,D002_LOC1_EI
-            start:
-              example: start=2016-01-29T16:04:27.000Z
-            end:
-              example: end=2016-01-29T16:04:27.000Z
-          responses:
-            200:
-              description: Returns an array of telemetry data.
-              body:
-                application/json:
-                  example: |
-                    [
-                      {
-                        "tag": "[TAG]",
-                        "timestamp": "[DATE]",
-                        "device": {
-                          "serialNumber": "",
-                          "type": "",
-                          "descriptor": "",
-                          "geolocation": [x, y]
-                        },
-                        "sensor": {
-                          "type": 1,
-                          "typeString": "",
-                          "description": "",
-                          "unit", ""
-                        },
-                        "data": {
-                          "unit": "",
-                          "quality": 1,
-                          "values": {
-                            "min": 5,
-                            "max": 5,
-                            "average": 5,
-                            "current": 5
-                          }
-                        }
-                      }
-                    ]
+                  ]
     /locations:
       securedBy: [JWT]
       get:
@@ -473,21 +429,24 @@ documentation:
               application/json:
                 example: |
                   [{
-                    "tagCode": "",
-                    "description": "",
-                    "geolocation": [x, y],
+                    "_id": : "OBJECT_ID",
+                    "created": "DATE",
+                    "updated": "DATE",
+                    "tagCode": "STRING",
+                    "description": "STRING",
+                    "geolocation": [NUMBER, NUMBER],
                     "address": {
-                      "street": "",
-                      "street2": "",
-                      "city": "",
-                      "province": "",
-                      "postalCode": "",
-                      "country": ""
+                      "street": "STRING",
+                      "street2": "STRING",
+                      "city": "STRING",
+                      "province": "STRING",
+                      "postalCode": "STRING",
+                      "country": "STRING"
                     },
                     "assets": [{
-                      "tagCode": "",
-                      "name": "",
-                      "description": ""
+                      "tagCode": "STRING",
+                      "name": "STRING",
+                      "description": "STRING"
                     }]
                   }]
       post:
@@ -496,16 +455,16 @@ documentation:
           application/json:
             example: |
               {
-                "tagCode": "",
-                "description": "",
-                "geolocation": [x, y],
+                "tagCode": "STRING",
+                "description": "STRING",
+                "geolocation": [NUMBER, NUMBER],
                 "address": {
-                  "street": "",
-                  "street2": "",
-                  "city": "",
-                  "province": "",
-                  "postalCode": "",
-                  "country": ""
+                  "street": "STRING",
+                  "street2": "STRING",
+                  "city": "STRING",
+                  "province": "STRING",
+                  "postalCode": "STRING",
+                  "country": "STRING"
                 }
               }
         responses:
@@ -515,81 +474,21 @@ documentation:
               application/json:
                 example: |
                   {
-                    "id": "",
-                    "tagCode": "",
-                    "description": "",
-                    "geolocation": [x, y],
+                    "_id": : "OBJECT_ID",
+                    "created": "DATE",
+                    "updated": "DATE",
+                    "tagCode": "STRING",
+                    "description": "STRING",
+                    "geolocation": [NUMBER, NUMBER],
                     "address": {
-                      "street": "",
-                      "street2": "",
-                      "city": "",
-                      "province": "",
-                      "postalCode": "",
-                      "country": ""
+                      "street": "STRING",
+                      "street2": "STRING",
+                      "city": "STRING",
+                      "province": "STRING",
+                      "postalCode": "STRING",
+                      "country": "STRING"
                     }
                   }
-      /{id}:
-        securedBy: [JWT]
-        get:
-          description: Gets a single location.
-          responses:
-            200:
-              description: A single location.
-              body:
-                application/json:
-                  example: |
-                    {
-                      "id": "",
-                      "tagCode": "",
-                      "description": "",
-                      "geolocation": [x, y],
-                      "address": {
-                        "street": "",
-                        "street2": "",
-                        "city": "",
-                        "province": "",
-                        "postalCode": "",
-                        "country": ""
-                      }
-                    }
-        put:
-          description: Updates a location.
-          body:
-            application/json:
-              example: |
-                {
-                  "tagCode": "",
-                  "description": "",
-                  "geolocation": [x, y],
-                  "address": {
-                    "street": "",
-                    "street2": "",
-                    "city": "",
-                    "province": "",
-                    "postalCode": "",
-                    "country": ""
-                  }
-                }
-          responses:
-            200:
-              description: Location updated.
-              body:
-                application/json:
-                  example: |
-                    {
-                      "id": "",
-                      "tagCode": "",
-                      "description": "",
-                      "geolocation": [x, y],
-                      "address": {
-                        "street": "",
-                        "street2": "",
-                        "city": "",
-                        "province": "",
-                        "postalCode": "",
-                        "country": ""
-                      }
-                    }
     /assets:
       securedBy: [JWT]
       get:
@@ -600,21 +499,23 @@ documentation:
               application/json:
                 example: |
                   [{
-                    "id": "",
-                    "tagCode": "",
-                    "name": "",
-                    "description": "",
+                    "_id": : "OBJECT_ID",
+                    "created": "DATE",
+                    "updated": "DATE",
+                    "tagCode": "STRING",
+                    "name": "STRING",
+                    "description": "STRING",
                     "location": {
-                      "tagCode": "",
-                      "description": "",
-                      "geolocation": [x, y],
+                      "tagCode": "STRING",
+                      "description": "STRING",
+                      "geolocation": [NUMBER, NUMBER],
                       "address": {
-                        "street": "",
-                        "street2": "",
-                        "city": "",
-                        "province": "",
-                        "postalCode": "",
-                        "country": ""
+                        "street": "STRING",
+                        "street2": "STRING",
+                        "city": "STRING",
+                        "province": "STRING",
+                        "postalCode": "STRING",
+                        "country": "STRING"
                       }
                     }
                   }]
@@ -624,9 +525,10 @@ documentation:
           application/json:
             example: |
               {
-                "tagCode": "",
-                "name": "",
-                "description": ""
+                "tagCode": "STRING",
+                "name": "STRING",
+                "description": "STRING",
+                "locationId": "OBJECT_ID"
               }
         responses:
           200:
@@ -634,107 +536,25 @@ documentation:
               application/json:
                 example: |
                   {
-                    "id", "",
-                    "tagCode": "",
-                    "name": "",
-                    "description": ""
+                    "_id": : "OBJECT_ID",
+                    "created": "DATE",
+                    "updated": "DATE",
+                    "tagCode": "STRING",
+                    "name": "STRING",
+                    "description": "STRING",
+                    "location": {
+                      "tagCode": "STRING",
+                      "description": "STRING",
+                      "geolocation": [NUMBER, NUMBER],
+                      "address": {
+                        "street": "STRING",
+                        "street2": "STRING",
+                        "city": "STRING",
+                        "province": "STRING",
+                        "postalCode": "STRING",
+                        "country": "STRING"
+                      }
                   }
-      /{id}:
-        securedBy: [JWT]
-        get:
-          description: Gets a single asset.
-          responses:
-            200:
-              description: Gets a single asset.
-              body:
-                application/json:
-                  example: |
-                    {
-                      "id", "",
-                      "tagCode": "",
-                      "name": "",
-                      "description": ""
-                    }
-        put:
-          description: Updates an asset.
-          body:
-            application/json:
-              example: |
-                {
-                  "tagCode": "",
-                  "name": "",
-                  "description": ""
-                }
-          responses:
-            200:
-              description: Asset updated.
-              body:
-                application/json:
-                  example: |
-                    {
-                      "id": "",
-                      "tagCode": "",
-                      "name": "",
-                      "description": ""
-                    }
-        /devices:
-          securedBy: [JWT]
-          get:
-            description: Gets an array of devices attached to this asset.
-            responses:
-              200:
-                description: Returns an array of devices.
-                body:
-                  application/json:
-                    example: |
-                      [{
-                        "created": "2016-01-29T16:04:27.000Z",
-                        "updated": "2016-01-29T16:04:27.000Z",
-                        "serialNumber": "15",
-                        "type": "hydrant",
-                        "tagLocation": "",
-                        "tagCode": "Client assigned code",
-                        "descriptor": "Client assigned descriptor",
-                        "geolocation": [x, y],
-                        "sensors":
-                          [
-                            {
-                              "tagCode": "",
-                              "type": 1,
-                              "typeString": "",
-                              "description": "",
-                              "unit": ""
-                            }
-                          ],
-                        "settings": {
-                        }
-                      }]
-          /{id}/add:
-            securedBy: [JWT]
-            post:
-              description: Adds this device to this asset.
-              responses:
-                200:
-                  description: Deviced added to asset.
-                  body:
-                    application/json:
-                      example: |
-                        {
-                          "message": "Device added."
-                        }
-          /{id}/remove:
-            securedBy: [JWT]
-            delete:
-              description: Removes this device from this asset.
-              responses:
-                200:
-                  description: Deviced removed from asset.
-                  body:
-                    application/json:
-                      example: |
-                        {
-                          "message": "Device removed."
-                        }
     /devices:
       securedBy: [JWT]
       get:
@@ -746,26 +566,25 @@ documentation:
               application/json:
                 example: |
                   [{
-                    "created": "2016-01-29T16:04:27.000Z",
-                    "updated": "2016-01-29T16:04:27.000Z",
-                    "serialNumber": "15",
-                    "type": "hydrant",
-                    "tagLocation": "",
-                    "tagCode": "Client assigned code",
-                    "descriptor": "Client assigned descriptor",
-                    "geolocation": [x, y],
-                    "sensors":
-                      [
-                        {
-                          "tagCode": "",
-                          "type": 1,
-                          "typeString": "",
-                          "description": "",
-                          "unit": ""
-                        }
-                      ],
-                    "settings": {
-                    }
+                    "_id": : "OBJECT_ID",
+                    "created": "DATE",
+                    "updated": "DATE",
+                    "serialNumber": "STRING",
+                    "type": "STRING",
+                    "tagCode": "STRING",
+                    "description": "STRING",
+                    "sensors": [{
+                      "tagCode": "STRING",
+                      "type": STRING,
+                      "typeString": "STRING",
+                      "description": "STRING",
+                      "unit": "STRING"
+                    }],
+                    "settings": [{
+                      "name": "STRING",
+                      "dataType": "STRING",
+                      "value": MIXED
+                    }]
                   }]
       post:
         description: Adds a new device to the client.
@@ -773,22 +592,22 @@ documentation:
           application/json:
             example: |
               {
-                "serialNumber": "",
-                "type": "",
-                "tagLocation": "",
-                "tagCode": "",
-                "descriptor": "",
-                "geolocation": [x, y],
-                "sensors": [
-                  {
-                    "tagCode": "",
-                    "limits": {
-                      "low": 5,
-                      "high": 10
-                    }
+                "serialNumber": "STRING",
+                "type": "STRING",
+                "tagCode": "STRING",
+                "description": "STRING",
+                "sensors": [{
+                  "tagCode": "STRING",
+                  "limits": {
+                    "low": NUMBER,
+                    "high": NUMBER
                   }
-                ]
-                "settings": {}
+                }],
+                "settings": [{
+                  "name": "STRING",
+                  "dataType": "STRING",
+                  "value": MIXED
+                }]
               }
         responses:
           200:
@@ -797,25 +616,25 @@ documentation:
               application/json:
                 example: |
                   {
-                    "id": "",
-                    "created": "2016-01-29T16:04:27.000Z",
-                    "updated": "2016-01-29T16:04:27.000Z",
-                    "serialNumber": "",
-                    "type": "",
-                    "tagLocation": "",
-                    "tagCode": "",
-                    "descriptor": "",
-                    "geolocation": [x, y],
-                    "sensors": [
-                      {
-                        "tagCode": "",
-                        "limits": {
-                          "low": 5,
-                          "high": 10
-                        }
+                    "_id": : "STRING",
+                    "created": "DATE",
+                    "updated": "DATE",
+                    "serialNumber": "STRING",
+                    "type": "STRING",
+                    "tagCode": "STRING",
+                    "description": "STRING",
+                    "sensors": [{
+                      "tagCode": "STRING",
+                      "limits": {
+                        "low": NUMBER,
+                        "high": NUMBER
                       }
-                    ]
-                    "settings": {}
+                    }],
+                    "settings": [{
+                      "name": "STRING",
+                      "dataType": "STRING",
+                      "value": MIXED
+                    }]
                   }
     /users:
       securedBy: [JWT]
@@ -829,14 +648,14 @@ documentation:
                 example: |
                   [
                     {
-                      "id": "",
-                      "created": "2016-01-29T16:04:27.000Z",
-                      "updated": "2016-01-29T16:04:27.000Z",
-                      "firstName": "",
-                      "lastName": "",
-                      "email": "",
-                      "roles": [""],
-                      "active": true
+                      "_id": : "OBJECT_ID",
+                      "created": "DATE",
+                      "updated": "DATE",
+                      "firstName": "STRING",
+                      "lastName": "STRING",
+                      "email": "STRING",
+                      "role": "STRING",
+                      "active": BOOLEAN
                     }
                   ]
       post:
@@ -845,11 +664,11 @@ documentation:
           application/json:
             example: |
               {
-                "firstName": "",
-                "lastName": "",
-                "email": "",
-                "roles": [""],
-                "active": true
+                "firstName": "STRING",
+                "lastName": "STRING",
+                "email": "STRING",
+                "role": "STRING",
+                "active": BOOLEAN
               }
         responses:
           200:
@@ -858,16 +677,188 @@ documentation:
               application/json:
                 example: |
                   {
-                    "id": "",
-                    "created": "2016-01-29T16:04:27.000Z",
-                    "updated": "2016-01-29T16:04:27.000Z",
-                    "firstName": "",
-                    "lastName": "",
-                    "email": "",
-                    "roles": [""],
-                    "active": true
+                    "_id": "OBJECT_ID",
+                    "created": "DATE",
+                    "updated": "DATE",
+                    "firstName": "STRING",
+                    "lastName": "STRING",
+                    "email": "STRING",
+                    "role": "STRING",
+                    "active": BOOLEAN
                   }
 
+/assets/{id}:
+  displayName: ASSETS
+  description: |
+    Lets you manupulate assets.
+  securedBy: [JWT]
+  get:
+    description: Gets a single asset.
+    responses:
+      200:
+        description: Gets a single asset.
+        body:
+          application/json:
+            example: |
+              {
+                "_id": "OBJECT_ID",
+                "created": "DATE",
+                "updated": "DATE",
+                "tagCode": "STRING",
+                "name": "STRING",
+                "description": "STRING"
+              }
+  put:
+    description: Updates an asset.
+    body:
+      application/json:
+        example: |
+          {
+            "tagCode": "STRING",
+            "name": "STRING",
+            "description": "STRING"
+          }
+    responses:
+      200:
+        description: Asset updated.
+        body:
+          application/json:
+            example: |
+              {
+                "_id": "OBJECT_ID",
+                "created": "DATE",
+                "updated": "DATE",
+                "tagCode": "STRING",
+                "name": "STRING",
+                "description": "STRING"
+              }
+  /devices:
+    securedBy: [JWT]
+    get:
+      description: Gets an array of devices attached to this asset.
+      responses:
+        200:
+          description: Returns an array of devices.
+          body:
+            application/json:
+              example: |
+                [{
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "serialNumber": "STRING",
+                  "type": "STRING",
+                  "tagCode": "STRING",
+                  "description": "STRING",
+                  "geolocation": [NUMBER, NUMBER],
+                  "sensors":[{
+                    "tagCode": "STRING",
+                    "type": NUMBER,
+                    "typeString": "STRING",
+                    "description": "STRING",
+                    "unit": "STRING"
+                  }],
+                  "settings": [{
+                    "name": "STRING",
+                    "dataType": "STRING",
+                    "value": MIXED
+                  }]
+                }]
+    /{id}/add:
+      securedBy: [JWT]
+      post:
+        description: Adds this device to this asset.
+        responses:
+          200:
+            description: Deviced added to asset.
+            body:
+              application/json:
+                example: |
+                  {
+                    "message": "Device added."
+                  }
+    /{id}/remove:
+      securedBy: [JWT]
+      delete:
+        description: Removes this device from this asset.
+        responses:
+          200:
+            description: Deviced removed from asset.
+            body:
+              application/json:
+                example: |
+                  {
+                    "message": "Device removed."
+                  }
+/locations/{id}:
+  displayName: LOCATIONS
+  description: |
+    Lets you view and edit a location.
+  securedBy: [JWT]
+  get:
+    description: Gets a single location.
+    responses:
+      200:
+        description: A single location.
+        body:
+          application/json:
+            example: |
+              {
+                "_id": : "OBJECT_ID",
+                "created": "DATE",
+                "updated": "DATE",
+                "tagCode": "STRING",
+                "description": "STRING",
+                "geolocation": [NUMBER, NUMBER],
+                "address": {
+                  "street": "STRING",
+                  "street2": "STRING",
+                  "city": "STRING",
+                  "province": "STRING",
+                  "postalCode": "STRING",
+                  "country": "STRING"
+                }
+              }
+  put:
+    description: Updates a location.
+    body:
+      application/json:
+        example: |
+          {
+            "tagCode": "STRING",
+            "description": "STRING",
+            "geolocation": [NUMBER, NUMBER],
+            "address": {
+              "street": "STRING",
+              "street2": "STRING",
+              "city": "STRING",
+              "province": "STRING",
+              "postalCode": "STRING",
+              "country": "STRING"
+            }
+          }
+    responses:
+      200:
+        description: Location updated.
+        body:
+          application/json:
+            example: |
+              {
+                "_id": : "OBJECT_ID",
+                "created": "DATE",
+                "updated": "DATE",
+                "tagCode": "STRING",
+                "description": "STRING",
+                "geolocation": [NUMBER, NUMBER],
+                "address": {
+                  "street": "STRING",
+                  "street2": "STRING",
+                  "city": "STRING",
+                  "province": "STRING",
+                  "postalCode": "STRING",
+                  "country": "STRING"
+                }
+              }
 /users:
   displayName: USERS
   description: |
@@ -883,14 +874,14 @@ documentation:
             example: |
               [
                 {
-                  "id": "",
-                  "created": "2016-01-29T16:04:27.000Z",
-                  "updated": "2016-01-29T16:04:27.000Z",
-                  "firstName": "",
-                  "lastName": "",
-                  "email": "",
-                  "roles": [""],
-                  "active": true
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "firstName": "STRING",
+                  "lastName": "STRING",
+                  "email": "STRING",
+                  "role": "STRING",
+                  "active": BOOLEAN
                 }
               ]
   /{id}:
@@ -904,14 +895,14 @@ documentation:
             application/json:
               example: |
                 {
-                  "id": "",
-                  "created": "2016-01-29T16:04:27.000Z",
-                  "updated": "2016-01-29T16:04:27.000Z",
-                  "firstName": "",
-                  "lastName": "",
-                  "email": "",
-                  "roles": [""],
-                  "active": true
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "firstName": "STRING",
+                  "lastName": "STRING",
+                  "email": "STRING",
+                  "role": "STRING",
+                  "active": BOOLEAN
                 }
     put:
       description: Edits a user (can't change password).
@@ -919,11 +910,11 @@ documentation:
         application/json:
           example: |
             {
-              "firstName": "",
-              "lastName": "",
-              "email": "",
-              "roles": [""],
-              "active": true
+              "firstName": "STRING",
+              "lastName": "STRING",
+              "email": "STRING",
+              "role": "STRING",
+              "active": BOOLEAN
             }
       responses:
         200:
@@ -932,7 +923,14 @@ documentation:
             application/json:
               example: |
                 {
-                  "message": "User has been edited."
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "firstName": "STRING",
+                  "lastName": "STRING",
+                  "email": "STRING",
+                  "role": "STRING",
+                  "active": BOOLEAN
                 }
     /password:
       securedBy: [JWT]
@@ -942,8 +940,7 @@ documentation:
           application/json:
             example: |
               {
-                "id": "",
-                "password", ""
+                "newPassword", "STRING"
               }
         responses:
           200:
@@ -970,12 +967,13 @@ documentation:
             example: |
               [
                 {
-                  "created": "2016-01-29T16:04:27.000Z",
-                  "updated": "2016-01-29T16:04:27.000Z",
-                  "serialNumber": "15",
-                  "type": "hydrant",
-                  "code": "Client assigned code",
-                  "descriptor": "Client assigned descriptor"
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "serialNumber": "STRING",
+                  "type": "STRING",
+                  "code": "STRING",
+                  "description": "STRING"
                 }
               ]
   /{id}:
@@ -996,20 +994,13 @@ documentation:
             application/json:
               example: |
                 {
-                  "created": "2016-01-29T16:04:27.000Z",
-                  "updated": "2016-01-29T16:04:27.000Z",
-                  "serialNumber": "15",
-                  "type": "hydrant",
-                  "code": "Client assigned code",
-                  "descriptor": "Client assigned descriptor"
-                }
-        404:
-          description: Device not found.
-          body:
-            application/json:
-              example: |
-                {
-                  "message": "Device not found"
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "serialNumber": "STRING",
+                  "type": "STRING",
+                  "code": "STRING",
+                  "description": "STRING"
                 }
     put:
       description: |
@@ -1018,8 +1009,9 @@ documentation:
         application/json:
           example: |
             {
-              "code": "Client assigned code",
-              "descriptor": "Client assigned descriptor"
+              "type": "STRING",
+              "code": "STRING",
+              "description": "STRING"
             }
       responses:
         200:
@@ -1028,15 +1020,13 @@ documentation:
             application/json:
               example: |
                 {
-                  "message": "Device saved."
-                }
-        404:
-          description: Device not found.
-          body:
-            application/json:
-              example: |
-                {
-                  "message": "Device not found"
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "serialNumber": "STRING",
+                  "type": "STRING",
+                  "code": "STRING",
+                  "description": "STRING"
                 }
     /settings:
       securedBy: [JWT]
@@ -1049,61 +1039,34 @@ documentation:
             body:
               application/json:
                 example: |
-                  {
-                    "serialNumber": "15",
-                    "code": "Client assigned code",
-                    "normalrate": 0,
-                    "highlimit": 0,
-                    "lowlimit": 0,
-                    "deadband": 0,
-                    "bufferallduration": 0,
-                    "preroll": 0,
-                    "postroll": 0,
-                    "starttime": "2016-01-29T16:04:27.000Z",
-                    "stoptime": "2016-01-29T16:04:27.000Z"
-                  }
-          404:
-            description: Device not found.
-            body:
-              application/json:
-                example: |
-                  {
-                    "message": "Device not found"
-                  }
+                  [{
+                    "name": "STRING",
+                    "dataType": "STRING",
+                    "value": MIXED
+                  }]
       put:
         description: |
-          Allows you to set the settings for a device.
+          Allows you to set the settings for a device. This overwrights the
+          existing settings.
         body:
           application/json:
             example: |
-              {
-                "normalrate": 0,
-                "highlimit": 0,
-                "lowlimit": 0,
-                "deadband": 0,
-                "bufferallduration": 0,
-                "preroll": 0,
-                "postroll": 0,
-                "starttime": "2016-01-29T16:04:27.000Z",
-                "stoptime": "2016-01-29T16:04:27.000Z"
-              }
+              [{
+                "name": "STRING",
+                "dataType": "STRING",
+                "value": MIXED
+              }]
         responses:
           200:
             description: Successful
             body:
               application/json:
                 example: |
-                  {
-                    "message": "Settings have been saved"
-                  }
-          404:
-            description: Device not found.
-            body:
-              application/json:
-                example: |
-                  {
-                    "message": "Device not found"
-                  }
+                  [{
+                    "name": "STRING",
+                    "dataType": "STRING",
+                    "value": MIXED
+                  }]
     /telemetries:
       securedBy: [JWT]
       get:
@@ -1124,37 +1087,29 @@ documentation:
                 example: |
                   [
                     {
-                      "tag": "[TAG]",
-                      "timestamp": "[DATE]",
+                      "tag": "STRING",
+                      "timestamp": "DATE",
                       "device": {
-                        "serialNumber": "",
-                        "type": "",
-                        "descriptor": "",
-                        "geolocation": [x, y]
+                        "serialNumber": "STRING",
+                        "type": "STRING",
+                        "description": "STRING",
+                        "geolocation": [NUMBER, NUMBER]
                       },
                       "sensor": {
-                        "type": 1,
-                        "typeString": "",
-                        "description": "",
-                        "unit", ""
+                        "type": NUMBER,
+                        "typeString": "STRING",
+                        "description": "STRING",
+                        "unit": "STRING"
                       },
                       "data": {
-                        "unit": "",
-                        "quality": 1,
+                        "unit": "STRING",
+                        "quality": NUMBER,
                         "values": {
-                          "min": 5,
-                          "max": 5,
-                          "average": 5,
-                          "current": 5
+                          "min": NUMBER,
+                          "max": NUMBER,
+                          "average": NUMBER,
+                          "current": NUMBER
                         }
                       }
                     }
                   ]
-          404:
-            description: Device not found.
-            body:
-              application/json:
-                example: |
-                  {
-                    "message": "Device not found"
-                  }

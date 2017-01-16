@@ -1,7 +1,7 @@
 {
   "name": "terepac-api",
   "description": "The RESTful API for the Terepac ONE Platform.",
-  "version": "0.1",
+  "version": "0.1.0",
   "author": "Terepac Corporation",
   "engines": {
     "node": "0.10.x",

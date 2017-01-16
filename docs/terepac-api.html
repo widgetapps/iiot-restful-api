@@ -1,4 +1,4 @@
-<!DOCTYPE HTML><html><head><title>Terepac ONE API documentation</title><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="generator" content="https://github.com/raml2html/raml2html 4.0.3"><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css"><script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script><script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script><script type="text/javascript">
+<!DOCTYPE HTML><html><head><title>Terepac ONE API documentation</title><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="generator" content="https://github.com/raml2html/raml2html 4.0.5"><link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/styles/default.min.css"><script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script><script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.3.0/highlight.min.js"></script><script type="text/javascript">
       $(document).ready(function() {
         $('.page-header pre code, .top-resource-description pre code, .modal-body pre code').each(function(i, block) {
           hljs.highlightBlock(block);
@@ -186,101 +186,32 @@ x-access-token: [jwt]
 }
 </code></pre></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="clients" class="panel-title">CLIENTS</h3></div><div class="panel-body"><div class="top-resource-description"><p>Lets you manipulate and access client data and telemetry tags.</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients"><span class="parent"></span>/clients</a> <span class="methods"><a href="#clients_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#clients_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Allows you to get a list of the clients you are allowed to access based on the user&#39;s role. If the user belongs to a company that&#39;s a reseller, an array of the reseller&#39;s clients is returned.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#clients_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Allows you to add a new client. You must be a reseller or be an admin to add a new client.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/clients</h4></div><div class="modal-body"><div class="alert alert-info"><p>Allows you to get a list of the clients you are allowed to access based on the user&#39;s role. If the user belongs to a company that&#39;s a reseller, an array of the reseller&#39;s clients is returned.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients_get_response" data-toggle="tab">Response</a></li><li><a href="#clients_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns an array of clients.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[
   {
-    "created": "2016-01-29T16:04:27.000Z",
-    "updated": "2016-01-29T16:04:27.000Z",
+    "_id": : "OBJECT_ID",
+    "created": "DATE",
+    "updated": "DATE",
     "apikey": {
-      "id": "[CLIENT_ID]"
+      "id": "STRING"
     },
-    "companyName": "[COMPANY_NAME]",
+    "companyName": "STRING",
     "address": {
-      "street": "[STREET]",
-      "street2": "[STREET_2]",
-      "city": "[CITY]",
-      "province": "[PROVINCE]",
-      "postalCode": [POSTAL_CODE]"",
-      "country": "[COUNTRY]"
+      "street": "STRING",
+      "street2": "STRING",
+      "city": "STRING",
+      "province": "STRING",
+      "postalCode": "STRING",
+      "country": "STRING"
     },
     "contact": {
-      "firstName": "[FIRST_NAME]",
-      "lastName": "[LAST_NAME]",
-      "email": "[EMAIL_ADDRESS]",
-      "phone": "[PHONE_NUMBER]"
+      "firstName": "STRING",
+      "lastName": "STRING",
+      "email": "STRING",
+      "phone": "STRING"
     },
-    "reseller": [true|false]
+    "reseller": BOOLEAN
   }
 ]
-</code></pre><h2>HTTP status code <a href="http://httpstatus.es/401" target="_blank">401</a></h2><p>Not authorized.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  message: "You are not authorized to access this resource."
-}
-</code></pre></div><div class="tab-pane" id="clients_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/clients</h4></div><div class="modal-body"><div class="alert alert-info"><p>Allows you to add a new client. You must be a reseller or be an admin to add a new client.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients_post_request" data-toggle="tab">Request</a></li><li><a href="#clients_post_response" data-toggle="tab">Response</a></li><li><a href="#clients_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients_post_request"><h3>Annotations</h3><ul><li><strong>role</strong>:<pre><code>"ADMIN"</code></pre></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "companyName": "[COMPANY_NAME]",
-  "address": {
-    "street": "[STREET]",
-    "street2": "[STREET_2]",
-    "city": "[CITY]",
-    "province": "[PROVINCE]",
-    "postalCode": [POSTAL_CODE]"",
-    "country": "[COUNTRY]"
-  },
-  "contact": {
-    "firstName": "[FIRST_NAME]",
-    "lastName": "[LAST_NAME]",
-    "email": "[EMAIL_ADDRESS]",
-    "phone": "[PHONE_NUMBER]"
-  },
-  "reseller": [true|false]
-}
-</code></pre></div><div class="tab-pane" id="clients_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns the added client.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "created": "2016-01-29T16:04:27.000Z",
-  "updated": "2016-01-29T16:04:27.000Z",
-  "apikey": {
-    "id": "[CLIENT_ID]"
-  },
-  "companyName": "[COMPANY_NAME]",
-  "address": {
-    "street": "[STREET]",
-    "street2": "[STREET_2]",
-    "city": "[CITY]",
-    "province": "[PROVINCE]",
-    "postalCode": [POSTAL_CODE]"",
-    "country": "[COUNTRY]"
-  },
-  "contact": {
-    "firstName": "[FIRST_NAME]",
-    "lastName": "[LAST_NAME]",
-    "email": "[EMAIL_ADDRESS]",
-    "phone": "[PHONE_NUMBER]"
-  },
-  "reseller": [true|false]
-}
 </code></pre><h2>HTTP status code <a href="http://httpstatus.es/400" target="_blank">400</a></h2><p>Database error adding the client.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
   message: "Error inserting the client: [ERROR_MESSAGE]"
-}
-</code></pre><h2>HTTP status code <a href="http://httpstatus.es/401" target="_blank">401</a></h2><p>Not authorized.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  message: "You are not authorized to access this resource."
-}
-</code></pre></div><div class="tab-pane" id="clients_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id_"><span class="parent">/clients</span>/{id}</a> <span class="methods"><a href="#clients__id__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#clients__id__put"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id_" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>Allows you to work with an individual client.</p></div><div class="list-group"><div onclick="window.location.href = '#clients__id__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Returns a single client.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#clients__id__put'" class="list-group-item"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Allows you to edit a client. All fields are optional. You cannot change a password with this endpoint (see USERS endpoint).</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Returns a single client.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul></div><div class="tab-pane" id="clients__id__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns a client.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "created": "2016-01-29T16:04:27.000Z",
-  "updated": "2016-01-29T16:04:27.000Z",
-  "apikey": {
-    "id": "[CLIENT_ID]"
-  },
-  "companyName": "[COMPANY_NAME]",
-  "address": {
-    "street": "[STREET]",
-    "street2": "[STREET_2]",
-    "city": "[CITY]",
-    "province": "[PROVINCE]",
-    "postalCode": [POSTAL_CODE]"",
-    "country": "[COUNTRY]"
-  },
-  "contact": {
-    "firstName": "[FIRST_NAME]",
-    "lastName": "[LAST_NAME]",
-    "email": "[EMAIL_ADDRESS]",
-    "phone": "[PHONE_NUMBER]"
-  },
-  "reseller": [true|false]
 }
 </code></pre><h2>HTTP status code <a href="http://httpstatus.es/401" target="_blank">401</a></h2><p>Not authorized.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
   message: "You are not authorized to access this resource."
@@ -288,501 +219,563 @@ x-access-token: [jwt]
 </code></pre><h2>HTTP status code <a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>Client not found.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
   message: "Client not found"
 }
-</code></pre></div><div class="tab-pane" id="clients__id__get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Allows you to edit a client. All fields are optional. You cannot change a password with this endpoint (see USERS endpoint).</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__put_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__put_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__put_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__put_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "companyName": "[COMPANY_NAME]",
+</code></pre></div><div class="tab-pane" id="clients_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/clients</h4></div><div class="modal-body"><div class="alert alert-info"><p>Allows you to add a new client. You must be a reseller or be an admin to add a new client.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients_post_request" data-toggle="tab">Request</a></li><li><a href="#clients_post_response" data-toggle="tab">Response</a></li><li><a href="#clients_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients_post_request"><h3>Annotations</h3><ul><li><strong>role</strong>:<pre><code>"ADMIN"</code></pre></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+  "companyName": "STRING",
   "address": {
-    "street": "[STREET]",
-    "street2": "[STREET_2]",
-    "city": "[CITY]",
-    "province": "[PROVINCE]",
-    "postalCode": [POSTAL_CODE]"",
-    "country": "[COUNTRY]"
+    "street": "STRING",
+    "street2": "STRING",
+    "city": "STRING",
+    "province": "STRING",
+    "postalCode": "STRING",
+    "country": "STRING"
   },
   "contact": {
-    "firstName": "[FIRST_NAME]",
-    "lastName": "[LAST_NAME]",
-    "email": "[EMAIL_ADDRESS]",
-    "phone": "[PHONE_NUMBER]"
+    "firstName": "STRING",
+    "lastName": "STRING",
+    "email": "STRING",
+    "phone": "STRING"
   },
-  "reseller": [true|false]
+  "reseller": BOOLEAN
+}
+</code></pre></div><div class="tab-pane" id="clients_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns the added client.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+  "_id": : "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "apikey": {
+    "id": "STRING"
+  },
+  "companyName": "STRING",
+  "address": {
+    "street": "STRING",
+    "street2": "STRING",
+    "city": "STRING",
+    "province": "STRING",
+    "postalCode": "STRING",
+    "country": "STRING"
+  },
+  "contact": {
+    "firstName": "STRING",
+    "lastName": "STRING",
+    "email": "STRING",
+    "phone": "STRING"
+  },
+  "reseller": BOOLEAN
+}
+</code></pre></div><div class="tab-pane" id="clients_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id_"><span class="parent">/clients</span>/{id}</a> <span class="methods"><a href="#clients__id__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#clients__id__put"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id_" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>Allows you to work with an individual client.</p></div><div class="list-group"><div onclick="window.location.href = '#clients__id__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Returns a single client.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#clients__id__put'" class="list-group-item"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Allows you to edit a client. All fields are optional. You cannot change a password with this endpoint (see USERS endpoint).</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Returns a single client.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul></div><div class="tab-pane" id="clients__id__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns a client.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+  "_id": : "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "apikey": {
+    "id": "STRING"
+  },
+  "companyName": "STRING",
+  "address": {
+    "street": "STRING",
+    "street2": "STRING",
+    "city": "STRING",
+    "province": "STRING",
+    "postalCode": "STRING",
+    "country": "STRING"
+  },
+  "contact": {
+    "firstName": "STRING",
+    "lastName": "STRING",
+    "email": "STRING",
+    "phone": "STRING"
+  },
+  "reseller": BOOLEAN
+}
+</code></pre></div><div class="tab-pane" id="clients__id__get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Allows you to edit a client. All fields are optional. You cannot change a password with this endpoint (see USERS endpoint).</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__put_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__put_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__put_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__put_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+  "companyName": "STRING",
+  "address": {
+    "street": "STRING",
+    "street2": "STRING",
+    "city": "STRING",
+    "province": "STRING",
+    "postalCode": "STRING",
+    "country": "STRING"
+  },
+  "contact": {
+    "firstName": "STRING",
+    "lastName": "STRING",
+    "email": "STRING",
+    "phone": "STRING"
+  },
+  "reseller": BOOLEAN
 }
 </code></pre></div><div class="tab-pane" id="clients__id__put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Client saved.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "created": "2016-01-29T16:04:27.000Z",
-  "updated": "2016-01-29T16:04:27.000Z",
+  "_id": : "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
   "apikey": {
-    "id": "[CLIENT_ID]"
+    "id": "STRING"
   },
-  "companyName": "[COMPANY_NAME]",
+  "companyName": "STRING",
   "address": {
-    "street": "[STREET]",
-    "street2": "[STREET_2]",
-    "city": "[CITY]",
-    "province": "[PROVINCE]",
-    "postalCode": [POSTAL_CODE]"",
-    "country": "[COUNTRY]"
+    "street": "STRING",
+    "street2": "STRING",
+    "city": "STRING",
+    "province": "STRING",
+    "postalCode": "STRING",
+    "country": "STRING"
   },
   "contact": {
-    "firstName": "[FIRST_NAME]",
-    "lastName": "[LAST_NAME]",
-    "email": "[EMAIL_ADDRESS]",
-    "phone": "[PHONE_NUMBER]"
+    "firstName": "STRING",
+    "lastName": "STRING",
+    "email": "STRING",
+    "phone": "STRING"
   },
-  "reseller": [true|false]
+  "reseller": BOOLEAN
 }
-</code></pre><h2>HTTP status code <a href="http://httpstatus.es/401" target="_blank">401</a></h2><p>Not authorized.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  message: "You are not authorized to access this resource."
-}
-</code></pre><h2>HTTP status code <a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>Client not found.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "message": "Client not found"
-}
-</code></pre></div><div class="tab-pane" id="clients__id__put_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__tags"><span class="parent">/clients/{id}</span>/tags</a> <span class="methods"><a href="#clients__id__tags_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__tags" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients__id__tags_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets a list of the client&#39;s tags.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__tags_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}</span>/tags</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets a list of the client&#39;s tags.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__tags_get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__tags_get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__tags_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__tags_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul></div><div class="tab-pane" id="clients__id__tags_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns the available tags for the client.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[
-  { "tag": "LOCATION_DEVICE_SENSOR" },
-  { "tag": "LOCATION_DEVICE_SENSOR" },
-  { "tag": "LOCATION_DEVICE_SENSOR" }
-]
-</code></pre><h2>HTTP status code <a href="http://httpstatus.es/401" target="_blank">401</a></h2><p>Not authorized.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  message: "You are not authorized to access this resource."
-}
-</code></pre><h2>HTTP status code <a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>Client not found.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "message": "Client not found"
-}
-</code></pre></div><div class="tab-pane" id="clients__id__tags_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__tags__tag_"><span class="parent">/clients/{id}/tags</span>/{tag}</a> <span class="methods"><a href="#clients__id__tags__tag__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__tags__tag_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients__id__tags__tag__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets the telemetry data for a single tag.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__tags__tag__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}/tags</span>/{tag}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets the telemetry data for a single tag.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__tags__tag__get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__tags__tag__get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__tags__tag__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__tags__tag__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li><li><strong>tag</strong>: <em>required (string)</em><p>The tag.</p></li></ul></div><div class="tab-pane" id="clients__id__tags__tag__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Telemetry found.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "tag": "[TAG]",
-  "timestamp": "[DATE]",
-  "device": {
-    "serialNumber": "",
-    "type": "",
-    "descriptor": "",
-    "geolocation": [x, y]
-  },
-  "sensor": {
-    "type": 1,
-    "typeString": "",
-    "description": "",
-    "unit", ""
-  },
-  "data": {
-    "unit": "",
-    "quality": 1,
-    "values": {
-      "min": 5,
-      "max": 5,
-      "average": 5,
-      "current": 5
-    }
+</code></pre></div><div class="tab-pane" id="clients__id__put_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__tags"><span class="parent">/clients/{id}</span>/tags</a> <span class="methods"><a href="#clients__id__tags_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__tags" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients__id__tags_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets a list of the client&#39;s tags.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__tags_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}</span>/tags</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets a list of the client&#39;s tags.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__tags_get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__tags_get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__tags_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__tags_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul></div><div class="tab-pane" id="clients__id__tags_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns the available tags for the client.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[{
+  "_id": : "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "tag": "STRING",
+  "active": BOOLEAN,
+  "activeStart": "DATE",
+  "historical": {
+    "start": "DATE",
+    "end": "DATE"
   }
-}
-</code></pre></div><div class="tab-pane" id="clients__id__tags__tag__get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__tags_search"><span class="parent">/clients/{id}/tags</span>/search</a> <span class="methods"><a href="#clients__id__tags_search_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__tags_search" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>Allows you to search multiple tags. Returns an array of telemetry data.</p></div><div class="list-group"><div onclick="window.location.href = '#clients__id__tags_search_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Queries for telemetry using tags.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__tags_search_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}/tags</span>/search</h4></div><div class="modal-body"><div class="alert alert-info"><p>Queries for telemetry using tags.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__tags_search_get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__tags_search_get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__tags_search_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__tags_search_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul><h3>Query Parameters</h3><ul><li><strong>tags</strong>: <em>required (string)</em><p><strong>Examples</strong>:</p><pre>tags=D001_LOC1_TI,D002_LOC1_EI</pre></li><li><strong>start</strong>: <em>required (string)</em><p><strong>Examples</strong>:</p><pre>start=2016-01-29T16:04:27.000Z</pre></li><li><strong>end</strong>: <em>required (string)</em><p><strong>Examples</strong>:</p><pre>end=2016-01-29T16:04:27.000Z</pre></li></ul></div><div class="tab-pane" id="clients__id__tags_search_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns an array of telemetry data.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[
+}]
+</code></pre></div><div class="tab-pane" id="clients__id__tags_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__telemetries_search"><span class="parent">/clients/{id}</span>/telemetries/search</a> <span class="methods"><a href="#clients__id__telemetries_search_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__telemetries_search" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>Allows you to search multiple tags. Returns an array of telemetry data.</p></div><div class="list-group"><div onclick="window.location.href = '#clients__id__telemetries_search_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Queries for telemetry using tags.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__telemetries_search_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}</span>/telemetries/search</h4></div><div class="modal-body"><div class="alert alert-info"><p>Queries for telemetry using tags.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__telemetries_search_get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__telemetries_search_get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__telemetries_search_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__telemetries_search_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul><h3>Query Parameters</h3><ul><li><strong>tags</strong>: <em>required (string)</em><p>A comma delimited list of tags.</p><p><strong>Examples</strong>:</p><pre>tags=D001_LOC1_TI,D002_LOC1_EI</pre></li><li><strong>start</strong>: <em>required (string)</em><p>The start date of the data.</p><p><strong>Examples</strong>:</p><pre>start=2016-01-29T16:04:27.000Z</pre></li><li><strong>end</strong>: <em>required (string)</em><p>The end date of the data.</p><p><strong>Examples</strong>:</p><pre>end=2016-01-29T16:04:27.000Z</pre></li><li><strong>asset</strong>: <em>(string)</em><p>Include asset data.</p><p><strong>Examples</strong>:</p><pre>asset=1</pre></li><li><strong>device</strong>: <em>(string)</em><p>Include device data.</p><p><strong>Examples</strong>:</p><pre>device=1</pre></li><li><strong>sensor</strong>: <em>(string)</em><p>Include sensor data.</p><p><strong>Examples</strong>:</p><pre>sensor=1</pre></li></ul></div><div class="tab-pane" id="clients__id__telemetries_search_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns an array of telemetry data. The data represents the state of the system when the telemetry was captured (asset, device and sensor are copied data).</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[
   {
-    "tag": "[TAG]",
-    "timestamp": "[DATE]",
+    "tag": "STRING",
+    "timestamp": "DATE",
+    "asset": {
+      "tagCode": "STRING",
+      "name": "STRING",
+      "description": "STRING",
+      "location": {
+        "tagCode": "STRING",
+        "description": "STRING",
+        "geolocation": [NUMBER, NUMBER]
+      }
+    },
     "device": {
-      "serialNumber": "",
-      "type": "",
-      "descriptor": "",
-      "geolocation": [x, y]
+      "serialNumber": "STRING",
+      "type": "STRING",
+      "description": "STRING"
     },
     "sensor": {
-      "type": 1,
-      "typeString": "",
-      "description": "",
-      "unit", ""
+      "type": NUMBER,
+      "typeString": "STRING",
+      "description": "STRING",
+      "unit": "STRING"
     },
     "data": {
-      "unit": "",
-      "quality": 1,
+      "unit": "STRING",
+      "quality": NUMBER,
       "values": {
-        "min": 5,
-        "max": 5,
-        "average": 5,
-        "current": 5
+        "min": NUMBER,
+        "max": NUMBER,
+        "average": NUMBER,
+        "current": NUMBER
       }
     }
   }
 ]
-</code></pre></div><div class="tab-pane" id="clients__id__tags_search_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__locations"><span class="parent">/clients/{id}</span>/locations</a> <span class="methods"><a href="#clients__id__locations_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#clients__id__locations_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__locations" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients__id__locations_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets an array of locations.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#clients__id__locations_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Adds a new location to the client.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__locations_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}</span>/locations</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets an array of locations.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__locations_get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__locations_get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__locations_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__locations_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul></div><div class="tab-pane" id="clients__id__locations_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns an array of locations for this client.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[{
-  "tagCode": "",
-  "description": "",
-  "geolocation": [x, y],
+</code></pre></div><div class="tab-pane" id="clients__id__telemetries_search_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__locations"><span class="parent">/clients/{id}</span>/locations</a> <span class="methods"><a href="#clients__id__locations_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#clients__id__locations_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__locations" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients__id__locations_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets an array of locations.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#clients__id__locations_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Adds a new location to the client.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__locations_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}</span>/locations</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets an array of locations.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__locations_get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__locations_get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__locations_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__locations_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul></div><div class="tab-pane" id="clients__id__locations_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns an array of locations for this client.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[{
+  "_id": : "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "tagCode": "STRING",
+  "description": "STRING",
+  "geolocation": [NUMBER, NUMBER],
   "address": {
-    "street": "",
-    "street2": "",
-    "city": "",
-    "province": "",
-    "postalCode": "",
-    "country": ""
+    "street": "STRING",
+    "street2": "STRING",
+    "city": "STRING",
+    "province": "STRING",
+    "postalCode": "STRING",
+    "country": "STRING"
   },
   "assets": [{
-    "tagCode": "",
-    "name": "",
-    "description": ""
+    "tagCode": "STRING",
+    "name": "STRING",
+    "description": "STRING"
   }]
 }]
 </code></pre></div><div class="tab-pane" id="clients__id__locations_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__locations_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}</span>/locations</h4></div><div class="modal-body"><div class="alert alert-info"><p>Adds a new location to the client.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__locations_post_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__locations_post_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__locations_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__locations_post_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "tagCode": "",
-  "description": "",
-  "geolocation": [x, y],
+  "tagCode": "STRING",
+  "description": "STRING",
+  "geolocation": [NUMBER, NUMBER],
   "address": {
-    "street": "",
-    "street2": "",
-    "city": "",
-    "province": "",
-    "postalCode": "",
-    "country": ""
+    "street": "STRING",
+    "street2": "STRING",
+    "city": "STRING",
+    "province": "STRING",
+    "postalCode": "STRING",
+    "country": "STRING"
   }
 }
 </code></pre></div><div class="tab-pane" id="clients__id__locations_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Location added.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "id": "",
-  "tagCode": "",
-  "description": "",
-  "geolocation": [x, y],
+  "_id": : "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "tagCode": "STRING",
+  "description": "STRING",
+  "geolocation": [NUMBER, NUMBER],
   "address": {
-    "street": "",
-    "street2": "",
-    "city": "",
-    "province": "",
-    "postalCode": "",
-    "country": ""
+    "street": "STRING",
+    "street2": "STRING",
+    "city": "STRING",
+    "province": "STRING",
+    "postalCode": "STRING",
+    "country": "STRING"
   }
 }
-</code></pre></div><div class="tab-pane" id="clients__id__locations_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__locations__id_"><span class="parent">/clients/{id}/locations</span>/{id}</a> <span class="methods"><a href="#clients__id__locations__id__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#clients__id__locations__id__put"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__locations__id_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients__id__locations__id__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets a single location.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#clients__id__locations__id__put'" class="list-group-item"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Updates a location.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__locations__id__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}/locations</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets a single location.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__locations__id__get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__locations__id__get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__locations__id__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__locations__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="clients__id__locations__id__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>A single location.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "id": "",
-  "tagCode": "",
-  "description": "",
-  "geolocation": [x, y],
-  "address": {
-    "street": "",
-    "street2": "",
-    "city": "",
-    "province": "",
-    "postalCode": "",
-    "country": ""
-  }
-}
-</code></pre></div><div class="tab-pane" id="clients__id__locations__id__get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__locations__id__put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}/locations</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Updates a location.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__locations__id__put_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__locations__id__put_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__locations__id__put_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__locations__id__put_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li><li><strong>id</strong>: <em>required (string)</em></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "tagCode": "",
-  "description": "",
-  "geolocation": [x, y],
-  "address": {
-    "street": "",
-    "street2": "",
-    "city": "",
-    "province": "",
-    "postalCode": "",
-    "country": ""
-  }
-}
-</code></pre></div><div class="tab-pane" id="clients__id__locations__id__put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Location updated.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "id": "",
-  "tagCode": "",
-  "description": "",
-  "geolocation": [x, y],
-  "address": {
-    "street": "",
-    "street2": "",
-    "city": "",
-    "province": "",
-    "postalCode": "",
-    "country": ""
-  }
-}
-</code></pre></div><div class="tab-pane" id="clients__id__locations__id__put_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__assets"><span class="parent">/clients/{id}</span>/assets</a> <span class="methods"><a href="#clients__id__assets_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#clients__id__assets_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__assets" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients__id__assets_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets an array of assets.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#clients__id__assets_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Adds a new asset.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__assets_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}</span>/assets</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets an array of assets.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__assets_get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__assets_get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__assets_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__assets_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul></div><div class="tab-pane" id="clients__id__assets_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[{
-  "id": "",
-  "tagCode": "",
-  "name": "",
-  "description": "",
+</code></pre></div><div class="tab-pane" id="clients__id__locations_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__assets"><span class="parent">/clients/{id}</span>/assets</a> <span class="methods"><a href="#clients__id__assets_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#clients__id__assets_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__assets" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients__id__assets_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets an array of assets.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#clients__id__assets_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Adds a new asset.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__assets_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}</span>/assets</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets an array of assets.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__assets_get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__assets_get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__assets_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__assets_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul></div><div class="tab-pane" id="clients__id__assets_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[{
+  "_id": : "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "tagCode": "STRING",
+  "name": "STRING",
+  "description": "STRING",
   "location": {
-    "tagCode": "",
-    "description": "",
-    "geolocation": [x, y],
+    "tagCode": "STRING",
+    "description": "STRING",
+    "geolocation": [NUMBER, NUMBER],
     "address": {
-      "street": "",
-      "street2": "",
-      "city": "",
-      "province": "",
-      "postalCode": "",
-      "country": ""
+      "street": "STRING",
+      "street2": "STRING",
+      "city": "STRING",
+      "province": "STRING",
+      "postalCode": "STRING",
+      "country": "STRING"
     }
   }
 }]
 </code></pre></div><div class="tab-pane" id="clients__id__assets_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__assets_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}</span>/assets</h4></div><div class="modal-body"><div class="alert alert-info"><p>Adds a new asset.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__assets_post_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__assets_post_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__assets_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__assets_post_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "tagCode": "",
-  "name": "",
-  "description": ""
+  "tagCode": "STRING",
+  "name": "STRING",
+  "description": "STRING",
+  "locationId": "OBJECT_ID"
 }
 </code></pre></div><div class="tab-pane" id="clients__id__assets_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "id", "",
-  "tagCode": "",
-  "name": "",
-  "description": ""
+  "_id": : "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "tagCode": "STRING",
+  "name": "STRING",
+  "description": "STRING",
+  "location": {
+    "tagCode": "STRING",
+    "description": "STRING",
+    "geolocation": [NUMBER, NUMBER],
+    "address": {
+      "street": "STRING",
+      "street2": "STRING",
+      "city": "STRING",
+      "province": "STRING",
+      "postalCode": "STRING",
+      "country": "STRING"
+    }
 }
-</code></pre></div><div class="tab-pane" id="clients__id__assets_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__assets__id_"><span class="parent">/clients/{id}/assets</span>/{id}</a> <span class="methods"><a href="#clients__id__assets__id__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#clients__id__assets__id__put"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__assets__id_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients__id__assets__id__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets a single asset.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#clients__id__assets__id__put'" class="list-group-item"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Updates an asset.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__assets__id__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}/assets</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets a single asset.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__assets__id__get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__assets__id__get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__assets__id__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__assets__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="clients__id__assets__id__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Gets a single asset.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "id", "",
-  "tagCode": "",
-  "name": "",
-  "description": ""
-}
-</code></pre></div><div class="tab-pane" id="clients__id__assets__id__get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__assets__id__put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}/assets</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Updates an asset.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__assets__id__put_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__assets__id__put_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__assets__id__put_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__assets__id__put_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li><li><strong>id</strong>: <em>required (string)</em></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "tagCode": "",
-  "name": "",
-  "description": ""
-}
-</code></pre></div><div class="tab-pane" id="clients__id__assets__id__put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Asset updated.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "id": "",
-  "tagCode": "",
-  "name": "",
-  "description": ""
-}
-</code></pre></div><div class="tab-pane" id="clients__id__assets__id__put_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__assets__id__devices"><span class="parent">/clients/{id}/assets/{id}</span>/devices</a> <span class="methods"><a href="#clients__id__assets__id__devices_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__assets__id__devices" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients__id__assets__id__devices_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets an array of devices attached to this asset.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__assets__id__devices_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}/assets/{id}</span>/devices</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets an array of devices attached to this asset.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__assets__id__devices_get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__assets__id__devices_get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__assets__id__devices_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__assets__id__devices_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="clients__id__assets__id__devices_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns an array of devices.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[{
-  "created": "2016-01-29T16:04:27.000Z",
-  "updated": "2016-01-29T16:04:27.000Z",
-  "serialNumber": "15",
-  "type": "hydrant",
-  "tagLocation": "",
-  "tagCode": "Client assigned code",
-  "descriptor": "Client assigned descriptor",
-  "geolocation": [x, y],
-  "sensors":
-    [
-      {
-        "tagCode": "",
-        "type": 1,
-        "typeString": "",
-        "description": "",
-        "unit": ""
-      }
-    ],
-  "settings": {
-  }
-}]
-</code></pre></div><div class="tab-pane" id="clients__id__assets__id__devices_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__assets__id__devices__id__add"><span class="parent">/clients/{id}/assets/{id}/devices</span>/{id}/add</a> <span class="methods"><a href="#clients__id__assets__id__devices__id__add_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__assets__id__devices__id__add" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients__id__assets__id__devices__id__add_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Adds this device to this asset.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__assets__id__devices__id__add_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}/assets/{id}/devices</span>/{id}/add</h4></div><div class="modal-body"><div class="alert alert-info"><p>Adds this device to this asset.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__assets__id__devices__id__add_post_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__assets__id__devices__id__add_post_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__assets__id__devices__id__add_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__assets__id__devices__id__add_post_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li><li><strong>id</strong>: <em>required (string)</em></li><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="clients__id__assets__id__devices__id__add_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Deviced added to asset.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "message": "Device added."
-}
-</code></pre></div><div class="tab-pane" id="clients__id__assets__id__devices__id__add_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__assets__id__devices__id__remove"><span class="parent">/clients/{id}/assets/{id}/devices</span>/{id}/remove</a> <span class="methods"><a href="#clients__id__assets__id__devices__id__remove_delete"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__assets__id__devices__id__remove" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients__id__assets__id__devices__id__remove_delete'" class="list-group-item"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Removes this device from this asset.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__assets__id__devices__id__remove_delete"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}/assets/{id}/devices</span>/{id}/remove</h4></div><div class="modal-body"><div class="alert alert-info"><p>Removes this device from this asset.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__assets__id__devices__id__remove_delete_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__assets__id__devices__id__remove_delete_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__assets__id__devices__id__remove_delete_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__assets__id__devices__id__remove_delete_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li><li><strong>id</strong>: <em>required (string)</em></li><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="clients__id__assets__id__devices__id__remove_delete_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Deviced removed from asset.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "message": "Device removed."
-}
-</code></pre></div><div class="tab-pane" id="clients__id__assets__id__devices__id__remove_delete_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__devices"><span class="parent">/clients/{id}</span>/devices</a> <span class="methods"><a href="#clients__id__devices_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#clients__id__devices_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__devices" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients__id__devices_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets an array of the client&#39;s devices.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#clients__id__devices_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Adds a new device to the client.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__devices_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}</span>/devices</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets an array of the client&#39;s devices.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__devices_get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__devices_get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__devices_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__devices_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul></div><div class="tab-pane" id="clients__id__devices_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>An array of devices.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[{
-  "created": "2016-01-29T16:04:27.000Z",
-  "updated": "2016-01-29T16:04:27.000Z",
-  "serialNumber": "15",
-  "type": "hydrant",
-  "tagLocation": "",
-  "tagCode": "Client assigned code",
-  "descriptor": "Client assigned descriptor",
-  "geolocation": [x, y],
-  "sensors":
-    [
-      {
-        "tagCode": "",
-        "type": 1,
-        "typeString": "",
-        "description": "",
-        "unit": ""
-      }
-    ],
-  "settings": {
-  }
+</code></pre></div><div class="tab-pane" id="clients__id__assets_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__devices"><span class="parent">/clients/{id}</span>/devices</a> <span class="methods"><a href="#clients__id__devices_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#clients__id__devices_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__devices" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients__id__devices_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets an array of the client&#39;s devices.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#clients__id__devices_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Adds a new device to the client.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__devices_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}</span>/devices</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets an array of the client&#39;s devices.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__devices_get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__devices_get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__devices_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__devices_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul></div><div class="tab-pane" id="clients__id__devices_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>An array of devices.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[{
+  "_id": : "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "serialNumber": "STRING",
+  "type": "STRING",
+  "tagCode": "STRING",
+  "description": "STRING",
+  "sensors": [{
+    "tagCode": "STRING",
+    "type": STRING,
+    "typeString": "STRING",
+    "description": "STRING",
+    "unit": "STRING"
+  }],
+  "settings": [{
+    "name": "STRING",
+    "dataType": "STRING",
+    "value": MIXED
+  }]
 }]
 </code></pre></div><div class="tab-pane" id="clients__id__devices_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__devices_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}</span>/devices</h4></div><div class="modal-body"><div class="alert alert-info"><p>Adds a new device to the client.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__devices_post_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__devices_post_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__devices_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__devices_post_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "serialNumber": "",
-  "type": "",
-  "tagLocation": "",
-  "tagCode": "",
-  "descriptor": "",
-  "geolocation": [x, y],
-  "sensors": [
-    {
-      "tagCode": "",
-      "limits": {
-        "low": 5,
-        "high": 10
-      }
+  "serialNumber": "STRING",
+  "type": "STRING",
+  "tagCode": "STRING",
+  "description": "STRING",
+  "sensors": [{
+    "tagCode": "STRING",
+    "limits": {
+      "low": NUMBER,
+      "high": NUMBER
     }
-  ]
-  "settings": {}
+  }],
+  "settings": [{
+    "name": "STRING",
+    "dataType": "STRING",
+    "value": MIXED
+  }]
 }
 </code></pre></div><div class="tab-pane" id="clients__id__devices_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Device added.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "id": "",
-  "created": "2016-01-29T16:04:27.000Z",
-  "updated": "2016-01-29T16:04:27.000Z",
-  "serialNumber": "",
-  "type": "",
-  "tagLocation": "",
-  "tagCode": "",
-  "descriptor": "",
-  "geolocation": [x, y],
-  "sensors": [
-    {
-      "tagCode": "",
-      "limits": {
-        "low": 5,
-        "high": 10
-      }
+  "_id": : "STRING",
+  "created": "DATE",
+  "updated": "DATE",
+  "serialNumber": "STRING",
+  "type": "STRING",
+  "tagCode": "STRING",
+  "description": "STRING",
+  "sensors": [{
+    "tagCode": "STRING",
+    "limits": {
+      "low": NUMBER,
+      "high": NUMBER
     }
-  ]
-  "settings": {}
+  }],
+  "settings": [{
+    "name": "STRING",
+    "dataType": "STRING",
+    "value": MIXED
+  }]
 }
 </code></pre></div><div class="tab-pane" id="clients__id__devices_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_clients__id__users"><span class="parent">/clients/{id}</span>/users</a> <span class="methods"><a href="#clients__id__users_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#clients__id__users_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_clients__id__users" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#clients__id__users_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets an array of the client&#39;s users.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#clients__id__users_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Adds a new user to the client.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__users_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}</span>/users</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets an array of the client&#39;s users.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__users_get_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__users_get_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__users_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__users_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul></div><div class="tab-pane" id="clients__id__users_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns an array of the client&#39;s users.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[
   {
-    "id": "",
-    "created": "2016-01-29T16:04:27.000Z",
-    "updated": "2016-01-29T16:04:27.000Z",
-    "firstName": "",
-    "lastName": "",
-    "email": "",
-    "roles": [""],
-    "active": true
+    "_id": : "OBJECT_ID",
+    "created": "DATE",
+    "updated": "DATE",
+    "firstName": "STRING",
+    "lastName": "STRING",
+    "email": "STRING",
+    "role": "STRING",
+    "active": BOOLEAN
   }
 ]
 </code></pre></div><div class="tab-pane" id="clients__id__users_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="clients__id__users_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/clients/{id}</span>/users</h4></div><div class="modal-body"><div class="alert alert-info"><p>Adds a new user to the client.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#clients__id__users_post_request" data-toggle="tab">Request</a></li><li><a href="#clients__id__users_post_response" data-toggle="tab">Response</a></li><li><a href="#clients__id__users_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="clients__id__users_post_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The clients&#39;s ObjectId.</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "firstName": "",
-  "lastName": "",
-  "email": "",
-  "roles": [""],
-  "active": true
+  "firstName": "STRING",
+  "lastName": "STRING",
+  "email": "STRING",
+  "role": "STRING",
+  "active": BOOLEAN
 }
 </code></pre></div><div class="tab-pane" id="clients__id__users_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>User added.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "id": "",
-  "created": "2016-01-29T16:04:27.000Z",
-  "updated": "2016-01-29T16:04:27.000Z",
-  "firstName": "",
-  "lastName": "",
-  "email": "",
-  "roles": [""],
-  "active": true
+  "_id": "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "firstName": "STRING",
+  "lastName": "STRING",
+  "email": "STRING",
+  "role": "STRING",
+  "active": BOOLEAN
 }
-</code></pre></div><div class="tab-pane" id="clients__id__users_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="users" class="panel-title">USERS</h3></div><div class="panel-body"><div class="top-resource-description"><p>Lets you manipulate users.</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_users"><span class="parent"></span>/users</a> <span class="methods"><a href="#users_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_users" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#users_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets an array of users.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="users_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/users</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets an array of users.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#users_get_response" data-toggle="tab">Response</a></li><li><a href="#users_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns as array of users.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[
+</code></pre></div><div class="tab-pane" id="clients__id__users_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="assets__id_" class="panel-title">ASSETS</h3></div><div class="panel-body"><div class="top-resource-description"><p>Lets you manupulate assets.</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_assets__id_"><span class="parent"></span>/assets/{id}</a> <span class="methods"><a href="#assets__id__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#assets__id__put"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_assets__id_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#assets__id__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets a single asset.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#assets__id__put'" class="list-group-item"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Updates an asset.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="assets__id__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/assets/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets a single asset.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#assets__id__get_request" data-toggle="tab">Request</a></li><li><a href="#assets__id__get_response" data-toggle="tab">Response</a></li><li><a href="#assets__id__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="assets__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="assets__id__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Gets a single asset.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+  "_id": "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "tagCode": "STRING",
+  "name": "STRING",
+  "description": "STRING"
+}
+</code></pre></div><div class="tab-pane" id="assets__id__get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="assets__id__put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/assets/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Updates an asset.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#assets__id__put_request" data-toggle="tab">Request</a></li><li><a href="#assets__id__put_response" data-toggle="tab">Response</a></li><li><a href="#assets__id__put_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="assets__id__put_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+  "tagCode": "STRING",
+  "name": "STRING",
+  "description": "STRING"
+}
+</code></pre></div><div class="tab-pane" id="assets__id__put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Asset updated.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+  "_id": "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "tagCode": "STRING",
+  "name": "STRING",
+  "description": "STRING"
+}
+</code></pre></div><div class="tab-pane" id="assets__id__put_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_assets__id__devices"><span class="parent">/assets/{id}</span>/devices</a> <span class="methods"><a href="#assets__id__devices_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_assets__id__devices" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#assets__id__devices_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets an array of devices attached to this asset.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="assets__id__devices_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/assets/{id}</span>/devices</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets an array of devices attached to this asset.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#assets__id__devices_get_request" data-toggle="tab">Request</a></li><li><a href="#assets__id__devices_get_response" data-toggle="tab">Response</a></li><li><a href="#assets__id__devices_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="assets__id__devices_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="assets__id__devices_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns an array of devices.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[{
+  "_id": "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "serialNumber": "STRING",
+  "type": "STRING",
+  "tagCode": "STRING",
+  "description": "STRING",
+  "geolocation": [NUMBER, NUMBER],
+  "sensors":[{
+    "tagCode": "STRING",
+    "type": NUMBER,
+    "typeString": "STRING",
+    "description": "STRING",
+    "unit": "STRING"
+  }],
+  "settings": [{
+    "name": "STRING",
+    "dataType": "STRING",
+    "value": MIXED
+  }]
+}]
+</code></pre></div><div class="tab-pane" id="assets__id__devices_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_assets__id__devices__id__add"><span class="parent">/assets/{id}/devices</span>/{id}/add</a> <span class="methods"><a href="#assets__id__devices__id__add_post"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_assets__id__devices__id__add" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#assets__id__devices__id__add_post'" class="list-group-item"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Adds this device to this asset.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="assets__id__devices__id__add_post"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_post">post <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/assets/{id}/devices</span>/{id}/add</h4></div><div class="modal-body"><div class="alert alert-info"><p>Adds this device to this asset.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#assets__id__devices__id__add_post_request" data-toggle="tab">Request</a></li><li><a href="#assets__id__devices__id__add_post_response" data-toggle="tab">Response</a></li><li><a href="#assets__id__devices__id__add_post_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="assets__id__devices__id__add_post_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="assets__id__devices__id__add_post_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Deviced added to asset.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+  "message": "Device added."
+}
+</code></pre></div><div class="tab-pane" id="assets__id__devices__id__add_post_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_assets__id__devices__id__remove"><span class="parent">/assets/{id}/devices</span>/{id}/remove</a> <span class="methods"><a href="#assets__id__devices__id__remove_delete"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_assets__id__devices__id__remove" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#assets__id__devices__id__remove_delete'" class="list-group-item"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Removes this device from this asset.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="assets__id__devices__id__remove_delete"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_delete">delete <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/assets/{id}/devices</span>/{id}/remove</h4></div><div class="modal-body"><div class="alert alert-info"><p>Removes this device from this asset.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#assets__id__devices__id__remove_delete_request" data-toggle="tab">Request</a></li><li><a href="#assets__id__devices__id__remove_delete_response" data-toggle="tab">Response</a></li><li><a href="#assets__id__devices__id__remove_delete_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="assets__id__devices__id__remove_delete_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="assets__id__devices__id__remove_delete_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Deviced removed from asset.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+  "message": "Device removed."
+}
+</code></pre></div><div class="tab-pane" id="assets__id__devices__id__remove_delete_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="locations__id_" class="panel-title">LOCATIONS</h3></div><div class="panel-body"><div class="top-resource-description"><p>Lets you view and edit a location.</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_locations__id_"><span class="parent"></span>/locations/{id}</a> <span class="methods"><a href="#locations__id__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#locations__id__put"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_locations__id_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#locations__id__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets a single location.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#locations__id__put'" class="list-group-item"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Updates a location.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="locations__id__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/locations/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets a single location.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#locations__id__get_request" data-toggle="tab">Request</a></li><li><a href="#locations__id__get_response" data-toggle="tab">Response</a></li><li><a href="#locations__id__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="locations__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="locations__id__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>A single location.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+  "_id": : "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "tagCode": "STRING",
+  "description": "STRING",
+  "geolocation": [NUMBER, NUMBER],
+  "address": {
+    "street": "STRING",
+    "street2": "STRING",
+    "city": "STRING",
+    "province": "STRING",
+    "postalCode": "STRING",
+    "country": "STRING"
+  }
+}
+</code></pre></div><div class="tab-pane" id="locations__id__get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="locations__id__put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/locations/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Updates a location.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#locations__id__put_request" data-toggle="tab">Request</a></li><li><a href="#locations__id__put_response" data-toggle="tab">Response</a></li><li><a href="#locations__id__put_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="locations__id__put_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+  "tagCode": "STRING",
+  "description": "STRING",
+  "geolocation": [NUMBER, NUMBER],
+  "address": {
+    "street": "STRING",
+    "street2": "STRING",
+    "city": "STRING",
+    "province": "STRING",
+    "postalCode": "STRING",
+    "country": "STRING"
+  }
+}
+</code></pre></div><div class="tab-pane" id="locations__id__put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Location updated.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
+  "_id": : "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "tagCode": "STRING",
+  "description": "STRING",
+  "geolocation": [NUMBER, NUMBER],
+  "address": {
+    "street": "STRING",
+    "street2": "STRING",
+    "city": "STRING",
+    "province": "STRING",
+    "postalCode": "STRING",
+    "country": "STRING"
+  }
+}
+</code></pre></div><div class="tab-pane" id="locations__id__put_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="users" class="panel-title">USERS</h3></div><div class="panel-body"><div class="top-resource-description"><p>Lets you manipulate users.</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_users"><span class="parent"></span>/users</a> <span class="methods"><a href="#users_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_users" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#users_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets an array of users.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="users_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/users</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets an array of users.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#users_get_response" data-toggle="tab">Response</a></li><li><a href="#users_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns as array of users.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[
   {
-    "id": "",
-    "created": "2016-01-29T16:04:27.000Z",
-    "updated": "2016-01-29T16:04:27.000Z",
-    "firstName": "",
-    "lastName": "",
-    "email": "",
-    "roles": [""],
-    "active": true
+    "_id": "OBJECT_ID",
+    "created": "DATE",
+    "updated": "DATE",
+    "firstName": "STRING",
+    "lastName": "STRING",
+    "email": "STRING",
+    "role": "STRING",
+    "active": BOOLEAN
   }
 ]
 </code></pre></div><div class="tab-pane" id="users_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_users__id_"><span class="parent">/users</span>/{id}</a> <span class="methods"><a href="#users__id__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#users__id__put"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_users__id_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#users__id__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Gets a single user.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#users__id__put'" class="list-group-item"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Edits a user (can&#39;t change password).</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="users__id__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/users</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets a single user.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#users__id__get_request" data-toggle="tab">Request</a></li><li><a href="#users__id__get_response" data-toggle="tab">Response</a></li><li><a href="#users__id__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="users__id__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns a single user.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "id": "",
-  "created": "2016-01-29T16:04:27.000Z",
-  "updated": "2016-01-29T16:04:27.000Z",
-  "firstName": "",
-  "lastName": "",
-  "email": "",
-  "roles": [""],
-  "active": true
+  "_id": "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "firstName": "STRING",
+  "lastName": "STRING",
+  "email": "STRING",
+  "role": "STRING",
+  "active": BOOLEAN
 }
 </code></pre></div><div class="tab-pane" id="users__id__get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="users__id__put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/users</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Edits a user (can&#39;t change password).</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#users__id__put_request" data-toggle="tab">Request</a></li><li><a href="#users__id__put_response" data-toggle="tab">Response</a></li><li><a href="#users__id__put_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users__id__put_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "firstName": "",
-  "lastName": "",
-  "email": "",
-  "roles": [""],
-  "active": true
+  "firstName": "STRING",
+  "lastName": "STRING",
+  "email": "STRING",
+  "role": "STRING",
+  "active": BOOLEAN
 }
 </code></pre></div><div class="tab-pane" id="users__id__put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>User updated.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "message": "User has been edited."
+  "_id": "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "firstName": "STRING",
+  "lastName": "STRING",
+  "email": "STRING",
+  "role": "STRING",
+  "active": BOOLEAN
 }
 </code></pre></div><div class="tab-pane" id="users__id__put_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_users__id__password"><span class="parent">/users/{id}</span>/password</a> <span class="methods"><a href="#users__id__password_put"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_users__id__password" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#users__id__password_put'" class="list-group-item"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Changes a user&#39;s password.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="users__id__password_put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/users/{id}</span>/password</h4></div><div class="modal-body"><div class="alert alert-info"><p>Changes a user&#39;s password.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#users__id__password_put_request" data-toggle="tab">Request</a></li><li><a href="#users__id__password_put_response" data-toggle="tab">Response</a></li><li><a href="#users__id__password_put_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="users__id__password_put_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "id": "",
-  "password", ""
+  "newPassword", "STRING"
 }
 </code></pre></div><div class="tab-pane" id="users__id__password_put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Password changed.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
   "message": "The password has been changed."
 }
 </code></pre></div><div class="tab-pane" id="users__id__password_put_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div></div></div></div><div class="panel panel-default"><div class="panel-heading"><h3 id="devices" class="panel-title">DEVICES</h3></div><div class="panel-body"><div class="top-resource-description"><p>Lets you manipulate your devices and access telemetry.</p></div><div class="panel-group"><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_devices"><span class="parent"></span>/devices</a> <span class="methods"><a href="#devices_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_devices" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#devices_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Allows you to get a list of all of your devices.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="devices_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent"></span>/devices</h4></div><div class="modal-body"><div class="alert alert-info"><p>Allows you to get a list of all of your devices.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#devices_get_response" data-toggle="tab">Response</a></li><li><a href="#devices_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="devices_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns an array of all of your devices.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[
   {
-    "created": "2016-01-29T16:04:27.000Z",
-    "updated": "2016-01-29T16:04:27.000Z",
-    "serialNumber": "15",
-    "type": "hydrant",
-    "code": "Client assigned code",
-    "descriptor": "Client assigned descriptor"
+    "_id": "OBJECT_ID",
+    "created": "DATE",
+    "updated": "DATE",
+    "serialNumber": "STRING",
+    "type": "STRING",
+    "code": "STRING",
+    "description": "STRING"
   }
 ]
 </code></pre></div><div class="tab-pane" id="devices_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_devices__id_"><span class="parent">/devices</span>/{id}</a> <span class="methods"><a href="#devices__id__get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#devices__id__put"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_devices__id_" class="panel-collapse collapse"><div class="panel-body"><div class="resource-description"><p>Allows you to work with an individual device.</p></div><div class="list-group"><div onclick="window.location.href = '#devices__id__get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Returns a single device.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#devices__id__put'" class="list-group-item"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Allows you to edit an existing device.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="devices__id__get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/devices</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Returns a single device.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#devices__id__get_request" data-toggle="tab">Request</a></li><li><a href="#devices__id__get_response" data-toggle="tab">Response</a></li><li><a href="#devices__id__get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="devices__id__get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The device&#39;s serial number</p></li></ul></div><div class="tab-pane" id="devices__id__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns a device.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "created": "2016-01-29T16:04:27.000Z",
-  "updated": "2016-01-29T16:04:27.000Z",
-  "serialNumber": "15",
-  "type": "hydrant",
-  "code": "Client assigned code",
-  "descriptor": "Client assigned descriptor"
-}
-</code></pre><h2>HTTP status code <a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>Device not found.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "message": "Device not found"
+  "_id": "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "serialNumber": "STRING",
+  "type": "STRING",
+  "code": "STRING",
+  "description": "STRING"
 }
 </code></pre></div><div class="tab-pane" id="devices__id__get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="devices__id__put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/devices</span>/{id}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Allows you to edit an existing device.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#devices__id__put_request" data-toggle="tab">Request</a></li><li><a href="#devices__id__put_response" data-toggle="tab">Response</a></li><li><a href="#devices__id__put_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="devices__id__put_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The device&#39;s serial number</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "code": "Client assigned code",
-  "descriptor": "Client assigned descriptor"
+  "type": "STRING",
+  "code": "STRING",
+  "description": "STRING"
 }
 </code></pre></div><div class="tab-pane" id="devices__id__put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Device saved.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "message": "Device saved."
+  "_id": "OBJECT_ID",
+  "created": "DATE",
+  "updated": "DATE",
+  "serialNumber": "STRING",
+  "type": "STRING",
+  "code": "STRING",
+  "description": "STRING"
 }
-</code></pre><h2>HTTP status code <a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>Device not found.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "message": "Device not found"
-}
-</code></pre></div><div class="tab-pane" id="devices__id__put_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_devices__id__settings"><span class="parent">/devices/{id}</span>/settings</a> <span class="methods"><a href="#devices__id__settings_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#devices__id__settings_put"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_devices__id__settings" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#devices__id__settings_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Allows you to get the settings for a device.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#devices__id__settings_put'" class="list-group-item"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Allows you to set the settings for a device.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="devices__id__settings_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/devices/{id}</span>/settings</h4></div><div class="modal-body"><div class="alert alert-info"><p>Allows you to get the settings for a device.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#devices__id__settings_get_request" data-toggle="tab">Request</a></li><li><a href="#devices__id__settings_get_response" data-toggle="tab">Response</a></li><li><a href="#devices__id__settings_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="devices__id__settings_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The device&#39;s serial number</p></li></ul></div><div class="tab-pane" id="devices__id__settings_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns the settings for a device.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "serialNumber": "15",
-  "code": "Client assigned code",
-  "normalrate": 0,
-  "highlimit": 0,
-  "lowlimit": 0,
-  "deadband": 0,
-  "bufferallduration": 0,
-  "preroll": 0,
-  "postroll": 0,
-  "starttime": "2016-01-29T16:04:27.000Z",
-  "stoptime": "2016-01-29T16:04:27.000Z"
-}
-</code></pre><h2>HTTP status code <a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>Device not found.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "message": "Device not found"
-}
-</code></pre></div><div class="tab-pane" id="devices__id__settings_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="devices__id__settings_put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/devices/{id}</span>/settings</h4></div><div class="modal-body"><div class="alert alert-info"><p>Allows you to set the settings for a device.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#devices__id__settings_put_request" data-toggle="tab">Request</a></li><li><a href="#devices__id__settings_put_response" data-toggle="tab">Response</a></li><li><a href="#devices__id__settings_put_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="devices__id__settings_put_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The device&#39;s serial number</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "normalrate": 0,
-  "highlimit": 0,
-  "lowlimit": 0,
-  "deadband": 0,
-  "bufferallduration": 0,
-  "preroll": 0,
-  "postroll": 0,
-  "starttime": "2016-01-29T16:04:27.000Z",
-  "stoptime": "2016-01-29T16:04:27.000Z"
-}
-</code></pre></div><div class="tab-pane" id="devices__id__settings_put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Successful</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "message": "Settings have been saved"
-}
-</code></pre><h2>HTTP status code <a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>Device not found.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "message": "Device not found"
-}
+</code></pre></div><div class="tab-pane" id="devices__id__put_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_devices__id__settings"><span class="parent">/devices/{id}</span>/settings</a> <span class="methods"><a href="#devices__id__settings_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a> <a href="#devices__id__settings_put"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_devices__id__settings" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#devices__id__settings_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Allows you to get the settings for a device.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#devices__id__settings_put'" class="list-group-item"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Allows you to set the settings for a device. This overwrights the existing settings.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="devices__id__settings_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/devices/{id}</span>/settings</h4></div><div class="modal-body"><div class="alert alert-info"><p>Allows you to get the settings for a device.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#devices__id__settings_get_request" data-toggle="tab">Request</a></li><li><a href="#devices__id__settings_get_response" data-toggle="tab">Response</a></li><li><a href="#devices__id__settings_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="devices__id__settings_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The device&#39;s serial number</p></li></ul></div><div class="tab-pane" id="devices__id__settings_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns the settings for a device.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[{
+  "name": "STRING",
+  "dataType": "STRING",
+  "value": MIXED
+}]
+</code></pre></div><div class="tab-pane" id="devices__id__settings_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="devices__id__settings_put"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/devices/{id}</span>/settings</h4></div><div class="modal-body"><div class="alert alert-info"><p>Allows you to set the settings for a device. This overwrights the existing settings.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#devices__id__settings_put_request" data-toggle="tab">Request</a></li><li><a href="#devices__id__settings_put_response" data-toggle="tab">Response</a></li><li><a href="#devices__id__settings_put_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="devices__id__settings_put_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The device&#39;s serial number</p></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[{
+  "name": "STRING",
+  "dataType": "STRING",
+  "value": MIXED
+}]
+</code></pre></div><div class="tab-pane" id="devices__id__settings_put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Successful</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[{
+  "name": "STRING",
+  "dataType": "STRING",
+  "value": MIXED
+}]
 </code></pre></div><div class="tab-pane" id="devices__id__settings_put_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div><div class="panel panel-white"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_devices__id__telemetries"><span class="parent">/devices/{id}</span>/telemetries</a> <span class="methods"><a href="#devices__id__telemetries_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_devices__id__telemetries" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#devices__id__telemetries_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Returns telemetry data.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="devices__id__telemetries_get"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/devices/{id}</span>/telemetries</h4></div><div class="modal-body"><div class="alert alert-info"><p>Returns telemetry data.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#devices__id__telemetries_get_request" data-toggle="tab">Request</a></li><li><a href="#devices__id__telemetries_get_response" data-toggle="tab">Response</a></li><li><a href="#devices__id__telemetries_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="devices__id__telemetries_get_request"><h3>URI Parameters</h3><ul><li><strong>id</strong>: <em>required (string)</em><p>The device&#39;s serial number</p></li></ul><h3>Query Parameters</h3><ul><li><strong>start</strong>: <em>required (string)</em><p><strong>Examples</strong>:</p><pre>start=2016-01-29T16:04:27.000Z</pre></li><li><strong>end</strong>: <em>required (string)</em><p><strong>Examples</strong>:</p><pre>end=2016-01-29T16:04:27.000Z</pre></li><li><strong>sensors</strong>: <em>required (string)</em><p><strong>Examples</strong>:</p><pre>sensors=temp&amp;sensors=pres&amp;sensors=humi&amp;sensors=aclx&amp;sensors=acly&amp;sensors=aclz&amp;sensors=shck</pre></li></ul></div><div class="tab-pane" id="devices__id__telemetries_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>An array of telemetries</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>[
   {
-    "tag": "[TAG]",
-    "timestamp": "[DATE]",
+    "tag": "STRING",
+    "timestamp": "DATE",
     "device": {
-      "serialNumber": "",
-      "type": "",
-      "descriptor": "",
-      "geolocation": [x, y]
+      "serialNumber": "STRING",
+      "type": "STRING",
+      "description": "STRING",
+      "geolocation": [NUMBER, NUMBER]
     },
     "sensor": {
-      "type": 1,
-      "typeString": "",
-      "description": "",
-      "unit", ""
+      "type": NUMBER,
+      "typeString": "STRING",
+      "description": "STRING",
+      "unit": "STRING"
     },
     "data": {
-      "unit": "",
-      "quality": 1,
+      "unit": "STRING",
+      "quality": NUMBER,
       "values": {
-        "min": 5,
-        "max": 5,
-        "average": 5,
-        "current": 5
+        "min": NUMBER,
+        "max": NUMBER,
+        "average": NUMBER,
+        "current": NUMBER
       }
     }
   }
 ]
-</code></pre><h2>HTTP status code <a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>Device not found.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Examples</strong>:</p><pre><code>{
-  "message": "Device not found"
-}
-</code></pre></div><div class="tab-pane" id="devices__id__telemetries_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#authentication">AUTHENTICATION</a></li><li><a href="#clients">CLIENTS</a></li><li><a href="#users">USERS</a></li><li><a href="#devices">DEVICES</a></li></ul></div></div></div></div></body></html>
+</code></pre></div><div class="tab-pane" id="devices__id__telemetries_get_securedby"><h1>Secured by JWT</h1><h3>Headers</h3><ul><li><strong>x-access-token</strong>: <em>required (string)</em><p>A JWT access token. Get the JWT using /authenticate</p></li><li><strong>x-client-id</strong>: <em>required (string)</em><p>Your unique client ID.</p></li></ul></div></div></div></div></div></div></div></div></div></div></div><div class="col-md-3"><div id="sidebar" class="hidden-print affix" role="complementary"><ul class="nav nav-pills nav-stacked"><li><a href="#authentication">AUTHENTICATION</a></li><li><a href="#clients">CLIENTS</a></li><li><a href="#assets__id_">ASSETS</a></li><li><a href="#locations__id_">LOCATIONS</a></li><li><a href="#users">USERS</a></li><li><a href="#devices">DEVICES</a></li></ul></div></div></div></div></body></html>
