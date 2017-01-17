@@ -15,9 +15,6 @@ var fs = require('fs'),
 	cookieParser = require('cookie-parser'),
 	helmet = require('helmet'),
 	cors = require('cors'),
-	mongoStore = require('connect-mongo')({
-		session: session
-	}),
 	config = require('./config'),
 	consolidate = require('consolidate'),
 	path = require('path');

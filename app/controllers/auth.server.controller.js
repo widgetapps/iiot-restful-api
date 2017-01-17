@@ -3,10 +3,8 @@
 /**
  * Controller dependencies.
  */
-var mongoose = require('mongoose'),
-    User = require('@terepac/terepac-models').User,
+var User = require('@terepac/terepac-models').User,
     Client = require('@terepac/terepac-models').Client,
-    Device = require('@terepac/terepac-models').Device,
     _ = require('lodash'),
     moment = require('moment'),
     jwt = require('jsonwebtoken'),
@@ -19,30 +17,15 @@ exports.authenticate = function(req, res) {
 
     console.log('STARTING AUTHENTICATION...');
     console.log('EMAIL: ' + req.body.email);
+    console.log('PASSWORD: ' + req.body.password);
 
-    User.findOne({
-        email: req.body.email
-    },{
-        firstName: 1,
-        lastName: 1,
-        email: 1,
-        password: 1,
-        salt: 1,
-        phone: 1,
-        roles: 1,
-        active: 1,
-        client: 1
-    }).exec(function(err, user) {
+    var promise = User.findOne({ email: req.body.email }).exec();
+
+    console.log('PROMISES HAVE BEEN MADE');
+
+    promise.then(function (user) {
 
         console.log('QUERY SUCCESSFUL');
-
-        if (err) {
-            res.status(404).send({
-                message: 'Error finding the user: ' + err
-            });
-            return;
-        }
-
         console.log('NO ERROR');
 
         if (!user) {
@@ -92,7 +75,28 @@ exports.authenticate = function(req, res) {
                 });
             }
         }
+    }).catch(function() {
+        res.status(404).send({
+            message: 'Error with the database.'
+        });
+    });
+
+    /*
+    User.findOne({
+        email: req.body.email
+    },{
+        firstName: 1,
+        lastName: 1,
+        email: 1,
+        password: 1,
+        salt: 1,
+        phone: 1,
+        role: 1,
+        active: 1,
+        client: 1
+    }).exec(function(err, user) {
 
     });
+    */
 
 };
