@@ -246,8 +246,9 @@ exports.listTags = function(req, res) {
         Tag.find( query,
             {
                 tag: 1,
+                description: 1,
                 active: 1,
-                avticeStart: 1,
+                activeStart: 1,
                 historical: 1
             }, function(err, tags) {
                 res.json(tags);

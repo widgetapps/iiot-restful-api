@@ -329,7 +329,18 @@ documentation:
                     "_id": : "OBJECT_ID",
                     "created": "DATE",
                     "updated": "DATE",
-                    "tag": "STRING",
+                    "description": {
+                      "location": "STRING",
+                      "asset": "STRING",
+                      "sensor": "STRING"
+                    },
+                    "tag": {
+                      "full": "STRING",
+                      "clientTagCode": "STRING",
+                      "locationTagCode": "STRING",
+                      "assetTagCode": "STRING",
+                      "sensorTagCode": "STRING"
+                    },
                     "active": BOOLEAN,
                     "activeStart": "DATE",
                     "historical": {
