@@ -247,6 +247,7 @@ exports.listTags = function(req, res) {
             {
                 tag: 1,
                 description: 1,
+                unit: 1,
                 active: 1,
                 activeStart: 1,
                 historical: 1
@@ -307,8 +308,13 @@ exports.searchTelemetry = function(req, res) {
         }, fields)
         .sort('timestamp')
         .exec(function(err, telemetries) {
-            if (err || telemetries.length === 0) {
-                res.status(404).send({
+            if (err) {
+                res.status(500).send({
+                    message: 'Database error.'
+                });
+                return;
+            } else if (telemetries.length === 0) {
+                res.status(200).send({
                     message: 'No data found. Did you include the start, end & tags params?'
                 });
                 return;
