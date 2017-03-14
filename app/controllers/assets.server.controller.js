@@ -25,10 +25,12 @@ exports.listDevices = function(req, res) {
 
 };
 
+// Remember to add/update the tag when a device is added to an asset
 exports.addDevice = function(req, res) {
 
 };
 
+// Remember to add/update the tag when a device is removed from an asset
 exports.removeDevice = function(req, res) {
 
 };

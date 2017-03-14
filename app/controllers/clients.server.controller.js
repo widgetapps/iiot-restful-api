@@ -327,11 +327,56 @@ exports.searchTelemetry = function(req, res) {
 };
 
 exports.listLocations = function(req, res) {
+    authorize.validate(endpoint, req, res, 'user', function() {
+        var query;
 
+        switch (req.user.role) {
+            case 'user':
+                query = {
+                    client: req.user.client
+                };
+                break;
+            case 'manager':
+            case 'admin':
+                query = {
+                    $or: [{client: req.user.client}, {resellerClients: req.user.client}]
+                };
+                break;
+            case 'super':
+                query = {};
+                break;
+            default:
+                res.status(401).send({
+                    message: 'You are not authorized to access this resource.'
+                });
+                return;
+        }
+
+        Location.find( query, {
+                tagCode: 1,
+                description: 1,
+                geolocation: 1,
+                address: 1,
+                assets: 1
+            })
+            .populate('assets')
+            .exec(function(err, locations) {
+                if (err) {
+                    res.status(500).send({
+                        message: 'Database error.'
+                    });
+                    return;
+                }
+
+                res.json(locations);
+            });
+    });
 };
 
 exports.insertLocation = function(req, res) {
+    authorize.validate(endpoint, req, res, 'manager', function() {
 
+    });
 };
 
 exports.listAssets = function(req, res) {
