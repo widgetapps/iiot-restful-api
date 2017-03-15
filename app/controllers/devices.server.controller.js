@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    jsonQuery = require('json-query'),
     errorHandler = require('./errors.server.controller'),
     Device = require('@terepac/terepac-models').Device,
     Sensor = require('@terepac/terepac-models').Sensor,
@@ -15,7 +16,7 @@ var mongoose = require('mongoose'),
 exports.list = function(req, res) {
     var clientId = mongoose.Types.ObjectId(req.user.client);
 
-    Device.find({$or: [{client: clientId}, {acl: clientId}]},
+    Device.find({$or: [{client: clientId}, {'acl.client': clientId}]},
         {
             created: 1,
             updated: 1,
@@ -41,7 +42,7 @@ exports.getOne = function(req, res) {
     var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
     Device.findOne(
-        { _id: deviceId, $or: [{client: clientId}, {acl: clientId}] }, {
+        { _id: deviceId, $or: [{client: clientId}, {'acl.client': clientId}] }, {
             created: 1,
             updated: 1,
             serialNumber: 1,
@@ -66,7 +67,7 @@ exports.updateDevice = function(req, res) {
     var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
     Device.update(
-        { _id: deviceId, $or: [{client: clientId}, {acl: clientId}] },
+        { _id: deviceId, $or: [{client: clientId}, {'acl.client': clientId}] },
         {
             $set: {
                 code: req.body.code,
@@ -92,7 +93,7 @@ exports.getSensors = function(req, res) {
     var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
     Device.findOne(
-        { _id: deviceId, $or: [{client: clientId}, {acl: clientId}] }, {
+        { _id: deviceId, $or: [{client: clientId}, {'acl.client': clientId}] }, {
             sensors: 1
         })
         .populate('sensors.sensor')
@@ -126,15 +127,86 @@ exports.getSensors = function(req, res) {
 };
 
 exports.getSensor = function(req, res) {
+    var clientId = mongoose.Types.ObjectId(req.user.client);
+    var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
+    var sensorId = mongoose.Types.ObjectId(req.params.sensorId);
 
+    Device.findOne(
+        { _id: deviceId, $or: [{client: clientId}, {'acl.client': clientId}] }, {
+            sensors: 1
+        })
+        .populate('sensors.sensor')
+        .exec(function (err, device) {
+            if (err) {
+                res.status(500).send({
+                    message: 'Database error.'
+                });
+                return;
+            }
+
+            var data = jsonQuery('sensors[sensor._id=' + sensorId + ']', {data: device}).value;
+
+            var sensor = {
+                _id: data.sensor._id,
+                type: data.sensor.type,
+                typeString: data.sensor.typeString,
+                tagCode: data.sensor.tagCode,
+                description: data.sensor.description,
+                unit: data.sensor.unit,
+                limits: data.limits
+            };
+
+            res.json(sensor);
+        });
 };
 
 exports.getLimits = function(req, res) {
+    var clientId = mongoose.Types.ObjectId(req.user.client);
+    var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
+    var sensorId = mongoose.Types.ObjectId(req.params.sensorId);
 
+    Device.findOne(
+        { _id: deviceId, $or: [{client: clientId}, {'acl.client': clientId}] }, {
+            sensors: 1
+        })
+        .populate('sensors.sensor')
+        .exec(function (err, device) {
+            if (err) {
+                res.status(500).send({
+                    message: 'Database error.'
+                });
+                return;
+            }
+
+            var limits = jsonQuery('sensors[sensor=' + sensorId + '].limits', {data: device}).value;
+
+            res.json(limits);
+        });
 };
 
 exports.updateLimits = function(req, res) {
+    var clientId = mongoose.Types.ObjectId(req.user.client);
+    var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
+    Device.update(
+        { _id: deviceId, $or: [{client: clientId}, {'acl.client': clientId}] },
+        {
+            $set: {
+                limits: req.body
+            }
+        }, function(err, device) {
+            if (!device || err) {
+                res.status(404).send({
+                    message: 'No device found.'
+                });
+                return;
+            }
+
+            res.json({
+                message: 'Limits have been saved'
+            });
+        }
+    );
 };
 
 exports.getSettings = function(req, res) {
@@ -142,7 +214,7 @@ exports.getSettings = function(req, res) {
     var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
     Device.findOne(
-        { _id: deviceId, $or: [{client: clientId}, {acl: clientId}] }, {
+        { _id: deviceId, $or: [{client: clientId}, {'acl.client': clientId}] }, {
             serialNumber: 1,
             code: 1,
             settings: 1
@@ -165,7 +237,7 @@ exports.updateSettings = function(req, res) {
     var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
     Device.update(
-        { _id: deviceId, $or: [{client: clientId}, {acl: clientId}] },
+        { _id: deviceId, $or: [{client: clientId}, {'acl.client': clientId}] },
         {
             $set: {
                 settings: req.body

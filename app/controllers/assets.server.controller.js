@@ -25,7 +25,7 @@ exports.listDevices = function(req, res) {
 
 };
 
-// Remember to add/update the tag when a device is added to an asset
+// Remember to add/update the tag when a device is added to an asset. Think about other things that need updating!
 exports.addDevice = function(req, res) {
 
 };
