@@ -6,8 +6,11 @@
 var mongoose = require('mongoose'),
     errorHandler = require('./errors.server.controller'),
     Device = require('@terepac/terepac-models').Device,
+    Sensor = require('@terepac/terepac-models').Sensor,
     _ = require('lodash'),
-    moment = require('moment');
+    moment = require('moment'),
+    authorize = require('../lib/authorize.server.lib'),
+    endpoint = 'device';
 
 exports.list = function(req, res) {
     var clientId = mongoose.Types.ObjectId(req.user.client);
@@ -35,10 +38,10 @@ exports.list = function(req, res) {
 
 exports.getOne = function(req, res) {
     var clientId = mongoose.Types.ObjectId(req.user.client);
-    var serialNumber = req.params.serialNumber;
+    var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
     Device.findOne(
-        { serialNumber: serialNumber, $or: [{client: clientId}, {acl: clientId}] }, {
+        { _id: deviceId, $or: [{client: clientId}, {acl: clientId}] }, {
             created: 1,
             updated: 1,
             serialNumber: 1,
@@ -60,10 +63,10 @@ exports.getOne = function(req, res) {
 
 exports.updateDevice = function(req, res) {
     var clientId = mongoose.Types.ObjectId(req.user.client);
-    var serialNumber = req.params.serialNumber;
+    var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
     Device.update(
-        { serialNumber: serialNumber, $or: [{client: clientId}, {acl: clientId}] },
+        { _id: deviceId, $or: [{client: clientId}, {acl: clientId}] },
         {
             $set: {
                 code: req.body.code,
@@ -84,12 +87,62 @@ exports.updateDevice = function(req, res) {
     );
 };
 
-exports.getSettings = function(req, res) {
+exports.getSensors = function(req, res) {
     var clientId = mongoose.Types.ObjectId(req.user.client);
-    var serialNumber = req.params.serialNumber;
+    var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
     Device.findOne(
-        { serialNumber: serialNumber, $or: [{client: clientId}, {acl: clientId}] }, {
+        { _id: deviceId, $or: [{client: clientId}, {acl: clientId}] }, {
+            sensors: 1
+        })
+        .populate('sensors.sensor')
+        .exec(function (err, device) {
+            if (err) {
+                res.status(500).send({
+                    message: 'Database error.'
+                });
+                return;
+            }
+
+            var sensors = [];
+
+            _.each(device.sensors, function(sensor){
+                var data = {
+                    _id: sensor.sensor._id,
+                    type: sensor.sensor.type,
+                    typeString: sensor.sensor.typeString,
+                    tagCode: sensor.sensor.tagCode,
+                    description: sensor.sensor.description,
+                    unit: sensor.sensor.unit,
+                    limits: sensor.limits
+                };
+
+                sensors.push(data);
+            });
+
+            res.json(sensors);
+        });
+
+};
+
+exports.getSensor = function(req, res) {
+
+};
+
+exports.getLimits = function(req, res) {
+
+};
+
+exports.updateLimits = function(req, res) {
+
+};
+
+exports.getSettings = function(req, res) {
+    var clientId = mongoose.Types.ObjectId(req.user.client);
+    var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
+
+    Device.findOne(
+        { _id: deviceId, $or: [{client: clientId}, {acl: clientId}] }, {
             serialNumber: 1,
             code: 1,
             settings: 1
@@ -101,39 +154,21 @@ exports.getSettings = function(req, res) {
                 return;
             }
 
-            res.json({
-                serialNumber: device.serialNumber,
-                code: device.code,
-                normalrate: device.normalrate,
-                highlimit: device.highlimit,
-                lowlimit: device.lowlimit,
-                deadband: device.deadband,
-                bufferallduration: device.bufferallduration,
-                preroll: device.preroll,
-                postroll: device.postroll,
-                starttime: device.starttime,
-                stoptime: device.stoptime
-            });
+            res.json(
+                device.settings
+            );
     });
 };
 
 exports.updateSettings = function(req, res) {
     var clientId = mongoose.Types.ObjectId(req.user.client);
-    var serialNumber = req.params.serialNumber;
+    var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
     Device.update(
-        { serialNumber: serialNumber, $or: [{client: clientId}, {acl: clientId}] },
+        { _id: deviceId, $or: [{client: clientId}, {acl: clientId}] },
         {
             $set: {
-                'settings.normalrate': req.body.normalrate,
-                'settings.highlimit': req.body.highlimit,
-                'settings.lowlimit': req.body.lowlimit,
-                'settings.deadband': req.body.deadband,
-                'settings.bufferallduration': req.body.bufferallduration,
-                'settings.preroll': req.body.preroll,
-                'settings.postroll': req.body.postroll,
-                'settings.starttime': new Date(req.body.starttime),
-                'settings.stoptime': new Date(req.body.stoptime)
+                settings: req.body
             }
         }, function(err, device) {
             if (!device || err) {
