@@ -193,6 +193,8 @@ exports.getMeasurements = function(req, res) {
             sensors = [req.query.sensors];
         }
 
+        res.set('Content-Type', 'application/json');
+
         Measurement.find({
             device: mongoose.Types.ObjectId(device._id),
             created: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)},
