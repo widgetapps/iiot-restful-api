@@ -195,7 +195,7 @@ exports.getMeasurements = function(req, res) {
 
         res.set('Content-Type', 'application/json');
 
-        var cursor = Measurement.find({
+        Measurement.find({
             device: mongoose.Types.ObjectId(device._id),
             created: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)},
             sensor: {$in: sensors}
@@ -205,9 +205,9 @@ exports.getMeasurements = function(req, res) {
             data: 1
         })
             .sort('created')
-            .cursor();
-
-        cursor.pipe(JSONStream).pipe(res);
+            .cursor({batchSize: 100})
+            .pipe(JSONStream)
+            .pipe(res);
 
         /*
         Measurement.find({
