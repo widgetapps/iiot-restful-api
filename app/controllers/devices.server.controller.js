@@ -155,17 +155,31 @@ exports.getMeasurements = function(req, res) {
     var clientId = mongoose.Types.ObjectId(req.user.client);
     var serialNumber = req.params.serialNumber;
 
+    if (!req.query.sensors) {
+        res.status(404).send({
+            message: 'No sensors were provided.'
+        });
+        return;
+    }
+
+    if (!req.query.start || !moment(req.query.start).isValid()) {
+        res.status(404).send({
+            message: 'Valid start date was not provided.'
+        });
+        return;
+    }
+
+    if (!req.query.end || !moment(req.query.end).isValid()) {
+        res.status(404).send({
+            message: 'Valid end date was not provided.'
+        });
+        return;
+    }
+
     Device.findOne({ serialNumber: serialNumber, $or: [{client: clientId}, {acl: clientId}] }, function(err, device) {
         if (!device || err) {
             res.status(404).send({
                 message: 'No device found.'
-            });
-            return;
-        }
-
-        if (!req.query.sensors) {
-            res.status(404).send({
-                message: 'No sensors were provided.'
             });
             return;
         }
