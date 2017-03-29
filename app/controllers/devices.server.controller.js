@@ -179,7 +179,7 @@ exports.getMeasurements = function(req, res) {
         }
 
         Measurement.find({
-                device: device._id,
+                device: mongoose.Types.ObjectId(device._id),
                 created: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)},
                 sensor: {$in: sensors}
             },{
