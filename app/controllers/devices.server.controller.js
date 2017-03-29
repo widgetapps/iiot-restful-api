@@ -207,7 +207,9 @@ exports.getMeasurements = function(req, res) {
             .sort('created')
             .cursor();
 
-        res.json(cursor);
+        console.log('Cursor:' + cursor);
+
+        res.json({data: 'this'});
 
         /*
         Measurement.find({
