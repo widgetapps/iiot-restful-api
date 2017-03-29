@@ -205,8 +205,8 @@ exports.getMeasurements = function(req, res) {
             data: 1
         })
             .sort('created')
-            .cursor({batchSize: 100})
-            .pipe(JSONStream)
+            .cursor()
+            .pipe(JSONStream.stringify())
             .pipe(res);
 
         /*
