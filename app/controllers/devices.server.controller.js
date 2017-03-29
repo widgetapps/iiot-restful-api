@@ -209,28 +209,5 @@ exports.getMeasurements = function(req, res) {
             .pipe(JSONStream.stringify())
             .pipe(res);
 
-        /*
-        Measurement.find({
-                device: mongoose.Types.ObjectId(device._id),
-                created: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)},
-                sensor: {$in: sensors}
-            },{
-                created: 1,
-                sensor: 1,
-                data: 1
-            })
-            .sort('created')
-            .exec(function (err, measurements) {
-                if (err || measurements.length === 0) {
-                    res.status(404).send({
-                        message: 'No measurements found.'
-                    });
-                    return;
-                }
-
-                res.json(measurements);
-
-            });
-            */
     });
 };
