@@ -8,7 +8,8 @@ var mongoose = require('mongoose'),
     Measurement = mongoose.model('Measurement'),
     Device = mongoose.model('Device'),
     _ = require('lodash'),
-    moment = require('moment');
+    moment = require('moment'),
+    JSONStream = require('JSONStream');
 
 exports.list = function(req, res) {
     var clientId = mongoose.Types.ObjectId(req.user.client);
@@ -193,6 +194,21 @@ exports.getMeasurements = function(req, res) {
         }
 
         Measurement.find({
+            device: mongoose.Types.ObjectId(device._id),
+            created: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)},
+            sensor: {$in: sensors}
+        },{
+            created: 1,
+            sensor: 1,
+            data: 1
+        })
+            .sort('created')
+            .cursor()
+            .pipe(JSONStream.stringify)
+            .pipe(res);
+
+        /*
+        Measurement.find({
                 device: mongoose.Types.ObjectId(device._id),
                 created: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)},
                 sensor: {$in: sensors}
@@ -205,7 +221,7 @@ exports.getMeasurements = function(req, res) {
             .exec(function (err, measurements) {
                 if (err || measurements.length === 0) {
                     res.status(404).send({
-                        message: 'No measurements found. Did you include the start, end & sensors params?'
+                        message: 'No measurements found.'
                     });
                     return;
                 }
@@ -213,5 +229,6 @@ exports.getMeasurements = function(req, res) {
                 res.json(measurements);
 
             });
+            */
     });
 };
