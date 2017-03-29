@@ -203,6 +203,7 @@ exports.getMeasurements = function(req, res) {
             data: 1
         })
             .sort('created')
+            .stream()
             .pipe(JSONStream.stringify)
             .pipe(res);
 
