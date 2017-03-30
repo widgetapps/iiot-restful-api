@@ -208,7 +208,6 @@ exports.getMeasurements = function(req, res) {
             sensor: 1,
             data: 1
         })
-            .sort('created')
             .cursor()
             .pipe(JSONStream.stringify())
             .pipe(res);
