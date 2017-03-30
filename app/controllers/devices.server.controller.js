@@ -195,6 +195,7 @@ exports.getMeasurements = function(req, res) {
 
         res.set('Content-Type', 'application/json');
         res.set('X-Accel-Buffering', 'no');
+        res.set('Cache-Control', 'no-cache');
 
         Measurement.find({
             device: mongoose.Types.ObjectId(device._id),
