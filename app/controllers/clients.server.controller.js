@@ -9,8 +9,10 @@ var mongoose = require('mongoose'),
     Tag = require('@terepac/terepac-models').Tag,
     Telemetry = require('@terepac/terepac-models').Telemetry,
     User = require('@terepac/terepac-models').User,
+    Sensor = require('@terepac/terepac-models').Sensor,
     _ = require('lodash'),
     moment = require('moment'),
+    async = require('async'),
     randomstring = require('randomstring'),
     authorize = require('../lib/authorize.server.lib'),
     endpoint = 'client';
@@ -392,7 +394,66 @@ exports.listDevices = function(req, res) {
 };
 
 exports.insertDevice = function(req, res) {
-    // TODO: Remember that when a new device is added, also insert login creds for MQTT. Hmm, I might be able to do this with a hook.
+    /*
+     {
+         "serialNumber": "STRING",
+         "type": "STRING",
+         "tagCode": "STRING",
+         "description": "STRING",
+         "sensors": [{
+             "tagCode": "STRING",
+             "limits": {
+                 "low": NUMBER,
+                 "high": NUMBER
+             }
+         }],
+         "settings": [{
+             "name": "STRING",
+             "dataType": "STRING",
+             "value": MIXED
+         }]
+     }
+     */
+    authorize.validate(endpoint, req, res, 'admin', function() {
+        var sensors = req.body.sensors;
+
+        var device = {
+            serialNumber: req.body.serialNumber,
+            type: req.body.type,
+            tagCode: req.body.tagCode,
+            description: req.body.description,
+            settings: req.body.settings
+        };
+
+        var deviceSensors = [];
+        async.each(sensors, function(sensor, callback) {
+            var sensorPromise = Sensor.findOne({ tagCode: sensor.tagCode }).exec();
+
+            sensorPromise.then(function (dbSensor) {
+                deviceSensors.push({
+                    sensor: mongoose.Types.ObjectId(dbSensor._id),
+                    tagCode: dbSensor.tagCode,
+                    unit: dbSensor.unit,
+                    limits: {
+                        high: sensor.limits.high,
+                        low: sensor.limits.low
+                    }
+                });
+                callback();
+            }).catch(callback('Error getting sensors'));
+        }, function(err) {
+            // Add data processed, save to DB amd send response.
+            if (err) {
+                res.status(401).send({
+                    message: 'Error with sensors'
+                });
+            } else {
+                //TODO: Save to DB, serialNumber is unique
+                device.sensors = deviceSensors;
+                res.json(device);
+            }
+        });
+    });
 };
 
 exports.getUsers = function(req, res) {
