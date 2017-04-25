@@ -1,7 +1,7 @@
 {
   "name": "terepac-api",
   "description": "The RESTful API for the Terepac ONE Platform.",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "author": "Terepac Corporation",
   "engines": {
     "node": "0.10.x",
@@ -26,6 +26,7 @@
     "glob": "~4.0.5",
     "grunt-cli": "~0.1.13",
     "helmet": "~0.5.0",
+    "json-query": "^2.2.0",
     "jsonwebtoken": "~3.1.1",
     "lodash": "~2.4.1",
     "method-override": "~2.3.0",

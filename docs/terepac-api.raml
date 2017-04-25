@@ -1,6 +1,6 @@
 #%RAML 1.0
 title: Terepac ONE
-version: v1
+version: v2
 baseUri: https://api.terepac.one/{version}
 annotationTypes:
   role:
@@ -97,6 +97,119 @@ documentation:
               {
                 "message": "No client associated with user."
               }
+/assets/{id}:
+  displayName: ASSETS
+  description: |
+    Lets you manupulate assets.
+
+  securedBy:
+    - JWT
+  get:
+    description: Gets a single asset.
+    responses:
+      200:
+        description: Gets a single asset.
+        body:
+          application/json:
+            example: |
+              {
+                "_id": "OBJECT_ID",
+                "created": "DATE",
+                "updated": "DATE",
+                "tagCode": "STRING",
+                "name": "STRING",
+                "description": "STRING"
+              }
+
+  put:
+    description: Updates an asset.
+    body:
+      application/json:
+        example: |
+          {
+            "tagCode": "STRING",
+            "name": "STRING",
+            "description": "STRING"
+          }
+
+    responses:
+      200:
+        description: Asset updated.
+        body:
+          application/json:
+            example: |
+              {
+                "_id": "OBJECT_ID",
+                "created": "DATE",
+                "updated": "DATE",
+                "tagCode": "STRING",
+                "name": "STRING",
+                "description": "STRING"
+              }
+
+  /devices:
+    securedBy:
+      - JWT
+    get:
+      description: Gets an array of devices attached to this asset.
+      responses:
+        200:
+          description: Returns an array of devices.
+          body:
+            application/json:
+              example: |
+                [{
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "serialNumber": "STRING",
+                  "type": "STRING",
+                  "tagCode": "STRING",
+                  "description": "STRING",
+                  "geolocation": [NUMBER, NUMBER],
+                  "sensors":[{
+                    "tagCode": "STRING",
+                    "type": NUMBER,
+                    "typeString": "STRING",
+                    "description": "STRING",
+                    "unit": "STRING"
+                  }],
+                  "settings": [{
+                    "name": "STRING",
+                    "dataType": "STRING",
+                    "value": MIXED
+                  }]
+                }]
+
+    /{id}/add:
+      securedBy:
+        - JWT
+      post:
+        description: Adds this device to this asset.
+        responses:
+          200:
+            description: Deviced added to asset.
+            body:
+              application/json:
+                example: |
+                  {
+                    "message": "Device added."
+                  }
+
+    /{id}/remove:
+      securedBy:
+        - JWT
+      delete:
+        description: Removes this device from this asset.
+        responses:
+          200:
+            description: Deviced removed from asset.
+            body:
+              application/json:
+                example: |
+                  {
+                    "message": "Device removed."
+                  }
 /clients:
   displayName: CLIENTS
   description: |
@@ -697,110 +810,320 @@ documentation:
                     "role": "STRING",
                     "active": BOOLEAN
                   }
-
-/assets/{id}:
-  displayName: ASSETS
+/devices:
+  displayName: DEVICES
   description: |
-    Lets you manupulate assets.
+    Lets you manipulate your devices and access telemetry.
   securedBy: [JWT]
   get:
-    description: Gets a single asset.
+    description: |
+      Allows you to get a list of all of your devices.
     responses:
       200:
-        description: Gets a single asset.
+        description: Returns an array of all of your devices.
         body:
           application/json:
             example: |
-              {
-                "_id": "OBJECT_ID",
-                "created": "DATE",
-                "updated": "DATE",
-                "tagCode": "STRING",
-                "name": "STRING",
-                "description": "STRING"
-              }
-  put:
-    description: Updates an asset.
-    body:
-      application/json:
-        example: |
-          {
-            "tagCode": "STRING",
-            "name": "STRING",
-            "description": "STRING"
-          }
-    responses:
-      200:
-        description: Asset updated.
-        body:
-          application/json:
-            example: |
-              {
-                "_id": "OBJECT_ID",
-                "created": "DATE",
-                "updated": "DATE",
-                "tagCode": "STRING",
-                "name": "STRING",
-                "description": "STRING"
-              }
-  /devices:
-    securedBy: [JWT]
-    get:
-      description: Gets an array of devices attached to this asset.
-      responses:
-        200:
-          description: Returns an array of devices.
-          body:
-            application/json:
-              example: |
-                [{
+              [
+                {
                   "_id": "OBJECT_ID",
                   "created": "DATE",
                   "updated": "DATE",
                   "serialNumber": "STRING",
                   "type": "STRING",
-                  "tagCode": "STRING",
-                  "description": "STRING",
-                  "geolocation": [NUMBER, NUMBER],
-                  "sensors":[{
-                    "tagCode": "STRING",
+                  "code": "STRING",
+                  "description": "STRING"
+                }
+              ]
+  /{id}:
+    description: |
+      Allows you to work with an individual device.
+    securedBy: [JWT]
+    uriParameters:
+      id:
+        description: The device's object ID
+        type: string
+    get:
+      description: |
+        Returns a single device.
+      responses:
+        200:
+          description: Returns a device.
+          body:
+            application/json:
+              example: |
+                {
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "serialNumber": "STRING",
+                  "type": "STRING",
+                  "code": "STRING",
+                  "description": "STRING"
+                }
+    put:
+      description: |
+        Allows you to edit an existing device.
+      body:
+        application/json:
+          example: |
+            {
+              "type": "STRING",
+              "code": "STRING",
+              "description": "STRING"
+            }
+      responses:
+        200:
+          description: Device saved.
+          body:
+            application/json:
+              example: |
+                {
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "serialNumber": "STRING",
+                  "type": "STRING",
+                  "code": "STRING",
+                  "description": "STRING"
+                }
+    /sensors:
+      securedBy: [JWT]
+      get:
+        description: |
+          Allows you to get the sensors available on the device.
+        responses:
+          200:
+            description: Returns the sensors available on the device.
+            body:
+              application/json:
+                example: |
+                  [{
+                    "_id": "OBJECT_ID",
                     "type": NUMBER,
                     "typeString": "STRING",
+                    "tagCode": "STRING",
                     "description": "STRING",
-                    "unit": "STRING"
-                  }],
-                  "settings": [{
+                    "unit": "STRING",
+                    "limits": {
+                      "high": NUMBER,
+                      "low": NUMBER
+                    }
+                  }]
+      /{sensor_id}:
+        securedBy: [JWT]
+        uriParameters:
+          sensor_id:
+            description: The sensor's object ID
+            type: string
+        get:
+          description: |
+            Allows you to get details on a single sensor on the device.
+          responses:
+            200:
+              description: Returns the details of a single sensor.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "_id": "OBJECT_ID",
+                      "type": NUMBER,
+                      "typeString": "STRING",
+                      "tagCode": "STRING",
+                      "description": "STRING",
+                      "unit": "STRING",
+                      "limits": {
+                        "high": NUMBER,
+                        "low": NUMBER
+                      }
+                    }
+        /limits:
+          securedBy: [JWT]
+          get:
+            description: |
+              Allows you to get the limits set for the sensor.
+            responses:
+              200:
+                description: Returns the limits.
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "high": NUMBER,
+                        "low": NUMBER
+                      }
+          put:
+            description: |
+              Allows you to set the limits.
+            body:
+              application/json:
+                example: |
+                  {
+                    "high": NUMBER,
+                    "low": NUMBER
+                  }
+            responses:
+              200:
+                description: Successful.
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "high": NUMBER,
+                        "low": NUMBER
+                      }
+    /settings:
+      securedBy: [JWT]
+      get:
+        description: |
+          Allows you to get the settings for a device.
+        responses:
+          200:
+            description: |
+              Returns the settings for a device. The setting are an
+              array of settings objects that contain the name (or key) of the
+              setting, the data type of the setting and the value.
+            body:
+              application/json:
+                example: |
+                  [
+                    {
+                      "name": "normalrate",
+                      "dataType": "NUMBER",
+                      "value": 80
+                    },
+                    {
+                      "name": "deadband",
+                      "dataType": "NUMBER",
+                      "value": 200
+                    },
+                    {
+                      "name": "bufferallduration",
+                      "dataType": "NUMBER",
+                      "value": 60
+                    },
+                    {
+                      "name": "preroll",
+                      "dataType": "NUMBER",
+                      "value": 30
+                    },
+                    {
+                      "name": "postroll",
+                      "dataType": "NUMBER",
+                      "value": 45
+                    },
+                    {
+                      "name": "starttime",
+                      "dataType": "DATE",
+                      "value": "2016-01-29T16:04:27.000Z"
+                    },
+                    {
+                      "name": "endtime",
+                      "dataType": "DATE",
+                      "value": "2016-01-29T16:04:27.000Z"
+                    }
+                  ]
+      put:
+        description: |
+          Allows you to set the settings for a device. This overwrights all
+          existing settings with the new settings.
+        body:
+          application/json:
+            example: |
+              [
+                {
+                  "name": "normalrate",
+                  "dataType": "NUMBER",
+                  "value": 80
+                },
+                {
+                  "name": "deadband",
+                  "dataType": "NUMBER",
+                  "value": 200
+                },
+                {
+                  "name": "bufferallduration",
+                  "dataType": "NUMBER",
+                  "value": 60
+                },
+                {
+                  "name": "preroll",
+                  "dataType": "NUMBER",
+                  "value": 30
+                },
+                {
+                  "name": "postroll",
+                  "dataType": "NUMBER",
+                  "value": 45
+                },
+                {
+                  "name": "starttime",
+                  "dataType": "DATE",
+                  "value": "2016-01-29T16:04:27.000Z"
+                },
+                {
+                  "name": "endtime",
+                  "dataType": "DATE",
+                  "value": "2016-01-29T16:04:27.000Z"
+                }
+              ]
+        responses:
+          200:
+            description: Successful
+            body:
+              application/json:
+                example: |
+                  [{
                     "name": "STRING",
                     "dataType": "STRING",
                     "value": MIXED
                   }]
-                }]
-    /{id}/add:
+    /telemetries:
       securedBy: [JWT]
-      post:
-        description: Adds this device to this asset.
+      get:
+        description: |
+          Returns telemetry data.
+        queryParameters:
+          start:
+            example: start=2016-01-29T16:04:27.000Z
+          end:
+            example: end=2016-01-29T16:04:27.000Z
+          sensors:
+            example: sensors=temp&sensors=pres&sensors=humi&sensors=aclx&sensors=acly&sensors=aclz&sensors=shck
         responses:
           200:
-            description: Deviced added to asset.
+            description: An array of telemetries
             body:
               application/json:
                 example: |
-                  {
-                    "message": "Device added."
-                  }
-    /{id}/remove:
-      securedBy: [JWT]
-      delete:
-        description: Removes this device from this asset.
-        responses:
-          200:
-            description: Deviced removed from asset.
-            body:
-              application/json:
-                example: |
-                  {
-                    "message": "Device removed."
-                  }
+                  [
+                    {
+                      "tag": "STRING",
+                      "timestamp": "DATE",
+                      "device": {
+                        "serialNumber": "STRING",
+                        "type": "STRING",
+                        "description": "STRING",
+                        "geolocation": [NUMBER, NUMBER]
+                      },
+                      "sensor": {
+                        "type": NUMBER,
+                        "typeString": "STRING",
+                        "description": "STRING",
+                        "unit": "STRING"
+                      },
+                      "data": {
+                        "unit": "STRING",
+                        "quality": NUMBER,
+                        "values": {
+                          "min": NUMBER,
+                          "max": NUMBER,
+                          "average": NUMBER,
+                          "current": NUMBER
+                        }
+                      }
+                    }
+                  ]
 /locations/{id}:
   displayName: LOCATIONS
   description: |
@@ -962,165 +1285,3 @@ documentation:
                   {
                     "message": "The password has been changed."
                   }
-/devices:
-  displayName: DEVICES
-  description: |
-    Lets you manipulate your devices and access telemetry.
-  securedBy: [JWT]
-  get:
-    description: |
-      Allows you to get a list of all of your devices.
-    responses:
-      200:
-        description: Returns an array of all of your devices.
-        body:
-          application/json:
-            example: |
-              [
-                {
-                  "_id": "OBJECT_ID",
-                  "created": "DATE",
-                  "updated": "DATE",
-                  "serialNumber": "STRING",
-                  "type": "STRING",
-                  "code": "STRING",
-                  "description": "STRING"
-                }
-              ]
-  /{id}:
-    description: |
-      Allows you to work with an individual device.
-    securedBy: [JWT]
-    uriParameters:
-      id:
-        description: The device's serial number
-        type: string
-    get:
-      description: |
-        Returns a single device.
-      responses:
-        200:
-          description: Returns a device.
-          body:
-            application/json:
-              example: |
-                {
-                  "_id": "OBJECT_ID",
-                  "created": "DATE",
-                  "updated": "DATE",
-                  "serialNumber": "STRING",
-                  "type": "STRING",
-                  "code": "STRING",
-                  "description": "STRING"
-                }
-    put:
-      description: |
-        Allows you to edit an existing device.
-      body:
-        application/json:
-          example: |
-            {
-              "type": "STRING",
-              "code": "STRING",
-              "description": "STRING"
-            }
-      responses:
-        200:
-          description: Device saved.
-          body:
-            application/json:
-              example: |
-                {
-                  "_id": "OBJECT_ID",
-                  "created": "DATE",
-                  "updated": "DATE",
-                  "serialNumber": "STRING",
-                  "type": "STRING",
-                  "code": "STRING",
-                  "description": "STRING"
-                }
-    /settings:
-      securedBy: [JWT]
-      get:
-        description: |
-          Allows you to get the settings for a device.
-        responses:
-          200:
-            description: Returns the settings for a device.
-            body:
-              application/json:
-                example: |
-                  [{
-                    "name": "STRING",
-                    "dataType": "STRING",
-                    "value": MIXED
-                  }]
-      put:
-        description: |
-          Allows you to set the settings for a device. This overwrights the
-          existing settings.
-        body:
-          application/json:
-            example: |
-              [{
-                "name": "STRING",
-                "dataType": "STRING",
-                "value": MIXED
-              }]
-        responses:
-          200:
-            description: Successful
-            body:
-              application/json:
-                example: |
-                  [{
-                    "name": "STRING",
-                    "dataType": "STRING",
-                    "value": MIXED
-                  }]
-    /telemetries:
-      securedBy: [JWT]
-      get:
-        description: |
-          Returns telemetry data.
-        queryParameters:
-          start:
-            example: start=2016-01-29T16:04:27.000Z
-          end:
-            example: end=2016-01-29T16:04:27.000Z
-          sensors:
-            example: sensors=temp&sensors=pres&sensors=humi&sensors=aclx&sensors=acly&sensors=aclz&sensors=shck
-        responses:
-          200:
-            description: An array of telemetries
-            body:
-              application/json:
-                example: |
-                  [
-                    {
-                      "tag": "STRING",
-                      "timestamp": "DATE",
-                      "device": {
-                        "serialNumber": "STRING",
-                        "type": "STRING",
-                        "description": "STRING",
-                        "geolocation": [NUMBER, NUMBER]
-                      },
-                      "sensor": {
-                        "type": NUMBER,
-                        "typeString": "STRING",
-                        "description": "STRING",
-                        "unit": "STRING"
-                      },
-                      "data": {
-                        "unit": "STRING",
-                        "quality": NUMBER,
-                        "values": {
-                          "min": NUMBER,
-                          "max": NUMBER,
-                          "average": NUMBER,
-                          "current": NUMBER
-                        }
-                      }
-                    }
-                  ]
