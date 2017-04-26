@@ -304,6 +304,22 @@ exports.searchTelemetry = function(req, res) {
             fields.sensor = 1;
         }
 
+        res.set({
+            'Content-Type': 'application/json',
+            'X-Accel-Buffering': 'no',
+            'Cache-Control': 'no-cache'
+        });
+
+        Telemetry.find({
+            'tag.full': {$in: tags},
+            timestamp: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)}
+        }, fields)
+        .sort('timestamp')
+        .cursor()
+        .pipe(JSONStream.stringify())
+        .pipe(res);
+
+        /*
         Telemetry.find({
             'tag.full': {$in: tags},
             timestamp: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)}
@@ -325,6 +341,7 @@ exports.searchTelemetry = function(req, res) {
             res.json(telemetries);
 
         });
+        */
     });
 };
 
