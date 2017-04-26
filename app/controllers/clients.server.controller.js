@@ -15,7 +15,8 @@ var mongoose = require('mongoose'),
     async = require('async'),
     randomstring = require('randomstring'),
     authorize = require('../lib/authorize.server.lib'),
-    endpoint = 'client';
+    endpoint = 'client',
+    JSONStream = require('JSONStream');
 
 exports.list = function(req, res) {
     authorize.validate(endpoint, req, res, 'user', function() {
