@@ -319,30 +319,6 @@ exports.searchTelemetry = function(req, res) {
         .cursor()
         .pipe(JSONStream.stringify())
         .pipe(res);
-
-        /*
-        Telemetry.find({
-            'tag.full': {$in: tags},
-            timestamp: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)}
-        }, fields)
-        .sort('timestamp')
-        .exec(function(err, telemetries) {
-            if (err) {
-                res.status(500).send({
-                    message: 'Database error.'
-                });
-                return;
-            } else if (telemetries.length === 0) {
-                res.status(200).send({
-                    message: 'No data found. Did you include the start, end & tags params?'
-                });
-                return;
-            }
-
-            res.json(telemetries);
-
-        });
-        */
     });
 };
 
