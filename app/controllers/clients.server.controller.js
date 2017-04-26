@@ -315,7 +315,6 @@ exports.searchTelemetry = function(req, res) {
             'tag.full': {$in: tags},
             timestamp: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)}
         }, fields)
-        .sort('timestamp')
         .cursor()
         .pipe(JSONStream.stringify())
         .pipe(res);
