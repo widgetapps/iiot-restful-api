@@ -11,8 +11,11 @@ var mongoose = require('mongoose'),
     User = require('@terepac/terepac-models').User,
     Sensor = require('@terepac/terepac-models').Sensor,
     Device = require('@terepac/terepac-models').Device,
+    MqttUser = require('@terepac/terepac-models').MqttUser,
+    MqttAcl = require('@terepac/terepac-models').MqttAcl,
     _ = require('lodash'),
     moment = require('moment'),
+    crypto = require('crypto'),
     async = require('async'),
     randomstring = require('randomstring'),
     authorize = require('../lib/authorize.server.lib'),
@@ -430,9 +433,34 @@ exports.insertDevice = function(req, res) {
                         message: 'Error inserting the device: ' + err
                     });
                 } else {
-                    //TODO: Need to update the MQTT collection with the device login info
-                    res.status(200).send({
-                        _id: d._id
+                    var key = 'R5CYPRvd82keWMsfRDWJ';
+                    if (process.env.SECRET_MQTT) {
+                        key = process.env.SECRET_MQTT;
+                    }
+
+                    var username = crypto.createHash('md5').update(device.serialNumber).digest("hex");
+                    var password = crypto.createHmac('md5', key).update(username).digest('hex');
+
+                    var mqttUser = new MqttUser({
+                        username: username,
+                        password: crypto.createHash('sha256').update(password).digest('hex'),
+                        is_superuser: false
+                    });
+
+                    mqttUser.save(function (err, mu) {
+
+                        var mqttAcl = new MqttAcl({
+                            username: username,
+                            publish: ['telemetry', '$client/' + device.serialNumber],
+                            subscribe: ['system', 'time', '$client/' + device.serialNumber]
+                        });
+
+                        mqttAcl.save(function (err, ma) {
+                            res.status(200).send({
+                                _id: d._id
+                            });
+                        })
+
                     });
                 }
             });
