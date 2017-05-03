@@ -442,8 +442,10 @@ exports.insertDevice = function(req, res) {
 
                 console.log('SENSOR ADDED: ' + JSON.stringify(deviceSensors));
 
-                callback();
             }).catch(callback('Error getting sensors'));
+
+            callback();
+
         }, function(err) {
             // Add data processed, save to DB amd send response.
             if (err) {
