@@ -10,6 +10,7 @@ var mongoose = require('mongoose'),
     Telemetry = require('@terepac/terepac-models').Telemetry,
     User = require('@terepac/terepac-models').User,
     Sensor = require('@terepac/terepac-models').Sensor,
+    Device = require('@terepac/terepac-models').Device,
     _ = require('lodash'),
     moment = require('moment'),
     async = require('async'),
@@ -389,26 +390,6 @@ exports.listDevices = function(req, res) {
 };
 
 exports.insertDevice = function(req, res) {
-    /*
-     {
-         "serialNumber": "STRING",
-         "type": "STRING",
-         "tagCode": "STRING",
-         "description": "STRING",
-         "sensors": [{
-             "tagCode": "STRING",
-             "limits": {
-                 "low": NUMBER,
-                 "high": NUMBER
-             }
-         }],
-         "settings": [{
-             "name": "STRING",
-             "dataType": "STRING",
-             "value": MIXED
-         }]
-     }
-     */
     authorize.validate(endpoint, req, res, 'admin', function() {
         var sensors = _.map(req.body.sensors, function(s) {
             return s.tagCode;
@@ -419,7 +400,8 @@ exports.insertDevice = function(req, res) {
             type: req.body.type,
             tagCode: req.body.tagCode,
             description: req.body.description,
-            settings: req.body.settings
+            settings: req.body.settings,
+            client: mongoose.Types.ObjectId(req.params.id)
         };
 
         var deviceSensors = [];
@@ -440,51 +422,21 @@ exports.insertDevice = function(req, res) {
             });
 
             device.sensors = deviceSensors;
-            res.json(device);
+            var newDevice = new Device(device);
+
+            newDevice.save(function (err, d) {
+                if (err) {
+                    res.status(400).send({
+                        message: 'Error inserting the device: ' + err
+                    });
+                } else {
+                    //TODO: Need to update the MQTT collection with the device login info
+                    res.status(200).send({
+                        _id: d._id
+                    });
+                }
+            });
         });
-/*
-        var deviceSensors = [];
-        console.log('SENSORS: ' + JSON.stringify(sensors));
-
-        async.eachSeries(sensors, function(sensor, callback) {
-            console.log('LOOKING UP SENSOR: ' + JSON.stringify(sensor));
-
-            var sensorPromise = Sensor.findOne({ tagCode: sensor.tagCode }).exec();
-
-            sensorPromise.then(function (dbSensor) {
-                console.log('SENSOR FOUND: ' + JSON.stringify(dbSensor));
-
-                deviceSensors.push({
-                    sensor: mongoose.Types.ObjectId(dbSensor._id),
-                    tagCode: dbSensor.tagCode,
-                    unit: dbSensor.unit,
-                    limits: {
-                        high: sensor.limits.high,
-                        low: sensor.limits.low
-                    }
-                });
-
-                console.log('SENSOR ADDED: ' + JSON.stringify(deviceSensors));
-
-            }).catch(callback('Error getting sensors'));
-
-            callback();
-
-        }, function(err) {
-            // Add data processed, save to DB amd send response.
-            if (err) {
-                device.sensors = deviceSensors;
-                res.status(401).send({
-                    message: err,
-                    device: device
-                });
-            } else {
-                //TODO: Save to DB, serialNumber is unique
-                device.sensors = deviceSensors;
-                res.json(device);
-            }
-        });
- */
     });
 };
 
