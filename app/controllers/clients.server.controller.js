@@ -16,7 +16,8 @@ var mongoose = require('mongoose'),
     randomstring = require('randomstring'),
     authorize = require('../lib/authorize.server.lib'),
     endpoint = 'client',
-    JSONStream = require('JSONStream');
+    JSONStream = require('JSONStream'),
+    jsonQuery = require('json-query');
 
 exports.list = function(req, res) {
     authorize.validate(endpoint, req, res, 'user', function() {
@@ -421,9 +422,24 @@ exports.insertDevice = function(req, res) {
             settings: req.body.settings
         };
 
+        var deviceSensors = [];
+
         var sensorPromise = Sensor.find({tagCode: {$in: sensors}}).exec();
         sensorPromise.then(function (dbSensors) {
-            device.sensors = dbSensors;
+
+            _.each(dbSensors, function (sensor) {
+                deviceSensors.push({
+                    sensor: mongoose.Types.ObjectId(sensor._id),
+                    tagCode: sensor.tagCode,
+                    unit: sensor.unit,
+                    limits: {
+                        high: jsonQuery('sensors[tagCode=' + sensor.tagCode + '].limits.high', {data: req.body}),
+                        low: jsonQuery('sensors[tagCode=' + sensor.tagCode + '].limits.low', {data: req.body})
+                    }
+                });
+            });
+
+            device.sensors = deviceSensors;
             res.json(device);
         });
 /*
