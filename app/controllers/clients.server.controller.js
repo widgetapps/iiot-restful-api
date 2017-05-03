@@ -444,19 +444,19 @@ exports.insertDevice = function(req, res) {
 
             }).catch(callback('Error getting sensors'));
 
-            callback(null, deviceSensors);
+            callback();
 
-        }, function(err, ds) {
+        }, function(err) {
             // Add data processed, save to DB amd send response.
             if (err) {
-                device.sensors = ds;
+                device.sensors = deviceSensors;
                 res.status(401).send({
                     message: err,
                     device: device
                 });
             } else {
                 //TODO: Save to DB, serialNumber is unique
-                device.sensors = ds;
+                device.sensors = deviceSensors;
                 res.json(device);
             }
         });
