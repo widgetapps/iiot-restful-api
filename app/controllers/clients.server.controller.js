@@ -446,17 +446,17 @@ exports.insertDevice = function(req, res) {
 
             callback(null, deviceSensors);
 
-        }, function(err, deviceSensors) {
+        }, function(err, ds) {
             // Add data processed, save to DB amd send response.
             if (err) {
-                device.sensors = deviceSensors;
+                device.sensors = ds;
                 res.status(401).send({
                     message: err,
                     device: device
                 });
             } else {
                 //TODO: Save to DB, serialNumber is unique
-                device.sensors = deviceSensors;
+                device.sensors = ds;
                 res.json(device);
             }
         });
