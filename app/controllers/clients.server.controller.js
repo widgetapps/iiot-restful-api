@@ -433,8 +433,8 @@ exports.insertDevice = function(req, res) {
                     tagCode: sensor.tagCode,
                     unit: sensor.unit,
                     limits: {
-                        high: jsonQuery('sensors[tagCode=' + sensor.tagCode + '].limits.high', {data: req.body}),
-                        low: jsonQuery('sensors[tagCode=' + sensor.tagCode + '].limits.low', {data: req.body})
+                        high: jsonQuery('sensors[tagCode=' + sensor.tagCode + '].limits.high', {data: req.body}).value,
+                        low: jsonQuery('sensors[tagCode=' + sensor.tagCode + '].limits.low', {data: req.body}).value
                     }
                 });
             });
