@@ -439,6 +439,9 @@ exports.insertDevice = function(req, res) {
                         low: sensor.limits.low
                     }
                 });
+
+                console.log('SENSOR ADDED: ' + JSON.stringify(deviceSensors));
+
                 callback();
             }).catch(callback('Error getting sensors'));
         }, function(err) {
