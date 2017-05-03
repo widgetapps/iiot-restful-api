@@ -62,7 +62,7 @@ conn.on('disconnected', function() {
 //assert.equal(query.exec().constructor, require('bluebird'));
 
 mongoose.Promise = global.Promise;
-assert.equal(query.exec().constructor, global.Promise);
+//assert.equal(query.exec().constructor, global.Promise);
 
 var db = mongoose.connect(config.db, dbOptions);
 
