@@ -439,7 +439,8 @@ exports.insertDevice = function(req, res) {
             // Add data processed, save to DB amd send response.
             if (err) {
                 res.status(401).send({
-                    message: err
+                    message: err,
+                    device: device
                 });
             } else {
                 //TODO: Save to DB, serialNumber is unique
