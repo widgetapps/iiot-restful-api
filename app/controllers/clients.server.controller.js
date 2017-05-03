@@ -409,7 +409,9 @@ exports.insertDevice = function(req, res) {
      }
      */
     authorize.validate(endpoint, req, res, 'admin', function() {
-        var sensors = req.body.sensors;
+        var sensors = _.map(req.body.sensors, function(s) {
+            return s.tagCode;
+        });
 
         var device = {
             serialNumber: req.body.serialNumber,
@@ -419,6 +421,12 @@ exports.insertDevice = function(req, res) {
             settings: req.body.settings
         };
 
+        var sensorPromise = Sensor.find({tagCode: {$in: sensors}}).exec();
+        sensorPromise.then(function (dbSensors) {
+            device.sensors = dbSensors;
+            res.json(device);
+        });
+/*
         var deviceSensors = [];
         console.log('SENSORS: ' + JSON.stringify(sensors));
 
@@ -460,6 +468,7 @@ exports.insertDevice = function(req, res) {
                 res.json(device);
             }
         });
+ */
     });
 };
 
