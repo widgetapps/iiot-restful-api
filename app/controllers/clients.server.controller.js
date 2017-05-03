@@ -423,9 +423,13 @@ exports.insertDevice = function(req, res) {
         console.log('SENSORS: ' + JSON.stringify(sensors));
 
         async.each(sensors, function(sensor, callback) {
+            console.log('LOOKING UP SENSOR: ' + JSON.stringify(sensor));
+
             var sensorPromise = Sensor.findOne({ tagCode: sensor.tagCode }).exec();
 
             sensorPromise.then(function (dbSensor) {
+                console.log('SENSOR FOUND: ' + JSON.stringify(dbSensor));
+
                 deviceSensors.push({
                     sensor: mongoose.Types.ObjectId(dbSensor._id),
                     tagCode: dbSensor.tagCode,
