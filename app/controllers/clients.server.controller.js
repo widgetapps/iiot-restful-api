@@ -420,6 +420,8 @@ exports.insertDevice = function(req, res) {
         };
 
         var deviceSensors = [];
+        console.log('SENSORS: ' + JSON.stringify(sensors));
+
         async.each(sensors, function(sensor, callback) {
             var sensorPromise = Sensor.findOne({ tagCode: sensor.tagCode }).exec();
 
