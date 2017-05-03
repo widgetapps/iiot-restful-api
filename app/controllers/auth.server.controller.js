@@ -26,16 +26,16 @@ exports.authenticate = function(req, res) {
     promise.then(function (user) {
 
         console.log('QUERY SUCCESSFUL');
-        console.log('NO ERROR');
 
         if (!user) {
-            console.log('NO USER');
+            console.log('ERROR: NO USER');
             res.status(404).send({
                 message: 'Authentication failed. User not found.'
             });
         } else {
             console.log('USER FOUND');
             if (!user.authenticate(req.body.password)) {
+                console.log('ERROR: BAD PASSWORD - ' + user.hashPassword(req.body.password) + ' vs ' + user.password);
                 res.status(404).send({
                     message: 'Authentication failed. Incorrect password.'
                 });
@@ -45,6 +45,7 @@ exports.authenticate = function(req, res) {
                     if (err) throw err;
 
                     if (!client) {
+                        console.log('ERROR: NO CLIENT');
                         res.status(409).send({
                             message: 'No client associated with user, your are an orphan!'
                         });
