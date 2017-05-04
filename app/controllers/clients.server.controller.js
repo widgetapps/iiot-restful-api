@@ -447,6 +447,10 @@ exports.insertDevice = function(req, res) {
                         is_superuser: false
                     });
 
+                    console.log('MqttUser: ' + JSON.stringify(mqttUser));
+                    console.log('Password: ' + password);
+
+                    /*
                     mqttUser.save(function (err, mu) {
 
                         var mqttAcl = new MqttAcl({
@@ -462,6 +466,7 @@ exports.insertDevice = function(req, res) {
                         })
 
                     });
+                    */
                 }
             });
         });
