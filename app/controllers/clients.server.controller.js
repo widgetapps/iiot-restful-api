@@ -439,7 +439,7 @@ exports.insertDevice = function(req, res) {
                     }
 
                     var username = crypto.createHash('md5').update(device.serialNumber).digest("hex");
-                    var password = crypto.createHmac('md5', key).update(new Buffer(username)).digest('hex');
+                    var password = crypto.createHmac('md5', key).update(username).digest('hex'); // this line might be broken
 
                     var mqttUser = new MqttUser({
                         username: username,
@@ -447,11 +447,6 @@ exports.insertDevice = function(req, res) {
                         is_superuser: false
                     });
 
-                    console.log('MqttUser: ' + JSON.stringify(mqttUser));
-                    console.log('Password: ' + password);
-                    console.log('Key: ' + key);
-
-                    /*
                     mqttUser.save(function (err, mu) {
 
                         var mqttAcl = new MqttAcl({
@@ -467,7 +462,6 @@ exports.insertDevice = function(req, res) {
                         })
 
                     });
-                    */
                 }
             });
         });
