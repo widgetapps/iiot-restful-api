@@ -441,31 +441,25 @@ exports.insertDevice = function(req, res) {
                     var username = crypto.createHash('md5').update(device.serialNumber).digest("hex");
                     var password = crypto.createHmac('md5', key).update(username).digest('hex'); // this line might be broken
 
+                    /*
                     console.log('Serial Number: ' + device.serialNumber);
                     console.log('Key: ' + key);
                     console.log('Username: ' + username);
                     console.log('Password: ' + password);
+                    */
 
-                    var mqttUser = new MqttUser({
+                    var mqtt = new Mqtt({
                         username: username,
                         password: crypto.createHash('sha256').update(password).digest('hex'),
-                        is_superuser: false
+                        is_superuser: false,
+                        publish: ['telemetry', '$client/' + device.serialNumber],
+                        subscribe: ['system', 'time', '$client/' + device.serialNumber]
                     });
 
-                    mqttUser.save(function (err, mu) {
-
-                        var mqttAcl = new MqttAcl({
-                            username: username,
-                            publish: ['telemetry', '$client/' + device.serialNumber],
-                            subscribe: ['system', 'time', '$client/' + device.serialNumber]
+                    mqtt.save(function (err, mu) {
+                        res.status(200).send({
+                            _id: d._id
                         });
-
-                        mqttAcl.save(function (err, ma) {
-                            res.status(200).send({
-                                _id: d._id
-                            });
-                        })
-
                     });
                 }
             });
