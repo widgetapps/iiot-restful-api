@@ -440,9 +440,11 @@ exports.insertDevice = function(req, res) {
                     var username = crypto.createHash('md5').update(device.serialNumber).digest("hex");
                     var password = crypto.createHmac('md5', key).update(username).digest('hex');
 
+                    /*
                     console.log('Serial Number: ' + device.serialNumber);
                     console.log('Username: ' + username);
                     console.log('Password: ' + password);
+                    */
 
                     var mqtt = new Mqtt({
                         username: username,
