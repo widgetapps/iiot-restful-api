@@ -438,21 +438,18 @@ exports.insertDevice = function(req, res) {
                     }
 
                     var username = crypto.createHash('md5').update(device.serialNumber).digest("hex");
-                    var password = crypto.createHmac('md5', key).update(username).digest('hex'); // this line might be broken
+                    var password = crypto.createHmac('md5', key).update(username).digest('hex');
 
-                    /*
                     console.log('Serial Number: ' + device.serialNumber);
-                    console.log('Key: ' + key);
                     console.log('Username: ' + username);
                     console.log('Password: ' + password);
-                    */
 
                     var mqtt = new Mqtt({
                         username: username,
                         password: crypto.createHash('sha256').update(password).digest('hex'),
                         is_superuser: false,
                         publish: ['telemetry', '$client/' + device.serialNumber],
-                        subscribe: ['system', 'time', '$client/' + device.serialNumber]
+                        subscribe: ['system', 'time', '$client/' + device.serialNumber, device.serialNumber + '/response']
                     });
 
                     mqtt.save(function (err, mu) {
