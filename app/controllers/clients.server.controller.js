@@ -377,6 +377,32 @@ exports.listLocations = function(req, res) {
 exports.insertLocation = function(req, res) {
     authorize.validate(endpoint, req, res, 'manager', function() {
 
+        var clientId = mongoose.Types.ObjectId(req.params.id);
+        var location = new Location(req.body);
+        location.client = clientId;
+        location.geolocation = {
+            type: 'Point',
+            coordinates: location.geolocation
+        };
+        location.save(function (err, loc) {
+            if (err) {
+                res.status(400).send({
+                    message: 'Error saving location: ' + err
+                });
+                return;
+            } else {
+                Client.findByIdAndUpdate(
+                    req.params.id,
+                    {$push: {'locations': mongoose.Types.ObjectId(loc._id)}},
+                    {safe: true, upsert: true, new : true},
+                    function(err, client) {
+                        res.status(200).send({
+                            _id: loc._id
+                        });
+                    }
+                );
+            }
+        });
     });
 };
 
