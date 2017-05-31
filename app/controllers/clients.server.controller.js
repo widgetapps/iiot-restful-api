@@ -412,7 +412,34 @@ exports.listAssets = function(req, res) {
 };
 
 exports.insertAsset = function(req, res) {
+    authorize.validate(endpoint, req, res, 'manager', function() {
 
+        var clientId = mongoose.Types.ObjectId(req.params.id);
+
+        var asset = new Asset(req.body);
+        asset.client = clientId;
+        asset.location = mongoose.Types.ObjectId(req.body.location);
+
+        asset.save(function (err, ass) {
+            if (err) {
+                res.status(400).send({
+                    message: 'Error saving asset: ' + err
+                });
+                return;
+            } else {
+                Client.findByIdAndUpdate(
+                    req.params.id,
+                    {$push: {'assets': mongoose.Types.ObjectId(ass._id)}},
+                    {safe: true, upsert: true, new : true},
+                    function(err, client) {
+                        res.status(200).send({
+                            _id: ass._id
+                        });
+                    }
+                );
+            }
+        });
+    });
 };
 
 exports.listDevices = function(req, res) {
