@@ -433,9 +433,16 @@ exports.insertAsset = function(req, res) {
                     {$push: {'assets': mongoose.Types.ObjectId(ass._id)}},
                     {safe: true, upsert: true, new : true},
                     function(err, client) {
-                        res.status(200).send({
-                            _id: ass._id
-                        });
+                        Location.findByIdAndUpdate(
+                            req.body.location,
+                            {$push: {'assets': mongoose.Types.ObjectId(ass._id)}},
+                            {safe: true, upsert: true, new: true},
+                            function(err, location) {
+                                res.status(200).send({
+                                    _id: ass._id
+                                });
+                            }
+                        );
                     }
                 );
             }
@@ -507,7 +514,7 @@ exports.insertDevice = function(req, res) {
                         password: crypto.createHash('sha256').update(password).digest('hex'),
                         is_superuser: false,
                         publish: ['telemetry', '$client/' + device.serialNumber],
-                        subscribe: ['system', 'time', '$client/' + device.serialNumber, device.serialNumber + '/response']
+                        subscribe: ['system', 'time', 'er/response', '$client/' + device.serialNumber, device.serialNumber + '/response']
                     });
 
                     mqtt.save(function (err, mu) {
