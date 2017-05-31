@@ -7,8 +7,10 @@ var mongoose = require('mongoose'),
     errorHandler = require('./errors.server.controller'),
     Client = require('@terepac/terepac-models').Client,
     User = require('@terepac/terepac-models').User,
+    Tag = require('@terepac/terepac-models').Tag,
     _ = require('lodash'),
     moment = require('moment'),
+    async = require('async'),
     randomstring = require('randomstring'),
     authorize = require('../lib/authorize.server.lib'),
     endpoint = 'asset';
@@ -41,6 +43,70 @@ exports.addDevice = function(req, res) {
          */
         var assetId  = mongoose.Types.ObjectId(req.params.assetId),
             deviceId = mongoose.Types.ObjectId(req.params.deviceId);
+
+        var assetPromise = Asset.findOne({ _id: assetId }).populate('location').exec();
+        assetPromise.then(function (asset) {
+             var devicePromise = Device.findOne({ _id: deviceId }).exec();
+             devicePromise.then(function (device) {
+                 var clientPromise = Client.findOne({ _id: asset.client}).exec();
+                 clientPromise.then(function (client) {
+                     device.asset = mongoose.Types.ObjectId(asset._id);
+                     device.location = mongoose.Types.ObjectId(asset.location._id);
+                     device.save(function (err, deviceSaved) {
+                         if (err) {
+                             res.status(400).send({
+                                 message: 'Error adding the device: ' + err
+                             });
+                             return;
+                         }
+
+                         // Build the tag, need to loop through the sensors! Pain in my ass.
+                         async.each(device.sensors, function (sensorData, callback) {
+                             var fullTag = asset.location.tagCode + '_' + asset.tagCode + '_' + sensorData.tagCode,
+                                 query = {'tag.full': fullTag},
+                                 options = { upsert: true, new: true, setDefaultsOnInsert: true },
+                                 update = {
+                                     tag: {
+                                         full: fullTag,
+                                         clientTagCode: client.tagCode,
+                                         locationTagCode: asset.location.tagCode,
+                                         assetTagCode: asset.tagCode,
+                                         sensorTagCode: sensorData.tagCode
+                                     },
+                                     description: {
+                                         location: asset.location.description,
+                                         asset: asset.description,
+                                         sensor: sensorData.description
+                                     },
+                                     unit: sensorData.unit,
+                                     active: true,
+                                     activeStart: new Date(),
+                                     client: client._id,
+                                     device: deviceId,
+                                     asset: assetId
+                                 };
+                             res.json(update);
+                             /*
+                             Tag.findOneAndUpdate(query, update, options, function(err, result) {
+                                 if (err) {
+                                     res.status(400).send({
+                                         message: 'Error adding the device: ' + err
+                                     });
+                                     return;
+                                 }
+
+                                 res.status(200).send({
+                                     message: 'Device added to asset'
+                                 });
+                             });
+                             */
+
+                         });
+
+                     });
+                 }).catch(console.warn);
+             }).catch(console.warn);
+        }).catch(console.warn);
 
     });
 };
