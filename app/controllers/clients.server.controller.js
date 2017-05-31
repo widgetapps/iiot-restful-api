@@ -387,7 +387,7 @@ exports.insertLocation = function(req, res) {
         location.save(function (err, loc) {
             if (err) {
                 res.status(400).send({
-                    message: 'Error saving location: ' + err
+                    message: 'Error saving location: ' + err + ' ' + location.geolocation
                 });
                 return;
             } else {
