@@ -443,7 +443,6 @@ exports.listAssets = function(req, res) {
             client: 1,
             location: 1
         })
-            .populate('client')
             .populate('location')
             .exec(function(err, devices) {
                 if (err) {
