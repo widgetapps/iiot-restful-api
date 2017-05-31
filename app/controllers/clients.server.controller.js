@@ -409,7 +409,53 @@ exports.insertLocation = function(req, res) {
 };
 
 exports.listAssets = function(req, res) {
+    authorize.validate(endpoint, req, res, 'user', function() {
+        var query;
 
+        switch (req.user.role) {
+            case 'user':
+                query = {
+                    client: req.user.client
+                };
+                break;
+            case 'manager':
+            case 'admin':
+                query = {
+                    $or: [{client: req.user.client}, {resellerClients: req.user.client}]
+                };
+                break;
+            case 'super':
+                query = {};
+                break;
+            default:
+                res.status(401).send({
+                    message: 'You are not authorized to access this resource.'
+                });
+                return;
+        }
+
+        Asset.find( query, {
+            created: 1,
+            updated: 1,
+            tagCode: 1,
+            name: 1,
+            description: 1,
+            client: 1,
+            location: 1
+        })
+            .populate('client')
+            .populate('location')
+            .exec(function(err, devices) {
+                if (err) {
+                    res.status(500).send({
+                        message: 'Database error.'
+                    });
+                    return;
+                }
+
+                res.json(devices);
+            });
+    });
 };
 
 exports.insertAsset = function(req, res) {
@@ -451,6 +497,55 @@ exports.insertAsset = function(req, res) {
 };
 
 exports.listDevices = function(req, res) {
+    authorize.validate(endpoint, req, res, 'user', function() {
+        var query;
+
+        switch (req.user.role) {
+            case 'user':
+                query = {
+                    client: req.user.client
+                };
+                break;
+            case 'manager':
+            case 'admin':
+                query = {
+                    $or: [{client: req.user.client}, {resellerClients: req.user.client}]
+                };
+                break;
+            case 'super':
+                query = {};
+                break;
+            default:
+                res.status(401).send({
+                    message: 'You are not authorized to access this resource.'
+                });
+                return;
+        }
+
+        Device.find( query, {
+            created: 1,
+            updated: 1,
+            serialNumber: 1,
+            type: 1,
+            sensors: 1,
+            description: 1,
+            client: 1,
+            location: 1,
+            asset: 1
+        })
+            .populate('assets')
+            .populate('location')
+            .exec(function(err, devices) {
+                if (err) {
+                    res.status(500).send({
+                        message: 'Database error.'
+                    });
+                    return;
+                }
+
+                res.json(devices);
+            });
+    });
 
 };
 
