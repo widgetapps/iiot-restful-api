@@ -378,12 +378,13 @@ exports.insertLocation = function(req, res) {
     authorize.validate(endpoint, req, res, 'manager', function() {
 
         var clientId = mongoose.Types.ObjectId(req.params.id);
+        req.body.geolocation = {
+            type: 'Point',
+            coordinates: req.body.geolocation
+        };
         var location = new Location(req.body);
         location.client = clientId;
-        location.geolocation = {
-            type: 'Point',
-            coordinates: location.geolocation
-        };
+
         location.save(function (err, loc) {
             if (err) {
                 res.status(400).send({
