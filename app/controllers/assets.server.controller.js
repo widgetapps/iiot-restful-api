@@ -54,7 +54,7 @@ exports.addDevice = function(req, res) {
                 return;
             }
 
-             var devicePromise = Device.findOne({ _id: deviceId }).exec();
+             var devicePromise = Device.findOne({ _id: deviceId }).populate('sensors.sensor').exec();
              devicePromise.then(function (device) {
                  if (!device) {
                      res.status(404).send({
@@ -99,7 +99,7 @@ exports.addDevice = function(req, res) {
                                      description: {
                                          location: asset.location.description,
                                          asset: asset.description,
-                                         sensor: sensorData.description
+                                         sensor: sensorData.sensor.description
                                      },
                                      unit: sensorData.unit,
                                      active: true,
