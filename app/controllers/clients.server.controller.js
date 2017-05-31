@@ -441,6 +441,7 @@ exports.listAssets = function(req, res) {
             name: 1,
             description: 1,
             client: 1,
+            location: 1,
             'location.tagCode': 1,
             'location.description': 1,
             'location.address': 1,
