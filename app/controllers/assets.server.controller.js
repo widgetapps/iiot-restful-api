@@ -127,7 +127,7 @@ exports.addDevice = function(req, res) {
                              }
 
                              res.status(200).send({
-                                 message: 'Device ' + device.serialNumber + 'added to asset ' + asset.tagCode
+                                 message: 'Device ' + device.serialNumber + ' added to asset ' + asset.tagCode
                              });
                          });
 
