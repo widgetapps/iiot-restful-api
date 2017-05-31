@@ -17,6 +17,9 @@ exports.validate = function (endpoint, req, res, role, callback) {
         case 'user':
             validateUserEndpoint(req, res, role, callback);
             break;
+        case 'asset':
+            validateAssetEndpoint(req, res, role, callback);
+            break;
     }
 
 };
@@ -33,27 +36,27 @@ function validateClientEndpoint(req, res, role, callback) {
      */
 
     // Check if the user is super, they can do anything
-    if (req.user.role == 'super') {
+    if (req.user.role === 'super') {
         callback();
         return;
     }
 
     // Sandbox into the user's client and/or resellers
-    if (req.user.client == req.params.id || _.contains(req.user.resellerClients, req.params.id)){
-        if (req.user.role == 'admin') {
+    if (req.user.client === req.params.id || _.contains(req.user.resellerClients, req.params.id)){
+        if (req.user.role === 'admin') {
             callback();
             return;
         }
 
         switch (role) {
             case 'manager':
-                if (req.user.role == 'manager') {
+                if (req.user.role === 'manager') {
                     callback();
                     return;
                 }
                 break;
             case 'user':
-                if (req.user.role == 'manager' || req.user.role == 'user'){
+                if (req.user.role === 'manager' || req.user.role === 'user'){
                     callback();
                     return;
                 }
@@ -65,7 +68,11 @@ function validateClientEndpoint(req, res, role, callback) {
 }
 
 function validateUserEndpoint(req, res, role, callback) {
+    callback();
+}
 
+function validateAssetEndpoint(req, res, role, callback) {
+    callback();
 }
 
 function notAuthorized(res) {
