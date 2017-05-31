@@ -11,6 +11,7 @@ var mongoose = require('mongoose'),
     User = require('@terepac/terepac-models').User,
     Sensor = require('@terepac/terepac-models').Sensor,
     Device = require('@terepac/terepac-models').Device,
+    Locstion = require('@terepac/terepac-models').Location,
     Mqtt = require('@terepac/terepac-models').Mqtt,
     _ = require('lodash'),
     moment = require('moment'),
@@ -71,7 +72,7 @@ exports.insert = function(req, res) {
     authorize.validate(endpoint, req, res, 'manager', function() {
 
         // admin & manager roles must be a reseller to add a client
-        if (!req.user.reseller && (req.user.role == 'admin' || req.user.role == 'manager')) {
+        if (!req.user.reseller && (req.user.role === 'admin' || req.user.role === 'manager')) {
             res.status(401).send({
                 message: 'You are not authorized to access this resource.'
             });
@@ -131,13 +132,13 @@ exports.getOne = function(req, res) {
         // Make sure the user is allowed see the client
         switch (req.user.role) {
             case 'user':
-                if (req.user.client == req.params.id) {
+                if (req.user.client === req.params.id) {
                     authorized = true;
                 }
                 break;
             case 'manager':
             case 'admin':
-                if (req.user.client == req.params.id || _.contains(req.user.resellerClients, req.params.id)) {
+                if (req.user.client === req.params.id || _.contains(req.user.resellerClients, req.params.id)) {
                     authorized = true;
                 }
                 break;
@@ -190,7 +191,7 @@ exports.update = function(req, res) {
                 }
                 break;
             case 'admin':
-                if (req.user.client == req.params.id || _.contains(req.user.resellerClients, req.params.id)) {
+                if (req.user.client === req.params.id || _.contains(req.user.resellerClients, req.params.id)) {
                     authorized = true;
                 }
                 break;
@@ -270,13 +271,13 @@ exports.searchTelemetry = function(req, res) {
 
         switch (req.user.role) {
             case 'user':
-                if (req.user.client == req.params.id) {
+                if (req.user.client === req.params.id) {
                     authorized = true;
                 }
                 break;
             case 'manager':
             case 'admin':
-                if (req.user.client == req.params.id || _.contains(req.user.resellerClients, req.params.id)) {
+                if (req.user.client === req.params.id || _.contains(req.user.resellerClients, req.params.id)) {
                     authorized = true;
                 }
                 break;
@@ -299,13 +300,13 @@ exports.searchTelemetry = function(req, res) {
             timestamp: 1,
             data: 1
         };
-        if (req.query.asset == '1') {
+        if (req.query.asset === '1') {
             fields.asset = 1;
         }
-        if (req.query.device == '1') {
+        if (req.query.device === '1') {
             fields.device = 1;
         }
-        if (req.query.sensor == '1') {
+        if (req.query.sensor === '1') {
             fields.sensor = 1;
         }
 
