@@ -82,8 +82,6 @@ exports.addDevice = function(req, res) {
                              return;
                          }
 
-                         // Build the tag, need to loop through the sensors! Pain in my ass.
-                         var entries = [];
                          async.each(device.sensors, function (sensorData, callback) {
                              var fullTag = asset.location.tagCode + '_' + asset.tagCode + '_' + sensorData.tagCode,
                                  query = {'tag.full': fullTag},
@@ -108,8 +106,7 @@ exports.addDevice = function(req, res) {
                                      device: deviceId,
                                      asset: assetId
                                  };
-                             entries.push(update);
-                             /*
+
                              Tag.findOneAndUpdate(query, update, options, function(err, result) {
                                  if (err) {
                                      res.status(400).send({
@@ -122,10 +119,8 @@ exports.addDevice = function(req, res) {
                                      message: 'Device added to asset'
                                  });
                              });
-                             */
 
                          });
-                         res.json(entries);
 
                      });
                  }).catch(console.warn);
