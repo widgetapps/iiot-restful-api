@@ -467,61 +467,50 @@ exports.insertDevice = function(req, res) {
 };
 
 exports.getUsers = function(req, res) {
-    if (!_.contains(req.user.roles, 'admin')) {
-        res.status(401).send({
-            message: 'You are not authorized to access this resource.'
+    authorize.validate(endpoint, req, res, 'admin', function() {
+        var clientId = mongoose.Types.ObjectId(req.params.id);
+
+        User.find( {client: clientId},
+            {
+                created: 1,
+                updated: 1,
+                firstName: 1,
+                lastName: 1,
+                email: 1,
+                phone: 1,
+                roles: 1,
+                active: 1
+            }, function(err, users) {
+                res.json(users);
         });
-        return;
-    }
-
-    var clientId = mongoose.Types.ObjectId(req.params.id);
-
-    User.find( {client: clientId},
-        {
-            created: 1,
-            updated: 1,
-            firstName: 1,
-            lastName: 1,
-            email: 1,
-            phone: 1,
-            roles: 1,
-            active: 1
-        }, function(err, users) {
-            res.json(users);
-        });
-
+    });
 };
 
 exports.insertUser = function(req, res) {
-    if (!_.contains(req.user.roles, 'admin')) {
-        res.status(401).send({
-            message: 'You are not authorized to access this resource.'
+    authorize.validate(endpoint, req, res, 'admin', function() {
+
+        var clientId = mongoose.Types.ObjectId(req.params.id);
+        var user = new User(req.body);
+        user.provider = 'local';
+        user.client = clientId;
+        user.save(function (err, user) {
+            if (err) {
+                res.status(400).send({
+                    message: 'Email already exists.'
+                });
+                return;
+            } else {
+                Client.findByIdAndUpdate(
+                    req.params.id,
+                    {$push: {'users': mongoose.Types.ObjectId(user._id)}},
+                    {safe: true, upsert: true, new : true},
+                    function(err, client) {
+                        res.status(200).send({
+                            _id: user._id
+                        });
+                    }
+                );
+            }
         });
-        return;
-    }
-
-    var clientId = mongoose.Types.ObjectId(req.params.id);
-    var user = new User(req.body);
-    user.provider = 'local';
-    user.client = clientId;
-    user.save(function (err, user) {
-        if (err) {
-            res.status(400).send({
-                message: 'Email already exists.'
-            });
-            return;
-        } else {
-            Client.findByIdAndUpdate(
-                req.params.id,
-                {$push: {'users': mongoose.Types.ObjectId(user._id)}},
-                {safe: true, upsert: true, new : true},
-                function(err, client) {
-                    res.status(200).send({
-                        _id: user._id
-                    });
-                }
-            );
-        }
     });
-
 };
