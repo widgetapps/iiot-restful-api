@@ -115,11 +115,20 @@ exports.addDevice = function(req, res) {
                                      return;
                                  }
 
-                                 res.status(200).send({
-                                     message: 'Device added to asset'
-                                 });
+                                 callback();
                              });
 
+                         }, function (err) {
+                             if (err) {
+                                 res.status(400).send({
+                                     message: 'Error adding the device: ' + err
+                                 });
+                                 return;
+                             }
+
+                             res.status(200).send({
+                                 message: 'Device added to asset'
+                             });
                          });
 
                      });
