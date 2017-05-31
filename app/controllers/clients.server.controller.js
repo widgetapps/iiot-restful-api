@@ -496,7 +496,7 @@ exports.insertUser = function(req, res) {
         user.save(function (err, user) {
             if (err) {
                 res.status(400).send({
-                    message: 'Email already exists.'
+                    message: 'Error saving user: ' + err
                 });
                 return;
             } else {
