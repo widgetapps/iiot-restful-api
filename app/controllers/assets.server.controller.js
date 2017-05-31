@@ -47,10 +47,31 @@ exports.addDevice = function(req, res) {
 
         var assetPromise = Asset.findOne({ _id: assetId }).populate('location').exec();
         assetPromise.then(function (asset) {
+            if (!asset) {
+                res.status(404).send({
+                    message: 'Asset not found'
+                });
+                return;
+            }
+
              var devicePromise = Device.findOne({ _id: deviceId }).exec();
              devicePromise.then(function (device) {
+                 if (!device) {
+                     res.status(404).send({
+                         message: 'Device not found'
+                     });
+                     return;
+                 }
+
                  var clientPromise = Client.findOne({ _id: asset.client}).exec();
                  clientPromise.then(function (client) {
+                     if (!client) {
+                         res.status(404).send({
+                             message: 'Client not found'
+                         });
+                         return;
+                     }
+
                      device.asset = mongoose.Types.ObjectId(asset._id);
                      device.location = mongoose.Types.ObjectId(asset.location._id);
                      device.save(function (err, deviceSaved) {
