@@ -143,14 +143,14 @@ exports.addDevice = function(req, res) {
 exports.removeDevice = function(req, res) {
     authorize.validate(endpoint, req, res, 'manager', function() {
         /*
-         1) Get the device
-         2) Clear out the asset_id & location_id (make sure the asset_id's match)
-         3) Save the device
-         4) Get the device's tags
-         5) Tag: Place the activeStart as the historical start & the current date as the historical end with the deviceId
-         6) Tag: Clear the activeStart
-         7) Tag: Clear the deviceId
-         8) Tag: Set as not active
+         1) Get the device's tags
+         2) Tag: Place the activeStart as the historical start & the current date as the historical end with the deviceId
+         3) Tag: Clear the activeStart
+         4) Tag: Clear the deviceId
+         5) Tag: Set as not active
+         6) Get the device
+         7) Clear out the asset_id & location_id (make sure the asset_id's match)
+         8) Save the device
          */
         var assetId  = mongoose.Types.ObjectId(req.params.assetId),
             deviceId = mongoose.Types.ObjectId(req.params.deviceId);
