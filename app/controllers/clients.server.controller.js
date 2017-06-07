@@ -255,14 +255,11 @@ exports.listTags = function(req, res) {
             tag: 1,
             description: 1,
             unit: 1,
-            device: 1,
-            'device.serialNumber': 1,
-            'device.decription': 1,
             active: 1,
             activeStart: 1,
             historical: 1
         })
-            .populate('device')
+            .populate('device', 'serialNumber description')
             .exec(function(err, tags) {
                 if (err) {
                     res.status(500).send({
