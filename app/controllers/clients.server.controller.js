@@ -256,8 +256,7 @@ exports.listTags = function(req, res) {
             description: 1,
             unit: 1,
             device: 1,
-            'device.serialNumber': 1,
-            'device.description': 1,
+            active: 1,
             activeStart: 1,
             historical: 1
         })
