@@ -251,15 +251,25 @@ exports.listTags = function(req, res) {
                 return;
         }
 
-        Tag.find( query,
-            {
-                tag: 1,
-                description: 1,
-                unit: 1,
-                active: 1,
-                activeStart: 1,
-                historical: 1
-            }, function(err, tags) {
+        Tag.find( query, {
+            tag: 1,
+            description: 1,
+            unit: 1,
+            'device.serialNumber': 1,
+            'device.decription': 1,
+            active: 1,
+            activeStart: 1,
+            historical: 1
+        })
+            .populate('device')
+            .exec(function(err, tags) {
+                if (err) {
+                    res.status(500).send({
+                        message: 'Database error.'
+                    });
+                    return;
+                }
+
                 res.json(tags);
             });
     });
