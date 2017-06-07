@@ -255,6 +255,7 @@ exports.listTags = function(req, res) {
             tag: 1,
             description: 1,
             unit: 1,
+            device: 1,
             'device.serialNumber': 1,
             'device.decription': 1,
             active: 1,
