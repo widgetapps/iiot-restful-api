@@ -10,7 +10,7 @@ exports.index = function(req, res) {
 
 exports.aggregatedTemperature = function(req, res) {
     Telemetry.aggregate([
-        {$match: {timestamp: {$gte: moment.subtract(1, 'days')}, "tag.sensorTagCode": "TI"}},
+        {$match: {timestamp: {$gte: moment().subtract(1, 'days')}, "tag.sensorTagCode": "TI"}},
         {$group: {
             _id: {
                 year: { $year: "$timestamp" },
