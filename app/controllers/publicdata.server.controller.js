@@ -9,7 +9,7 @@ exports.index = function(req, res) {
 };
 
 exports.aggregated = function(req, res) {
-    if (req.params.sensor !== 'TI' || req.params.sensor !== 'VI') {
+    if (req.params.sensor !== 'TI' && req.params.sensor !== 'VI') {
         res.status(404).send({
             message: 'Sensor type not found.'
         });
