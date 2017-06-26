@@ -13,7 +13,7 @@ exports.index = function(req, res) {
 
 exports.dataNumbers = function(req, res) {
     Tag.count({active: true}, function (errTag, tags) {
-        if (errTags) {
+        if (errTag) {
             tags = 'ERROR';
         }
         Asset.count({}, function (errAsset, assets) {
