@@ -8,9 +8,16 @@ exports.index = function(req, res) {
 	res.json({message: 'There is not data available from the root.'});
 };
 
-exports.aggregatedTemperature = function(req, res) {
+exports.aggregated = function(req, res) {
+    if (req.params.sensor !== 'TI' || req.params.sensor !== 'VI') {
+        res.status(404).send({
+            message: 'Sensor type not found.'
+        });
+        return;
+    }
+
     Telemetry.aggregate([
-        {'$match': {'timestamp': {'$gte': moment().subtract(1, 'd').toDate()}, 'tag.sensorTagCode': 'TI'}},
+        {'$match': {'timestamp': {'$gte': moment().subtract(1, 'd').toDate()}, 'tag.sensorTagCode': req.params.sensor}},
         {'$group': {
             '_id': {
                 'year': { '$year': '$timestamp' },
