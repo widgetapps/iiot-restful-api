@@ -51,6 +51,14 @@ exports.aggregated = function(req, res) {
         return;
     }
 
+    var min = '$data.values.min';
+    var max = '$data.values.max';
+
+    if (req.params.sensor === 'VI') {
+        min = '$data.values.average';
+        max = '$data.values.average';
+    }
+
     Telemetry.aggregate([
         {'$match': {'timestamp': {'$gte': moment().subtract(1, 'd').toDate()}, 'tag.sensorTagCode': req.params.sensor}},
         {'$group': {
@@ -67,8 +75,8 @@ exports.aggregated = function(req, res) {
                 }
             },
             'count': {'$sum': 1},
-            'min': {'$min': '$data.values.min'},
-            'max': {'$max': '$data.values.max'},
+            'min': {'$min': min},
+            'max': {'$max': max},
             'average': {'$avg': '$data.values.average'}
         }},
         {'$sort': {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1}}
