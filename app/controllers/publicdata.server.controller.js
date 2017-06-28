@@ -16,9 +16,9 @@ exports.dataNumbers = function(req, res) {
         if (errTag) {
             tags = 'ERROR';
         }
-        Asset.count({}, function (errAsset, assets) {
+        Telemetry.count({created: {'$gte': moment().subtract(1, 'h').toDate()}}, function (errAsset, dataper) {
             if (errAsset) {
-                assets = 'ERROR';
+                dataper = 'ERROR';
             }
             Device.count({}, function (errDevice, devices) {
                 if (errDevice) {
@@ -31,7 +31,7 @@ exports.dataNumbers = function(req, res) {
 
                     var data = {
                         tags: tags,
-                        assets: assets,
+                        dataper: dataper,
                         devices: devices,
                         telemetries: telemetries
                     };
