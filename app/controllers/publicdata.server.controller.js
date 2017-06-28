@@ -16,7 +16,7 @@ exports.dataNumbers = function(req, res) {
         if (errTag) {
             tags = 'ERROR';
         }
-        Telemetry.count({created: {'$gte': moment().subtract(1, 'h').toDate()}}, function (errAsset, dataper) {
+        Telemetry.count({created: {'$gte': moment().subtract(1, 'm').toDate()}}, function (errAsset, dataper) {
             if (errAsset) {
                 dataper = 'ERROR';
             }
