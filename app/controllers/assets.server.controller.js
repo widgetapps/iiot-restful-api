@@ -31,17 +31,6 @@ exports.listDevices = function(req, res) {
 // Remember to add/update the tag when a device is added to an asset. Think about other things that need updating!
 exports.addDevice = function(req, res) {
     authorize.validate(endpoint, req, res, 'manager', function() {
-        /*
-        1) Get the asset, populate the location
-        2) Get the device, populate the sensors
-        3) Save the device with the new asset_id & location_id
-        4) Build the tags from the device sensors (Get the tag if it exists)
-            - The tag JSON
-            - The description JSON
-            - The current date for activeStart
-            - Set the tag as active
-        5) Insert/update tags into the collection
-         */
         var assetId  = mongoose.Types.ObjectId(req.params.assetId),
             deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
@@ -71,7 +60,7 @@ exports.addDevice = function(req, res) {
                          });
                          return;
                      }
-
+                     /* TODO: Copy the alert limits from the Asset to the Device. */
                      device.asset = mongoose.Types.ObjectId(asset._id);
                      device.location = mongoose.Types.ObjectId(asset.location._id);
                      device.save(function (err, deviceSaved) {
@@ -149,7 +138,7 @@ exports.removeDevice = function(req, res) {
          4) Tag: Clear the deviceId
          5) Tag: Set as not active
          6) Get the device
-         7) Clear out the asset_id & location_id (make sure the asset_id's match)
+         7) Clear out the asset_id, location_id (make sure the asset_id's match) & alert limits
          8) Save the device
          */
         var assetId  = mongoose.Types.ObjectId(req.params.assetId),
