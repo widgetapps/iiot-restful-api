@@ -101,8 +101,10 @@ exports.deviceStatus = function (req, res) {
             created: 1,
             updated: 1,
             name: 1,
+            tagCode: 1,
             'client.companyName': 1,
-            'location.description': 1
+            'location.description': 1,
+            'location.tagCode': 1
         }
     ).populate('client', 'location').exec();
 
@@ -113,7 +115,7 @@ exports.deviceStatus = function (req, res) {
 
             // needs to query telemetry by locationTagCode & assetTagCode, this will get me device & tag info.
 
-            jobQueries.push("telemetry query");
+            jobQueries.push(Telemetry.find({'tag.locationTagCode': asset.location.tagCode, 'tag.assetTagCode': asset.tagCode}));
         });
 
         return Promise.all(jobQueries);
