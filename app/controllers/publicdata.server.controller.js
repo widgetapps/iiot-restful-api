@@ -122,6 +122,7 @@ exports.assetStatus = function (req, res) {
         },
         {
             created: 1,
+            'asset.name': 1,
             'device.serialNumber': 1,
             'device.description': 1,
             'tag.full': 1
