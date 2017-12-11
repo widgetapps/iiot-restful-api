@@ -115,7 +115,7 @@ exports.deviceStatus = function (req, res) {
 
             // needs to query telemetry by locationTagCode & assetTagCode, this will get me device & tag info.
 
-            jobQueries.push(Telemetry.find({'tag.locationTagCode': asset.location.tagCode, 'tag.assetTagCode': asset.tagCode}));
+            jobQueries.push(Telemetry.find({'tag.locationTagCode': asset.location.tagCode, 'tag.assetTagCode': asset.tagCode}).populate('device'));
         });
 
         return Promise.all(jobQueries);
@@ -125,9 +125,9 @@ exports.deviceStatus = function (req, res) {
 
         // Loop through listOfJobs (results of telemetry queries) to get deviceSerialNumber, lastTransmission & tag
         status.push({
-            client: asset.client.companyName,
-            asset: asset.name,
-            location: asset.location.description,
+            client: "",
+            asset: "",
+            location: "",
             deviceSerialNumber: "",
             lastTransmission: "",
             tag: ""
