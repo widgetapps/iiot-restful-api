@@ -120,8 +120,6 @@ exports.deviceStatus = function (req, res) {
         return Promise.all(jobQueries);
 
     }).then(function(listOfJobs) {
-        res.json({message: "hello"});
-        return;
         var status = [];
 
         // Loop through listOfJobs (results of telemetry queries) to get deviceSerialNumber, lastTransmission & tag
@@ -136,6 +134,8 @@ exports.deviceStatus = function (req, res) {
 
         res.json({message: "hello"});
 
-    }).catch(console.warn);
+    }).catch(function () {
+        res.json({message: "Error"});
+    });
 
 };
