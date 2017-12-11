@@ -134,6 +134,8 @@ exports.deviceStatus = function (req, res) {
 
         res.json({message: "hello"});
 
-    }).catch(console.warn);
+    }).catch(function(err) {
+        res.json({message: err});
+    });
 
 };
