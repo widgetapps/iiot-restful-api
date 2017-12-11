@@ -134,8 +134,8 @@ exports.deviceStatus = function (req, res) {
 
         res.json({message: "hello"});
 
-    }).catch(function () {
-        res.json({message: "Error"});
+    }).catch(function(error) {
+        res.status(500).send({message: 'one of the queries failed: ' + error});
     });
 
 };
