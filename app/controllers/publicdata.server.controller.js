@@ -124,7 +124,7 @@ exports.assetStatus = function (req, res) {
             created: 1,
             device: 1,
             'tag.full': 1
-        }).sort({created: -1}).populate('device', {serialNumber: 1, type: 1}).limit(1).exec();
+        }).sort({created: -1}).limit(1).exec();
     promise.then(function(telemetries) {
         res.json(telemetries);
     }).catch(function(error) {
