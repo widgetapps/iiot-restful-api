@@ -114,7 +114,7 @@ exports.deviceStatus = function (req, res) {
 
             // needs to query telemetry by locationTagCode & assetTagCode, this will get me device & tag info.
 
-            jobQueries.push(Telemetry.find({'tag.locationTagCode': asset.location.tagCode, 'tag.assetTagCode': asset.tagCode}).populate('device').exec());
+            jobQueries.push(Telemetry.findOne({'tag.locationTagCode': asset.location.tagCode, 'tag.assetTagCode': asset.tagCode}).sort({timestamp: 1}).populate('device').exec());
         });
 
         return Promise.all(jobQueries);
