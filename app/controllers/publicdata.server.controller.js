@@ -132,7 +132,7 @@ exports.deviceStatus = function (req, res) {
             tag: ""
         });
 
-        res.json(listOfJobs);
+        res.json({message: "hello"});
 
     }).catch(console.warn);
 
