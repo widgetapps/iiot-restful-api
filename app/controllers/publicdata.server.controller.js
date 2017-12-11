@@ -101,7 +101,9 @@ exports.deviceStatus = function (req, res) {
             created: 1,
             updated: 1,
             name: 1,
-            tagCode: 1
+            tagCode: 1,
+            client: 1,
+            location: 1
         }
     ).populate('client', {companyName: 1}).populate('location', {description: 1, tagCode: 1}).exec();
 
