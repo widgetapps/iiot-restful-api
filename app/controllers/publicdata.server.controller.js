@@ -117,7 +117,7 @@ exports.deviceStatus = function (req, res) {
             jobQueries.push(Telemetry.find({'tag.locationTagCode': asset.location.tagCode, 'tag.assetTagCode': asset.tagCode}).populate('device').exec());
         });
 
-        return Promise.all(jobQueries);
+        return Promise.each(jobQueries);
 
     }).then(function(listOfJobs) {
         var status = [];
