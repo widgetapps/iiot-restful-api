@@ -109,6 +109,9 @@ exports.deviceStatus = function (req, res) {
     ).populate('client', 'location').exec();
 
     promise.then(function(assets) {
+
+        res.json(assets);
+        return;
         var jobQueries = [];
 
         _.each(assets, function(asset) {
