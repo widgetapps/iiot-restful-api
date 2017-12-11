@@ -60,7 +60,7 @@ exports.addDevice = function(req, res) {
                          });
                          return;
                      }
-                     /* TODO: Copy the alert limits from the Asset to the Device. */
+                     /* TODO: Copy the alert limits from the Asset to the Device. The models need to be updated to do this. */
                      device.asset = mongoose.Types.ObjectId(asset._id);
                      device.location = mongoose.Types.ObjectId(asset.location._id);
                      device.save(function (err, deviceSaved) {

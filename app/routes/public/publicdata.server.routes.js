@@ -7,4 +7,5 @@ module.exports = function(app) {
 
     app.route('/aggregated/datanumbers').get(pdata.dataNumbers);
 	app.route('/aggregated/:sensor').get(pdata.aggregated);
+	app.route('/status/devices').get(pdata.deviceStatus);
 };

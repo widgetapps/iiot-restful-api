@@ -2,8 +2,10 @@
 
 var mongoose = require('mongoose'),
     moment = require('moment'),
-    Device = require('@terepac/terepac-models').Device,
+    _ = require('lodash'),
     Asset = require('@terepac/terepac-models').Asset,
+    Client = require('@terepac/terepac-models').Client,
+    Device = require('@terepac/terepac-models').Device,
     Tag = require('@terepac/terepac-models').Tag,
     Telemetry = require('@terepac/terepac-models').Telemetry;
 
@@ -90,4 +92,47 @@ exports.aggregated = function(req, res) {
 
         res.json(result);
     });
+};
+
+exports.deviceStatus = function (req, res) {
+    var promise =  Asset.find(
+        {},
+        {
+            created: 1,
+            updated: 1,
+            name: 1,
+            'client.companyName': 1,
+            'location.description': 1
+        }
+    ).populate('client', 'location').exec();
+
+    promise.then(function(assets) {
+        var jobQueries = [];
+
+        _.each(assets, function(asset) {
+
+            // needs to query telemetry by locationTagCode & assetTagCode, this will get me device & tag info.
+
+            jobQueries.push("telemetry query");
+        });
+
+        return Promise.all(jobQueries);
+
+    }).then(function(listOfJobs) {
+        var status = [];
+
+        // Loop through listOfJobs (results of telemetry queries) to get deviceSerialNumber, lastTransmission & tag
+        status.push({
+            client: asset.client.companyName,
+            asset: asset.name,
+            location: asset.location.description,
+            deviceSerialNumber: "",
+            lastTransmission: "",
+            tag: ""
+        });
+
+        res.json(listOfJobs);
+
+    }).catch(console.warn);
+
 };
