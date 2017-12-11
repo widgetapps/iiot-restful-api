@@ -132,7 +132,7 @@ exports.deviceStatus = function (req, res) {
             tag: ""
         });
 
-        res.json({message: "hello"});
+        res.json({message: listOfJobs});
 
     }).catch(function(error) {
         res.status(500).send({message: 'one of the queries failed: ' + error});
