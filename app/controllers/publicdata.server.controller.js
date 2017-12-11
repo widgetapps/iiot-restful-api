@@ -95,10 +95,6 @@ exports.aggregated = function(req, res) {
 };
 
 exports.listAssets = function (req, res) {
-
-};
-
-exports.assetStatus = function (req, res) {
     var promise =  Asset.find(
         {},
         {
@@ -115,6 +111,10 @@ exports.assetStatus = function (req, res) {
     }).catch(function(error) {
         res.status(500).send({message: 'Error getting locations: ' + error});
     });
+};
+
+exports.assetStatus = function (req, res) {
+    res.json({'message': 'Working on it'});
 };
 
 exports.deviceStatus = function (req, res) {
