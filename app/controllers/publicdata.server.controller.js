@@ -120,6 +120,8 @@ exports.deviceStatus = function (req, res) {
         return Promise.all(jobQueries);
 
     }).then(function(listOfJobs) {
+        res.json({message: "hello"});
+        return;
         var status = [];
 
         // Loop through listOfJobs (results of telemetry queries) to get deviceSerialNumber, lastTransmission & tag
