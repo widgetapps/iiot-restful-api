@@ -9,5 +9,5 @@ module.exports = function(app) {
 	app.route('/aggregated/:sensor').get(pdata.aggregated);
 	app.route('/status/devices').get(pdata.deviceStatus);
     app.route('/status/assets').get(pdata.listAssets);
-    app.route('/status/asset/:asset').get(pdata.assetStatus);
+    app.route('/status/asset/:location/:asset').get(pdata.assetStatus);
 };

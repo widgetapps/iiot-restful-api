@@ -109,12 +109,28 @@ exports.listAssets = function (req, res) {
     promise.then(function (assets) {
         res.json(assets);
     }).catch(function(error) {
-        res.status(500).send({message: 'Error getting locations: ' + error});
+        res.status(500).send({message: 'Error getting assets: ' + error});
     });
 };
 
 exports.assetStatus = function (req, res) {
-    res.json({'message': 'Working on it'});
+    var promise = Telemetry.find(
+        {
+            'tag.locationTagCode': req.params.location,
+            'tag.assetTagCode': req.params.asset,
+            created: { $gte : moment().subtract(1, 'M').toDate() }
+        },
+        {
+            created: 1,
+            device: 1,
+            'tag.full': 1
+        }).sort({created: -1}).populate('device', {serialNumber: 1, type: 1}).limit(1).exec();
+    promise.then(function(telemetries) {
+        res.json(telemetries);
+    }).catch(function(error) {
+        res.status(500).send({message: 'Error getting asset info: ' + error});
+    });
+
 };
 
 exports.deviceStatus = function (req, res) {
