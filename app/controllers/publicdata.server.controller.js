@@ -117,7 +117,7 @@ exports.deviceStatus = function (req, res) {
             jobQueries.push(Telemetry.find({'tag.locationTagCode': asset.location.tagCode, 'tag.assetTagCode': asset.tagCode}).populate('device').exec());
         });
 
-        return Promise.each(jobQueries);
+        return Promise.all(jobQueries);
 
     }).then(function(listOfJobs) {
         var status = [];
@@ -135,7 +135,7 @@ exports.deviceStatus = function (req, res) {
         res.json({message: "hello"});
 
     }).catch(function(err) {
-        res.status(500).send('One of the queries failed', err);
+        res.status(500).send({'message': 'One of the queries failed: ' + err});
     });
 
 };
