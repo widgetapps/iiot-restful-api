@@ -128,7 +128,7 @@ exports.assetStatus = function (req, res) {
             'tag.full': 1
         }).sort({created: -1}).limit(1).exec();
     promise.then(function(telemetries) {
-        res.json(telemetries);
+        res.json(telemetries[0]);
     }).catch(function(error) {
         res.status(500).send({message: 'Error getting asset info: ' + error});
     });
