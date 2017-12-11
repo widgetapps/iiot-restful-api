@@ -134,10 +134,8 @@ exports.deviceStatus = function (req, res) {
 
         res.json({message: "hello"});
 
-        return resolve(listOfJobs);
-
     }).catch(function(err) {
-        res.status(500).send({'message': 'One of the queries failed: ' + err});
+        res.json({message: err});
     });
 
 };
