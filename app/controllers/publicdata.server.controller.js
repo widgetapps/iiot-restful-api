@@ -128,7 +128,24 @@ exports.assetStatus = function (req, res) {
             'tag.full': 1
         }).sort({created: -1}).limit(1).exec();
     promise.then(function(telemetries) {
-        res.json(telemetries[0]);
+        if (telemetries.length === 0) {
+            res.json({
+                _id: 'na',
+                asset: {
+                    name: 'na'
+                },
+                device: {
+                    serialNumber: 'na',
+                    description: 'na'
+                },
+                tag: {
+                    full: 'na'
+                },
+                created: 'na'
+            });
+        } else {
+            res.json(telemetries[0]);
+        }
     }).catch(function(error) {
         res.status(500).send({message: 'Error getting asset info: ' + error});
     });
