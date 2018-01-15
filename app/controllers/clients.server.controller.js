@@ -4,7 +4,6 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    errorHandler = require('./errors.server.controller'),
     Client = require('@terepac/terepac-models').Client,
     Tag = require('@terepac/terepac-models').Tag,
     Telemetry = require('@terepac/terepac-models').Telemetry,
@@ -17,6 +16,7 @@ var mongoose = require('mongoose'),
     _ = require('lodash'),
     moment = require('moment'),
     crypto = require('crypto'),
+    util = require('../lib/util'),
     randomstring = require('randomstring'),
     authorize = require('../lib/authorize.server.lib'),
     endpoint = 'client',
@@ -606,8 +606,8 @@ exports.insertDevice = function(req, res) {
                         key = process.env.SECRET_MQTT;
                     }
 
-                    var username = crypto.createHash('md5').update(device.serialNumber).digest("hex");
-                    var password = crypto.createHmac('md5', key).update(username).digest('hex');
+                    var username = crypto.createHash('md5').update(device.serialNumber).digest('hex');
+                    var password = util.createHash(username);
 
                     /*
                     console.log('Serial Number: ' + device.serialNumber);
