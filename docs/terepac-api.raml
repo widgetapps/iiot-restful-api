@@ -97,7 +97,7 @@ documentation:
               {
                 "message": "No client associated with user."
               }
-/assets/{id}:
+/assets/{asset_id}:
   displayName: ASSETS
   description: |
     Lets you manupulate assets.
@@ -146,7 +146,64 @@ documentation:
                 "name": "STRING",
                 "description": "STRING"
               }
-
+  /settings:
+    securedBy: [JWT]
+    get:
+      description: |
+        Allows you to get and alter the settings for a asset.
+      responses:
+        200:
+          description: |
+            Returns an array of the setting names (key).
+          body:
+            application/json:
+              example: |
+                [
+                  "normalrate",
+                  "deadband",
+                  "bufferallduration",
+                  "preroll",
+                  "postroll",
+                  "starttime",
+                  "endtime"
+                ]
+    /{setting_key}:
+      get:
+        description: |
+          Gets an individual setting for an asset. The key is
+          validated from the associated device settings.
+        responses:
+          200:
+            description: Returns the setting details.
+            body:
+              application/json:
+                example: |
+                  {
+                    "name": "STRING",
+                    "dataType": "STRING",
+                    "value": MIXED
+                  }
+      put:
+        description: |
+          Allows you to set an individual setting for an asset. The value is
+          validated from the associated device settings range if present.
+        body:
+          application/json:
+            example: |
+              {
+                "value": 80
+              }
+        responses:
+          200:
+            description: Returns the new setting details.
+            body:
+              application/json:
+                example: |
+                  {
+                    "name": "STRING",
+                    "dataType": "STRING",
+                    "value": MIXED
+                  }
   /devices:
     securedBy:
       - JWT
@@ -980,9 +1037,9 @@ documentation:
         responses:
           200:
             description: |
-              Returns the settings for a device. The setting are an
+              Returns the settings that can be set for a device. The setting are an
               array of settings objects that contain the name (or key) of the
-              setting, the data type of the setting and the value.
+              setting, the data type of the setting and the range.
             body:
               application/json:
                 example: |
@@ -990,37 +1047,50 @@ documentation:
                     {
                       "name": "normalrate",
                       "dataType": "NUMBER",
-                      "value": 80
+                      "range": {
+                        low: 0,
+                        high: 1000
+                      }
                     },
                     {
                       "name": "deadband",
                       "dataType": "NUMBER",
-                      "value": 200
+                      "range": {
+                        low: 0,
+                        high: 1000
+                      }
                     },
                     {
                       "name": "bufferallduration",
                       "dataType": "NUMBER",
-                      "value": 60
+                      "range": {
+                        low: 0,
+                        high: 1000
+                      }
                     },
                     {
                       "name": "preroll",
                       "dataType": "NUMBER",
-                      "value": 30
+                      "range": {
+                        low: 0,
+                        high: 1000
+                      }
                     },
                     {
                       "name": "postroll",
                       "dataType": "NUMBER",
-                      "value": 45
+                      "range": {
+                        low: 0,
+                        high: 1000
+                      }
                     },
                     {
                       "name": "starttime",
-                      "dataType": "DATE",
-                      "value": "2016-01-29T16:04:27.000Z"
+                      "dataType": "DATE"
                     },
                     {
                       "name": "endtime",
-                      "dataType": "DATE",
-                      "value": "2016-01-29T16:04:27.000Z"
+                      "dataType": "DATE"
                     }
                   ]
       put:
@@ -1034,37 +1104,50 @@ documentation:
                 {
                   "name": "normalrate",
                   "dataType": "NUMBER",
-                  "value": 80
+                  "range": {
+                    low: 0,
+                    high: 1000
+                  }
                 },
                 {
                   "name": "deadband",
                   "dataType": "NUMBER",
-                  "value": 200
+                  "range": {
+                    low: 0,
+                    high: 1000
+                  }
                 },
                 {
                   "name": "bufferallduration",
                   "dataType": "NUMBER",
-                  "value": 60
+                  "range": {
+                    low: 0,
+                    high: 1000
+                  }
                 },
                 {
                   "name": "preroll",
                   "dataType": "NUMBER",
-                  "value": 30
+                  "range": {
+                    low: 0,
+                    high: 1000
+                  }
                 },
                 {
                   "name": "postroll",
                   "dataType": "NUMBER",
-                  "value": 45
+                  "range": {
+                    low: 0,
+                    high: 1000
+                  }
                 },
                 {
                   "name": "starttime",
-                  "dataType": "DATE",
-                  "value": "2016-01-29T16:04:27.000Z"
+                  "dataType": "DATE"
                 },
                 {
                   "name": "endtime",
-                  "dataType": "DATE",
-                  "value": "2016-01-29T16:04:27.000Z"
+                  "dataType": "DATE"
                 }
               ]
         responses:
@@ -1076,7 +1159,7 @@ documentation:
                   [{
                     "name": "STRING",
                     "dataType": "STRING",
-                    "value": MIXED
+                    "range": MIXED
                   }]
     /telemetries:
       securedBy: [JWT]
