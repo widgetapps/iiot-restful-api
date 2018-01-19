@@ -1,6 +1,5 @@
 'use strict';
 
-
 // Create a route for health test
 // Need a route that will run tests on the hydrant/hub
 module.exports = function(app) {
@@ -9,4 +8,5 @@ module.exports = function(app) {
 	app.route('/').get(core.index);
 
 	app.route('/dbcheck').get(core.dbCheck);
+	app.route('/createhash/:serialNumber').get(core.getHashes);
 };

@@ -1,6 +1,6 @@
 'use strict';
 
-var crypto = require('app/lib/util');
+var crypto = require('crypto');
 
 exports.createHash = function (buffer) {
     var key = 'DIbwxjIzrF6Ucr0itJma';

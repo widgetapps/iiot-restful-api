@@ -601,12 +601,8 @@ exports.insertDevice = function(req, res) {
                         message: 'Error inserting the device: ' + err
                     });
                 } else {
-                    var key = 'R5CYPRvd82keWMsfRDWJ';
-                    if (process.env.SECRET_MQTT) {
-                        key = process.env.SECRET_MQTT;
-                    }
 
-                    var username = crypto.createHash('md5').update(device.serialNumber).digest('hex');
+                    var username = crypto.createHash('md5').update(Buffer.from(device.serialNumber)).digest('hex');
                     var password = util.createHash(username);
 
                     /*
