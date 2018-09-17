@@ -3,7 +3,7 @@
 module.exports = function(req, res, next) {
 
     var mongoose = require('mongoose');
-    var Client = mongoose.model('Client');
+    var Client = require('@terepac/terepac-models').Client;
     var jwt = require('jsonwebtoken');
 
     var token = req.headers['x-access-token'];
@@ -39,7 +39,8 @@ module.exports = function(req, res, next) {
     } else {
         res.status(401).send({
             message: 'One or both of the required headers (x-client-id, x-access-token) are missing.',
-            ref: 'https://developers.terepac.one/#authentication'
+            ref: 'https://developers.terepac.one/#authentication',
+            path: req.path
         });
     }
 };

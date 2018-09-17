@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	db: 'mongodb://localhost/terepac-api-test',
+	db: 'mongodb://localhost/one-platform-test',
 	port: 3001,
 	app: {
 		title: 'terepac-api - Test Environment'

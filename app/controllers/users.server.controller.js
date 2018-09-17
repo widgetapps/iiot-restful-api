@@ -5,7 +5,7 @@
  */
 var mongoose = require('mongoose'),
     errorHandler = require('./errors.server.controller'),
-    User = mongoose.model('User'),
+    User = require('@terepac/terepac-models').User,
     _ = require('lodash'),
     moment = require('moment');
 

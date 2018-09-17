@@ -15,9 +15,6 @@ var fs = require('fs'),
 	cookieParser = require('cookie-parser'),
 	helmet = require('helmet'),
 	cors = require('cors'),
-	mongoStore = require('connect-mongo')({
-		session: session
-	}),
 	config = require('./config'),
 	consolidate = require('consolidate'),
 	path = require('path');
@@ -82,19 +79,6 @@ var fs = require('fs'),
 	app.use(cookieParser());
 
     app.use(cors());
-
-	// Express MongoDB session storage
-		/*
-	app.use(session({
-		saveUninitialized: true,
-		resave: true,
-		secret: config.sessionSecret,
-		store: new mongoStore({
-			db: db.connection.db,
-			collection: config.sessionCollection
-		})
-	}));
-	*/
 
 	// Use helmet to secure Express headers
 	app.use(helmet.xframe());

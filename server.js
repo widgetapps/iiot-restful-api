@@ -18,12 +18,55 @@ mongoose.Promise = global.Promise;
  */
 
 // Bootstrap db connection
-var db = mongoose.connect(config.db, function(err) {
-	if (err) {
-		console.error(chalk.red('Could not connect to MongoDB!'));
-		console.log(chalk.red(err));
-	}
+
+var dbOptions = {
+    server: {
+        auto_reconnect:true,
+        socketOptions: {
+            poolSize: 10,
+            keepAlive: 1,
+            connectTimeoutMS: 30000
+        }
+    },
+    replset: {
+        socketOptions: {
+            poolSize: 10,
+            keepAlive: 1,
+            connectTimeoutMS : 30000
+        }
+    }
+};
+
+var conn = mongoose.connection;
+conn.on('connecting', function() {
+    console.log('connecting');
 });
+conn.on('error', function(error) {
+    console.error('Error in MongoDb connection: ' + error);
+    mongoose.disconnect();
+});
+conn.on('connected', function() {
+    console.log('connected!');
+});
+conn.once('open', function() {
+    console.log('connection open');
+});
+conn.on('reconnected', function () {
+    console.log('reconnected');
+});
+conn.on('disconnected', function() {
+    console.log('disconnected');
+    console.log('DB URI is: ' + config.db);
+    mongoose.connect(config.db, dbOptions);
+});
+
+mongoose.Promise = require('bluebird');
+//assert.equal(query.exec().constructor, require('bluebird'));
+
+//mongoose.Promise = global.Promise;
+//assert.equal(query.exec().constructor, global.Promise);
+
+var db = mongoose.connect(config.db, dbOptions);
 
 // Init the express application
 var app = require('./config/express')(db);

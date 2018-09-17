@@ -1,67 +1,39 @@
 'use strict';
 
-/**
- * Controller dependencies.
- */
 var mongoose = require('mongoose'),
-    User = mongoose.model('User'),
-    Client = mongoose.model('Client'),
-    Device = mongoose.model('Device'),
-    _ = require('lodash');
+    Device = require('@terepac/terepac-models').Device,
+    crypto = require('crypto'),
+    util = require('../lib/util');
 
 exports.index = function(req, res) {
 	res.json({message: 'Hi there, I\'m a Terepac ONE server. Isn\'t that weird?'});
 };
 
-exports.addData = function(req, res) {
+exports.dbCheck = function(req, res) {
 
-    var client = new Client({
-        apikey: {
-            id: '123456789',
-            secret: 'A1A2A3A4A5A6A7A8A9A0'
-        },
-        companyName: 'WidgetApps',
-        address: {
-            street1: '2 Vankirk Rd',
-            city: 'Toronto',
-            province: 'ON',
-            postalCode: 'M1P1M7',
-            country: 'CA'
-        },
-        contact: {
-            firstName: 'Nicole',
-            lastName: 'Bouchard',
-            email: 'nic.patterson@gmail.com',
-            phone: '6477866465'
-        },
-        reseller: false
+    var promise = Device.find({}).exec();
+
+    promise.then(function(devices) {
+        res.json({
+            message: 'DB is A-OK.'
+        });
+    }).catch(function(e) {
+        res.json({
+            message: 'DB is NOT doing ok.'
+        });
     });
 
-    client.save(function(err, clientData) {
-        if (err) {
-            res.json({message: 'Error adding client', err: err});
-            return;
-        }
+};
 
-        var user = new User({
-            firstName: 'Darryl',
-            lastName: 'Patterson',
-            email: 'widgetapps@gmail.com',
-            password: '1234567890',
-            phone: '4167866116',
-            provider: 'local',
-            roles: ['user','admin','manager'],
-            active: true,
-            client: clientData._id
-        });
+exports.getHashes = function(req, res) {
+    var serialNumber = Buffer.from(req.params.serialNumber);
 
-        user.save(function(err, userData){
-            if (err) {
-                res.json({message: 'Error adding user', err: err});
-                return;
-            }
+    var login = crypto.createHash('md5').update(serialNumber).digest('hex');
+    var password = util.createHash(Buffer.from(login));
 
-            res.json({message: 'Data Added', clientData: clientData, userData: userData});
-        });
+    res.json({
+        serialNumber: serialNumber,
+        login: login,
+        password: password
     });
 };

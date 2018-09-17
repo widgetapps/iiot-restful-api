@@ -1,28 +1,31 @@
-#%RAML 0.8
+#%RAML 1.0
 title: Terepac ONE
-version: 0.2a
-baseUri: https://api.terepac.one
+version: v2
+baseUri: https://api.terepac.one/{version}
+annotationTypes:
+  role:
+    enum: [ADMIN]
 securitySchemes:
-  - JWT:
-      description: A JSON Web Token & Client ID must be sent in the request header.
-      type: x-jwt
-      describedBy:
-        headers:
-          x-access-token:
-            type: string
-            description: A JWT access token. Get the JWT using /authenticate
-          x-client-id:
-            type: string
-            description: Your unique client ID.
-        responses:
-          417:
-            body:
-              application/json:
-                example: |
-                  {
-                    "code": "417",
-                    "message": "invalid api key"
-                  }
+  JWT:
+    description: A JSON Web Token & Client ID must be sent in the request header.
+    type: x-jwt
+    describedBy:
+      headers:
+        x-access-token:
+          type: string
+          description: A JWT access token. Get the JWT using /authenticate
+        x-client-id:
+          type: string
+          description: Your unique client ID.
+      responses:
+        417:
+          body:
+            application/json:
+              example: |
+                {
+                  "code": "417",
+                  "message": "invalid api key"
+                }
 documentation:
   - title: Welcome
     content: |
@@ -60,10 +63,7 @@ documentation:
     ```
   post:
     description: |
-      Authenticates the user and returns a JSON Web Token and a client ID to be
-      used for future secured API requests. The client ID is randomly generated
-      32 character string and is returned for every successful authentication.
-      This means that your client ID will change for every new authentication.
+      Authenticates the user and returns a JSON Web Token.
     body:
       application/json:
         example: |
@@ -79,7 +79,6 @@ documentation:
             example: |
               {
                 "message": "Authentication successful.",
-                "clientId": "kjhkjh%jkhgj&876K&q9f@6pq*16gTx8",
                 "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ"
               }
       404:
@@ -98,49 +97,1099 @@ documentation:
               {
                 "message": "No client associated with user."
               }
-/devices:
-  displayName: DEVICES
+/assets:
+  displayName: ASSETS
   description: |
-    Lets you manipulate your devices and access the measurement data.
+    Lets you manipulate assets.
+  securedBy: [JWT]
+  /{asset_id}:
+    uriParameters:
+      asset_id:
+        description: The asset's ObjectId.
+        type: string
+    get:
+      description: Gets a single asset.
+      responses:
+        200:
+          description: Gets a single asset.
+          body:
+            application/json:
+              example: |
+                {
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "tagCode": "STRING",
+                  "name": "STRING",
+                  "description": "STRING",
+                  "location": {
+                    "description": "STRING",
+                    "geolocation": ["NUMBER", "NUMBER"],
+                    "address": {
+                      "street": "STRING",
+                      "street2": "STRING",
+                      "city": "STRING",
+                      "province": "STRING",
+                      "postalCode": "STRING",
+                      "country": "STRING"
+                      }
+                    }
+                }
+
+    put:
+      description: Updates an asset.
+      body:
+        application/json:
+          example: |
+            {
+              "tagCode": "STRING",
+              "name": "STRING",
+              "description": "STRING",
+              "location": "OBJECT_ID"
+            }
+
+      responses:
+        200:
+          description: Asset updated.
+          body:
+            application/json:
+              example: |
+                {
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "tagCode": "STRING",
+                  "name": "STRING",
+                  "description": "STRING",
+                  "location": {
+                    "description": "STRING",
+                    "geolocation": ["NUMBER", "NUMBER"],
+                    "address": {
+                      "street": "STRING",
+                      "street2": "STRING",
+                      "city": "STRING",
+                      "province": "STRING",
+                      "postalCode": "STRING",
+                      "country": "STRING"
+                      }
+                    }
+                }
+    /settings:
+      securedBy: [JWT]
+      get:
+        description: |
+          Allows you to get and alter the settings for a asset.
+        responses:
+          200:
+            description: |
+              Returns an array of the setting names (key).
+            body:
+              application/json:
+                example: |
+                  [{
+                    "name": "pressure-interval",
+                    "datatype": "int",
+                    "range": "MIXED",
+                    "value": "MIXED"
+                  },{
+                    "name": "battery-interval",
+                    "datatype": "int",
+                    "range": "MIXED",
+                    "value": "MIXED"
+                  },{
+                    "name": "temperature-interval",
+                    "datatype": "int",
+                    "range": "MIXED",
+                    "value": "MIXED"
+                  },{
+                    "name": "connect-interval",
+                    "datatype": "int",
+                    "range": "MIXED",
+                    "value": "MIXED"
+                  },{
+                    "name": "high-limit",
+                    "datatype": "double",
+                    "range": "MIXED",
+                    "value": "MIXED"
+                  },{
+                    "name": "low-limit",
+                    "datatype": "double",
+                    "range": "MIXED",
+                    "value": "MIXED"
+                  },{
+                    "name": "dead-band",
+                    "datatype": "double",
+                    "range": "MIXED",
+                    "value": "MIXED"
+                  },{
+                    "name": "pre-roll",
+                    "datatype": "int",
+                    "range": "MIXED",
+                    "value": "MIXED"
+                  },{
+                    "name": "post-roll",
+                    "datatype": "int",
+                    "range": "MIXED",
+                    "value": "MIXED"
+                  },{
+                    "name": "start-time",
+                    "datatype": "date",
+                    "range": "MIXED",
+                    "value": "MIXED"
+                  }]
+      /{setting_key}:
+        get:
+          description: |
+            Gets an individual setting for an asset. The key is
+            validated from the associated device settings.
+          responses:
+            200:
+              description: Returns the setting details.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "name": "STRING",
+                      "datatype": "STRING",
+                      "range": "MIXED",
+                      "value": "MIXED"
+                    }
+        put:
+          description: |
+            Allows you to set an individual setting for an asset. All valures are
+            posted as STRING. The value is cast based on setting data type and is
+            validated from the associated settings range if present.
+          body:
+            application/json:
+              example: |
+                {
+                  "value": "80"
+                }
+          responses:
+            200:
+              description: Returns the new setting details.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "name": "STRING",
+                      "value": "MIXED"
+                    }
+    /devices:
+      securedBy: [JWT]
+      get:
+        description: Gets an array of devices attached to this asset.
+        responses:
+          200:
+            description: Returns an array of devices.
+            body:
+              application/json:
+                example: |
+                  [{
+                    "_id": "OBJECT_ID",
+                    "created": "DATE",
+                    "updated": "DATE",
+                    "serialNumber": "STRING",
+                    "type": "STRING",
+                    "description": "STRING",
+                    "sensors":[{
+                      "tagCode": "STRING",
+                      "type": "NUMBER",
+                      "typeString": "STRING",
+                      "description": "STRING",
+                      "unit": "STRING"
+                    }]
+                  }]
+
+      /{device_id}/add:
+        securedBy: [JWT]
+        uriParameters:
+          device_id:
+            description: The device's ObjectId.
+            type: string
+        post:
+          description: Adds this device to this asset.
+          responses:
+            200:
+              description: Deviced added to asset.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "message": "Device added."
+                    }
+
+      /{device_id}/remove:
+        securedBy: [JWT]
+        delete:
+          description: Removes this device from this asset.
+          responses:
+            200:
+              description: Deviced removed from asset.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "message": "Device removed."
+                    }
+/clients:
+  displayName: CLIENTS
+  description: |
+    Lets you manipulate and access client data and telemetry tags.
   securedBy: [JWT]
   get:
     description: |
-      Allows you to get a list of all of your devices.
-    body:
-      application/json:
-        example: |
-          { }
+      Allows you to get a list of the clients you are allowed to access based on
+      the user's role. If the user belongs to a company that's a reseller, an
+      array of the reseller's clients is returned.
     responses:
       200:
-        description: Returns an array of all of your devices.
+        description: Returns an array of clients.
         body:
           application/json:
             example: |
               [
                 {
-                  "created": "2016-01-29T16:04:27.000Z",
-                  "updated": "2016-01-29T16:04:27.000Z",
-                  "serialNumber": "15",
-                  "type": "hydrant",
-                  "code": "Client assigned code",
-                  "descriptor": "Client assigned descriptor"
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "apikey": {
+                    "id": "STRING"
+                  },
+                  "tagCode": "STRING",
+                  "companyName": "STRING",
+                  "address": {
+                    "street": "STRING",
+                    "street2": "STRING",
+                    "city": "STRING",
+                    "province": "STRING",
+                    "postalCode": "STRING",
+                    "country": "STRING"
+                  },
+                  "contact": {
+                    "firstName": "STRING",
+                    "lastName": "STRING",
+                    "email": "STRING",
+                    "phone": "STRING"
+                  },
+                  "reseller": "BOOLEAN"
                 }
               ]
-  /{id}:
+      400:
+        description: Database error adding the client.
+        body:
+          application/json:
+            example: |
+              {
+                "message": "Error inserting the client: [ERROR_MESSAGE]"
+              }
+      401:
+        description: Not authorized.
+        body:
+          application/json:
+            example: |
+              {
+                "message": "You are not authorized to access this resource."
+              }
+      404:
+        description: Client not found.
+        body:
+          application/json:
+            example: |
+              {
+                "message": "Client not found"
+              }
+  post:
+    (role) : ADMIN
+    description: |
+      Allows you to add a new client. You must be a reseller or be an admin to
+      add a new client.
+    body:
+      application/json:
+        example: |
+          {
+            "message": "Client added",
+            "_id": "OBJECT_ID"
+          }
+    responses:
+      200:
+        description: Returns the added client.
+        body:
+          application/json:
+            example: |
+              {
+                "_id": "OBJECT_ID",
+                "created": "DATE",
+                "updated": "DATE",
+                "apikey": {
+                  "id": "STRING"
+                },
+                "tagCode": "STRING",
+                "companyName": "STRING",
+                "address": {
+                  "street": "STRING",
+                  "street2": "STRING",
+                  "city": "STRING",
+                  "province": "STRING",
+                  "postalCode": "STRING",
+                  "country": "STRING"
+                },
+                "contact": {
+                  "firstName": "STRING",
+                  "lastName": "STRING",
+                  "email": "STRING",
+                  "phone": "STRING"
+                },
+                "reseller": "BOOLEAN"
+              }
+  /{client_id}:
+    description: |
+      Allows you to work with an individual client.
+    securedBy: [JWT]
+    uriParameters:
+      client_id:
+        description: The clients's ObjectId.
+        type: string
+    get:
+      description: |
+        Returns a single client.
+      responses:
+        200:
+          description: Returns a client.
+          body:
+            application/json:
+              example: |
+                {
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "apikey": {
+                    "id": "STRING"
+                  },
+                  "tagCode": "STRING",
+                  "companyName": "STRING",
+                  "address": {
+                    "street": "STRING",
+                    "street2": "STRING",
+                    "city": "STRING",
+                    "province": "STRING",
+                    "postalCode": "STRING",
+                    "country": "STRING"
+                  },
+                  "contact": {
+                    "firstName": "STRING",
+                    "lastName": "STRING",
+                    "email": "STRING",
+                    "phone": "STRING"
+                  },
+                  "reseller": "BOOLEAN"
+                }
+    put:
+      description: |
+        Allows you to edit a client. All fields are optional. You cannot change
+        a password with this endpoint (see USERS endpoint).
+      body:
+        application/json:
+          example: |
+            {
+              "tagCode": "STRING",
+              "companyName": "STRING",
+              "address": {
+                "street": "STRING",
+                "street2": "STRING",
+                "city": "STRING",
+                "province": "STRING",
+                "postalCode": "STRING",
+                "country": "STRING"
+              },
+              "contact": {
+                "firstName": "STRING",
+                "lastName": "STRING",
+                "email": "STRING",
+                "phone": "STRING"
+              },
+              "reseller": "BOOLEAN"
+            }
+      responses:
+        200:
+          description: Client saved.
+          body:
+            application/json:
+              example: |
+                {
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "apikey": {
+                    "id": "STRING"
+                  },
+                  "tagCode": "STRING",
+                  "companyName": "STRING",
+                  "address": {
+                    "street": "STRING",
+                    "street2": "STRING",
+                    "city": "STRING",
+                    "province": "STRING",
+                    "postalCode": "STRING",
+                    "country": "STRING"
+                  },
+                  "contact": {
+                    "firstName": "STRING",
+                    "lastName": "STRING",
+                    "email": "STRING",
+                    "phone": "STRING"
+                  },
+                  "reseller": "BOOLEAN"
+                }
+    /alerts:
+      description: |
+        Allows you to work with a client's alerts.
+      securedBy: [JWT]
+      get:
+        responses:
+          200:
+            description: Gets a list of the client's alerts.
+            body:
+              application/json:
+                example: |
+                  [{
+                    "_id": "OBJECT_ID",
+                    "asset": "OBJECT_ID",
+                    "sensor": "OBJECT_ID",
+                    "alertGroupCodes": ["STRING"],
+                    "active": "BOOLEAN",
+                    "frequencyMinutes": "NUMBER",
+                    "limits": {
+                      "low": "NUMBER",
+                      "high": "NUMBER"
+                    }
+                  }]
+      post:
+        description: |
+          Allows you to add an alert.
+        body:
+          application/json:
+            example: |
+              {
+                "asset": "OBJECT_ID",
+                "sensor": "OBJECT_ID",
+                "alertGroupCodes": ["STRING"],
+                "active": "BOOLEAN",
+                "frequencyMinutes": "NUMBER",
+                "limits": {
+                  "low": "NUMBER",
+                  "high": "NUMBER"
+                }
+              }
+        responses:
+          200:
+            description: Alert added.
+            body:
+              application/json:
+                example: |
+                  {
+                    "_id": "OBJECT_ID",
+                    "asset": "OBJECT_ID",
+                    "sensor": "OBJECT_ID",
+                    "alertGroupCodes": ["STRING"],
+                    "active": "BOOLEAN",
+                    "frequencyMinutes": "NUMBER",
+                    "limits": {
+                      "low": "NUMBER",
+                      "high": "NUMBER"
+                    }
+                  }
+      /{alert_id}:
+        description: |
+          Allows you to work with an individual alert.
+        securedBy: [JWT]
+        uriParameters:
+          alert_id:
+            description: The alert group's code.
+            type: string
+        get:
+          responses:
+            200:
+              description: Get's a single alert.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "_id": "OBJECT_ID",
+                      "asset": "OBJECT_ID",
+                      "sensor": "OBJECT_ID",
+                      "alertGroupCodes": ["STRING"],
+                      "active": "BOOLEAN",
+                      "frequencyMinutes": "NUMBER",
+                      "limits": {
+                        "low": "NUMBER",
+                        "high": "NUMBER"
+                      }
+                    }
+        put:
+          description: |
+            Allows you to edit an alert.
+          body:
+            application/json:
+              example: |
+                {
+                  "asset": "OBJECT_ID",
+                  "sensor": "OBJECT_ID",
+                  "alertGroupCodes": ["STRING"],
+                  "active": "BOOLEAN",
+                  "frequencyMinutes": "NUMBER",
+                  "limits": {
+                    "low": "NUMBER",
+                    "high": "NUMBER"
+                  }
+                }
+          responses:
+            200:
+              description: Alert saved.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "_id": "OBJECT_ID",
+                      "asset": "OBJECT_ID",
+                      "sensor": "OBJECT_ID",
+                      "alertGroupCodes": ["STRING"],
+                      "active": "BOOLEAN",
+                      "frequencyMinutes": "NUMBER",
+                      "limits": {
+                        "low": "NUMBER",
+                        "high": "NUMBER"
+                      }
+                    }
+        delete:
+          responses:
+            200:
+              description: Removes an alert.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "message": "Alert has been removed."
+                    }
+    /alertgroups:
+      description: |
+        Allows you to work with a client's alert groups.
+      securedBy: [JWT]
+      get:
+        responses:
+          200:
+            description: Get's a list of the client's alert groups.
+            body:
+              application/json:
+                example: |
+                  [{
+                    "code": "STRING",
+                    "name": "STRING",
+                    "contacts": [{
+                      "name": "STRING",
+                      "sms": {
+                        "send": "BOOLEAN",
+                        "number": "STRING"
+                      },
+                      "email": {
+                        "send": "BOOLEAN",
+                        "address": "STRING"
+                      },
+                      "user": {
+                        "send": "BOOLEAN",
+                        "id": "OBJECT_ID"
+                      }
+                    }]
+                  }]
+      post:
+        description: |
+          Allows you to add an alert group. Code must be unique per client.
+        body:
+          application/json:
+            example: |
+              {
+                "code": "STRING",
+                "name": "STRING",
+                "contacts": [{
+                  "name": "STRING",
+                  "sms": {
+                    "send": "BOOLEAN",
+                    "number": "STRING"
+                  },
+                  "email": {
+                    "send": "BOOLEAN",
+                    "address": "STRING"
+                  },
+                  "user": {
+                    "send": "BOOLEAN",
+                    "id": "OBJECT_ID"
+                  }
+                }]
+              }
+        responses:
+          200:
+            description: Alert group added.
+            body:
+              application/json:
+                example: |
+                  [{
+                    "code": "STRING",
+                    "name": "STRING",
+                    "contacts": [{
+                      "name": "STRING",
+                      "sms": {
+                        "send": "BOOLEAN",
+                        "number": "STRING"
+                      },
+                      "email": {
+                        "send": "BOOLEAN",
+                        "address": "STRING"
+                      },
+                      "user": {
+                        "send": "BOOLEAN",
+                        "id": "OBJECT_ID"
+                      }
+                    }]
+                  }]
+      /{code}:
+        description: |
+          Allows you to work with an individual alert group.
+        securedBy: [JWT]
+        uriParameters:
+          code:
+            description: The alert group's code.
+            type: string
+        get:
+          responses:
+            200:
+              description: Get's a single alert group.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "code": "STRING",
+                      "name": "STRING",
+                      "contacts": [{
+                        "name": "STRING",
+                        "sms": {
+                          "send": "BOOLEAN",
+                          "number": "STRING"
+                        },
+                        "email": {
+                          "send": "BOOLEAN",
+                          "address": "STRING"
+                        },
+                        "user": {
+                          "send": "BOOLEAN",
+                          "id": "OBJECT_ID"
+                        }
+                      }]
+                    }
+        put:
+          description: |
+            Allows you to edit an alert group.
+          body:
+            application/json:
+              example: |
+                {
+                  "name": "STRING",
+                  "contacts": [{
+                    "name": "STRING",
+                    "sms": {
+                      "send": "BOOLEAN",
+                      "number": "STRING"
+                    },
+                    "email": {
+                      "send": "BOOLEAN",
+                      "address": "STRING"
+                    },
+                    "user": {
+                      "send": "BOOLEAN",
+                      "id": "OBJECT_ID"
+                    }
+                  }]
+                }
+          responses:
+            200:
+              description: Alert group saved.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "code": "STRING",
+                      "name": "STRING",
+                      "contacts": [{
+                        "name": "STRING",
+                        "sms": {
+                          "send": "BOOLEAN",
+                          "number": "STRING"
+                        },
+                        "email": {
+                          "send": "BOOLEAN",
+                          "address": "STRING"
+                        },
+                        "user": {
+                          "send": "BOOLEAN",
+                          "id": "OBJECT_ID"
+                        }
+                      }]
+                    }
+        delete:
+          responses:
+            200:
+              description: Removes an alert group.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "message": "Alert group has been removed."
+                    }
+    /assets:
+      securedBy: [JWT]
+      get:
+        description: Gets a list of the client's assets.
+        responses:
+          200:
+            description: An array of assets.
+            body:
+              application/json:
+                example: |
+                  [{
+                    "_id": "OBJECT_ID",
+                    "created": "DATE",
+                    "updated": "DATE",
+                    "tagCode": "STRING",
+                    "name": "STRING",
+                    "description": "STRING",
+                    "settings": [],
+                    "location": {
+                      "tagCode": "STRING",
+                      "description": "STRING",
+                      "geolocation": ["NUMBER", "NUMBER"],
+                      "address": {
+                        "street": "STRING",
+                        "street2": "STRING",
+                        "city": "STRING",
+                        "province": "STRING",
+                        "postalCode": "STRING",
+                        "country": "STRING"
+                      }
+                    }
+                  }]
+      post:
+        description: Add an asset to the client.
+        body:
+          application/json:
+            example: |
+              {
+                "tagCode": "STRING",
+                "name": "STRING",
+                "description": "STRING",
+                "settings": [],
+                "location": "OBJECT_ID"
+              }
+        responses:
+          200:
+            description: Asset added.
+            body:
+              application/json:
+                example: |
+                  {
+                    "message": "Added added",
+                    "_id": "OBJECT_ID"
+                  }
+    /tags:
+      securedBy: [JWT]
+      get:
+        description: Gets a list of the client's tags.
+        responses:
+          200:
+            description: Returns the available tags for the client.
+            body:
+              application/json:
+                example: |
+                  [{
+                    "_id": "OBJECT_ID",
+                    "created": "DATE",
+                    "updated": "DATE",
+                    "description": {
+                      "location": "STRING",
+                      "asset": "STRING",
+                      "sensor": "STRING"
+                    },
+                    "tag": {
+                      "full": "STRING",
+                      "clientTagCode": "STRING",
+                      "locationTagCode": "STRING",
+                      "assetTagCode": "STRING",
+                      "sensorTagCode": "STRING"
+                    },
+                    "active": "BOOLEAN",
+                    "activeStart": "DATE",
+                    "history": {
+                      "start": "DATE",
+                      "end": "DATE",
+                      "device_id": "OBJECT_ID"
+                    }
+                  }]
+    /telemetries/search:
+      securedBy: [JWT]
+      description: |
+        Allows you to search multiple tags. Returns an array of telemetry
+        data.
+      get:
+        description: Queries for telemetry using tags.
+        queryParameters:
+          tags:
+            type: string
+            description: A comma delimited list of tags.
+            example: tags=D001_LOC1_TI,D002_LOC1_EI
+          start:
+            type: string
+            description: The start date of the data.
+            example: start=2016-01-29T16:04:27.000Z
+          end:
+            type: string
+            description: The end date of the data.
+            example: end=2016-01-29T16:04:27.000Z
+          asset:
+            type: string
+            description: A flag to include asset data.
+            example: asset=1
+            required: false
+          device:
+            type: string
+            description: A flag to include device data.
+            example: device=1
+            required: false
+          sensor:
+            type: string
+            description: A flag to include sensor data.
+            example: sensor=1
+            required: false
+        responses:
+          200:
+            description: |
+              Returns an array of telemetry data. The data represents
+              the state of the system when the telemetry was captured (asset,
+              device and sensor are copied data).
+            body:
+              application/json:
+                example: |
+                  [
+                    {
+                      "tag": "STRING",
+                      "timestamp": "DATE",
+                      "asset": {
+                        "tagCode": "STRING",
+                        "name": "STRING",
+                        "description": "STRING",
+                        "location": {
+                          "tagCode": "STRING",
+                          "description": "STRING",
+                          "geolocation": ["NUMBER", "NUMBER"]
+                        }
+                      },
+                      "device": {
+                        "serialNumber": "STRING",
+                        "type": "STRING",
+                        "description": "STRING"
+                      },
+                      "sensor": {
+                        "type": "NUMBER",
+                        "typeString": "STRING",
+                        "description": "STRING",
+                        "unit": "STRING"
+                      },
+                      "data": {
+                        "unit": "STRING",
+                        "values": {
+                          "min": "NUMBER",
+                          "max": "NUMBER",
+                          "average": "NUMBER",
+                          "current": "NUMBER"
+                        }
+                      }
+                    }
+                  ]
+    /locations:
+      securedBy: [JWT]
+      get:
+        description: Gets an array of locations.
+        responses:
+          200:
+            description: Returns an array of locations for this client.
+            body:
+              application/json:
+                example: |
+                  [{
+                    "_id": "OBJECT_ID",
+                    "created": "DATE",
+                    "updated": "DATE",
+                    "tagCode": "STRING",
+                    "description": "STRING",
+                    "geolocation": ["NUMBER", "NUMBER"],
+                    "address": {
+                      "street": "STRING",
+                      "street2": "STRING",
+                      "city": "STRING",
+                      "province": "STRING",
+                      "postalCode": "STRING",
+                      "country": "STRING"
+                    }
+                  }]
+      post:
+        description: Adds a new location to the client.
+        body:
+          application/json:
+            example: |
+              {
+                "message": "Location added",
+                "_id": "OBJECT_ID"
+              }
+        responses:
+          200:
+            description: Location added.
+            body:
+              application/json:
+                example: |
+                  {
+                    "_id": "OBJECT_ID",
+                    "created": "DATE",
+                    "updated": "DATE",
+                    "tagCode": "STRING",
+                    "description": "STRING",
+                    "geolocation": ["NUMBER", "NUMBER"],
+                    "address": {
+                      "street": "STRING",
+                      "street2": "STRING",
+                      "city": "STRING",
+                      "province": "STRING",
+                      "postalCode": "STRING",
+                      "country": "STRING"
+                    }
+                  }
+    /devices:
+      securedBy: [JWT]
+      get:
+        description: Gets an array of the client's devices.
+        responses:
+          200:
+            description: An array of devices.
+            body:
+              application/json:
+                example: |
+                  [{
+                    "_id": "OBJECT_ID",
+                    "created": "DATE",
+                    "updated": "DATE",
+                    "serialNumber": "STRING",
+                    "type": "STRING",
+                    "tagCode": "STRING",
+                    "description": "STRING",
+                    "sensors": [{
+                      "tagCode": "STRING",
+                      "type": "STRING",
+                      "typeString": "STRING",
+                      "description": "STRING",
+                      "unit": "STRING"
+                    }],
+                    "asset": "OBJECT_ID"
+                  }]
+    /users:
+      securedBy: [JWT]
+      get:
+        description: Gets an array of the client's users.
+        responses:
+          200:
+            description: Returns an array of the client's users.
+            body:
+              application/json:
+                example: |
+                  [
+                    {
+                      "_id": "OBJECT_ID",
+                      "created": "DATE",
+                      "updated": "DATE",
+                      "firstName": "STRING",
+                      "lastName": "STRING",
+                      "email": "STRING",
+                      "role": "STRING",
+                      "active": "BOOLEAN"
+                    }
+                  ]
+      post:
+        description: Adds a new user to the client.
+        body:
+          application/json:
+            example: |
+              {
+                "firstName": "STRING",
+                "lastName": "STRING",
+                "email": "STRING",
+                "role": "STRING",
+                "active": "BOOLEAN"
+              }
+        responses:
+          200:
+            description: User added.
+            body:
+              application/json:
+                example: |
+                  {
+                    "_id": "OBJECT_ID",
+                    "created": "DATE",
+                    "updated": "DATE",
+                    "firstName": "STRING",
+                    "lastName": "STRING",
+                    "email": "STRING",
+                    "role": "STRING",
+                    "active": "BOOLEAN"
+                  }
+/devices:
+  displayName: DEVICES
+  description: |
+    Lets you manipulate your devices.
+  securedBy: [JWT]
+  get:
+    description: |
+      Allows you to get a list of all of your devices.
+    responses:
+      200:
+        description: Returns an array of all of devices you have access to.
+        body:
+          application/json:
+            example: |
+              [
+                {
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "serialNumber": "STRING",
+                  "type": "STRING",
+                  "description": "STRING",
+                  "sensors": [{
+                    "tagCode": "STRING",
+                    "type": "STRING",
+                    "typeString": "STRING",
+                    "description": "STRING",
+                    "unit": "STRING"
+                  }],
+                  "asset": "OBJECT_ID",
+                  "location": "OBJECT_ID"
+                }
+              ]
+  /{device_id}:
     description: |
       Allows you to work with an individual device.
     securedBy: [JWT]
     uriParameters:
-      id:
-        description: The device's serial number
+      device_id:
+        description: The device's object ID
         type: string
     get:
       description: |
         Returns a single device.
-      body:
-        application/json:
-          example: |
-            { }
       responses:
         200:
           description: Returns a device.
@@ -148,20 +1197,21 @@ documentation:
             application/json:
               example: |
                 {
-                  "created": "2016-01-29T16:04:27.000Z",
-                  "updated": "2016-01-29T16:04:27.000Z",
-                  "serialNumber": "15",
-                  "type": "hydrant",
-                  "code": "Client assigned code",
-                  "descriptor": "Client assigned descriptor"
-                }
-        404:
-          description: Device not found.
-          body:
-            application/json:
-              example: |
-                {
-                  "message": "Device not found"
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "serialNumber": "STRING",
+                  "type": "STRING",
+                  "description": "STRING",
+                  "sensors": [{
+                    "tagCode": "STRING",
+                    "type": "STRING",
+                    "typeString": "STRING",
+                    "description": "STRING",
+                    "unit": "STRING"
+                  }],
+                  "asset": "OBJECT_ID",
+                  "location": "OBJECT_ID"
                 }
     put:
       description: |
@@ -170,8 +1220,8 @@ documentation:
         application/json:
           example: |
             {
-              "code": "Client assigned code",
-              "descriptor": "Client assigned descriptor"
+              "type": "STRING",
+              "description": "STRING"
             }
       responses:
         200:
@@ -180,122 +1230,239 @@ documentation:
             application/json:
               example: |
                 {
-                  "message": "Device saved."
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "serialNumber": "STRING",
+                  "type": "STRING",
+                  "description": "STRING"
                 }
-        404:
-          description: Device not found.
-          body:
-            application/json:
-              example: |
-                {
-                  "message": "Device not found"
-                }
-    /settings:
+    /onboard/{client_id}:
+      securedBy: [JWT]
+      uriParameters:
+        client_id:
+          description: The client's ObjectId.
+          type: string
+      post:
+        description: |
+          Allows you to onboard a device to a client.
+        responses:
+          200:
+            description: Deviced onboarded to client.
+            body:
+              application/json:
+                example: |
+                  {
+                    "message": "Device onboarded."
+                  }
+    /sensors:
       securedBy: [JWT]
       get:
         description: |
-          Allows you to get the settings for a device.
-        body:
-          application/json:
-            example: |
-              { }
+          Allows you to get the sensors available on the device.
         responses:
           200:
-            description: Returns the settings for a device.
-            body:
-              application/json:
-                example: |
-                  {
-                    "serialNumber": "15",
-                    "code": "Client assigned code",
-                    "normalrate": 0,
-                    "highlimit": 0,
-                    "lowlimit": 0,
-                    "deadband": 0,
-                    "bufferallduration": 0,
-                    "preroll": 0,
-                    "postroll": 0,
-                    "starttime": "2016-01-29T16:04:27.000Z",
-                    "stoptime": "2016-01-29T16:04:27.000Z"
-                  }
-          404:
-            description: Device not found.
-            body:
-              application/json:
-                example: |
-                  {
-                    "message": "Device not found"
-                  }
-      put:
-        description: |
-          Allows you to set the settings for a device.
-        body:
-          application/json:
-            example: |
-              {
-                "normalrate": 0,
-                "highlimit": 0,
-                "lowlimit": 0,
-                "deadband": 0,
-                "bufferallduration": 0,
-                "preroll": 0,
-                "postroll": 0,
-                "starttime": "2016-01-29T16:04:27.000Z",
-                "stoptime": "2016-01-29T16:04:27.000Z"
-              }
-        responses:
-          200:
-            description: Successful
-            body:
-              application/json:
-                example: |
-                  {
-                    "message": "Settings have been saved"
-                  }
-          404:
-            description: Device not found.
-            body:
-              application/json:
-                example: |
-                  {
-                    "message": "Device not found"
-                  }
-    /measurements:
-      securedBy: [JWT]
-      get:
-        description: |
-          Returns a list of measurements.
-        queryParameters:
-          start:
-            example: start=2016-01-29T16:04:27.000Z
-          end:
-            example: end=2016-01-29T16:04:27.000Z
-          sensors:
-            example: sensors=temp&sensors=pres&sensors=humi&sensors=aclx&sensors=acly&&sensors=aclz&&sensors=shck
-        responses:
-          200:
-            description: An array of measurements
+            description: Returns the sensors available on the device.
             body:
               application/json:
                 example: |
                   [{
-                    "created": "2016-01-29T16:04:27.000Z",
-                    "sensor": "temperature",
-                    "data": {
-                       "unit": "celcius",
-                       "values": {
-                           "min": 50,
-                           "max": 80,
-                           "average":65,
-                           "current": 55
-                       }
-                     }
+                    "_id": "OBJECT_ID",
+                    "type": "NUMBER",
+                    "typeString": "STRING",
+                    "tagCode": "STRING",
+                    "description": "STRING",
+                    "unit": "STRING"
                   }]
-          404:
-            description: Device not found.
+      /{sensor_id}:
+        securedBy: [JWT]
+        uriParameters:
+          sensor_id:
+            description: The sensor's object ID
+            type: string
+        get:
+          description: |
+            Allows you to get details on a single sensor on the device.
+          responses:
+            200:
+              description: Returns the details of a single sensor.
+              body:
+                application/json:
+                  example: |
+                    {
+                      "_id": "OBJECT_ID",
+                      "type": "NUMBER",
+                      "typeString": "STRING",
+                      "tagCode": "STRING",
+                      "description": "STRING",
+                      "unit": "STRING"
+                    }
+/locations/{location_id}:
+  displayName: LOCATIONS
+  description: |
+    Lets you view and edit a location.
+  securedBy: [JWT]
+  uriParameters:
+    location_id:
+      description: The location's ObjectId.
+      type: string
+  get:
+    description: Gets a single location.
+    responses:
+      200:
+        description: A single location.
+        body:
+          application/json:
+            example: |
+              {
+                "_id": "OBJECT_ID",
+                "created": "DATE",
+                "updated": "DATE",
+                "tagCode": "STRING",
+                "description": "STRING",
+                "geolocation": ["NUMBER", "NUMBER"],
+                "address": {
+                  "street": "STRING",
+                  "street2": "STRING",
+                  "city": "STRING",
+                  "province": "STRING",
+                  "postalCode": "STRING",
+                  "country": "STRING"
+                }
+              }
+  put:
+    description: Updates a location.
+    body:
+      application/json:
+        example: |
+          {
+            "tagCode": "STRING",
+            "description": "STRING",
+            "geolocation": ["NUMBER", "NUMBER"],
+            "address": {
+              "street": "STRING",
+              "street2": "STRING",
+              "city": "STRING",
+              "province": "STRING",
+              "postalCode": "STRING",
+              "country": "STRING"
+            }
+          }
+    responses:
+      200:
+        description: Location updated.
+        body:
+          application/json:
+            example: |
+              {
+                "_id": "OBJECT_ID",
+                "created": "DATE",
+                "updated": "DATE",
+                "tagCode": "STRING",
+                "description": "STRING",
+                "geolocation": ["NUMBER", "NUMBER"],
+                "address": {
+                  "street": "STRING",
+                  "street2": "STRING",
+                  "city": "STRING",
+                  "province": "STRING",
+                  "postalCode": "STRING",
+                  "country": "STRING"
+                }
+              }
+/users:
+  displayName: USERS
+  description: |
+    Lets you manipulate users.
+  securedBy: [JWT]
+  get:
+    description: Gets an array of users.
+    responses:
+      200:
+        description: Returns as array of users.
+        body:
+          application/json:
+            example: |
+              [
+                {
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "firstName": "STRING",
+                  "lastName": "STRING",
+                  "email": "STRING",
+                  "role": "STRING",
+                  "active": "BOOLEAN"
+                }
+              ]
+  /{user_id}:
+    securedBy: [JWT]
+    uriParameters:
+      user_id:
+        description: The users's ObjectId.
+        type: string
+    get:
+      description: Gets a single user.
+      responses:
+        200:
+          description: Returns a single user.
+          body:
+            application/json:
+              example: |
+                {
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "firstName": "STRING",
+                  "lastName": "STRING",
+                  "email": "STRING",
+                  "role": "STRING",
+                  "active": "BOOLEAN"
+                }
+    put:
+      description: Edits a user (can't change password).
+      body:
+        application/json:
+          example: |
+            {
+              "firstName": "STRING",
+              "lastName": "STRING",
+              "email": "STRING",
+              "role": "STRING",
+              "active": "BOOLEAN"
+            }
+      responses:
+        200:
+          description: User updated.
+          body:
+            application/json:
+              example: |
+                {
+                  "_id": "OBJECT_ID",
+                  "created": "DATE",
+                  "updated": "DATE",
+                  "firstName": "STRING",
+                  "lastName": "STRING",
+                  "email": "STRING",
+                  "role": "STRING",
+                  "active": "BOOLEAN"
+                }
+    /password:
+      securedBy: [JWT]
+      put:
+        description: Changes a user's password.
+        body:
+          application/json:
+            example: |
+              {
+                "newPassword": "STRING"
+              }
+        responses:
+          200:
+            description: Password changed.
             body:
               application/json:
                 example: |
                   {
-                    "message": "Device not found"
+                    "message": "The password has been changed."
                   }
