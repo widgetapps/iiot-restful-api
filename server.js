@@ -20,6 +20,7 @@ mongoose.Promise = global.Promise;
 // Bootstrap db connection
 
 var dbOptions = {
+    useMongoClient: true,
     server: {
         auto_reconnect:true,
         socketOptions: {
