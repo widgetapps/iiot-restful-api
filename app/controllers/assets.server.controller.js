@@ -17,6 +17,7 @@ var mongoose = require('mongoose'),
     endpoint = 'asset';
 
 exports.getOne = function(req, res) {
+    // TODO: Get this v2 ready
 
 };
 
@@ -26,6 +27,18 @@ exports.update = function(req, res) {
 
 exports.listDevices = function(req, res) {
 
+};
+
+exports.listSettings = function(req, res) {
+    // TODO: Get this v2 ready
+};
+
+exports.getSetting = function(req, res) {
+    // TODO: Get this v2 ready
+};
+
+exports.updateSetting = function(req, res) {
+    // TODO: Get this v2 ready
 };
 
 // Remember to add/update the tag when a device is added to an asset. Think about other things that need updating!

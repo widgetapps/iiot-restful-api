@@ -417,6 +417,7 @@ exports.insertLocation = function(req, res) {
 };
 
 exports.listAssets = function(req, res) {
+    // TODO: Get this v2 ready
     authorize.validate(endpoint, req, res, 'user', function() {
         var query;
 
@@ -508,6 +509,7 @@ exports.insertAsset = function(req, res) {
 };
 
 exports.listDevices = function(req, res) {
+    // TODO: Get this v2 ready
     authorize.validate(endpoint, req, res, 'user', function() {
         var query;
 

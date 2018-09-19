@@ -38,6 +38,7 @@ exports.list = function(req, res) {
 };
 
 exports.getOne = function(req, res) {
+    // TODO: Get this v2 ready
     var clientId = mongoose.Types.ObjectId(req.user.client);
     var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
