@@ -20,7 +20,6 @@ mongoose.Promise = global.Promise;
 // Bootstrap db connection
 
 var dbOptions = {
-    useMongoClient: true
 };
 
 var conn = mongoose.connection;
