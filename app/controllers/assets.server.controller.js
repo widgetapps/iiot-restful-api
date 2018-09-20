@@ -277,7 +277,7 @@ exports.addDevice = function(req, res) {
                 return;
             }
 
-             var devicePromise = Device.findOne({ _id: deviceId }).populate('sensors.sensor').exec();
+             var devicePromise = Device.findOne({ _id: deviceId }).populate('sensors').exec();
              devicePromise.then(function (device) {
                  if (!device) {
                      res.status(404).send({
