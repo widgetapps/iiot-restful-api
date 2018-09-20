@@ -305,7 +305,10 @@ exports.addDevice = function(req, res) {
                              return;
                          }
 
-                         res.json(device);
+                         res.json({
+                             device: device,
+                             asset: asset
+                         });
 
                          return;
 
