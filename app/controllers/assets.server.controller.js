@@ -35,8 +35,8 @@ exports.getOne = function(req, res) {
                         authorized = true;
                     }
                     break;
-                case 'manager':
                 case 'admin':
+                case 'manager':
                     if (req.user.client === asset.client || _.contains(req.user.resellerClients, asset.client)) {
                         authorized = true;
                     }
