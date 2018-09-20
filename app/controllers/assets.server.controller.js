@@ -27,6 +27,7 @@ exports.getOne = function(req, res) {
 
             console.log('User client ID:  ' + req.user.client);
             console.log('Asset client ID: ' + asset.client);
+            console.log('Role: ' + req.user.role);
 
             switch (req.user.role) {
                 case 'user':
