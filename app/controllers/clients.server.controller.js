@@ -541,7 +541,8 @@ exports.listDevices = function(req, res) {
             description: 1,
             sensors: 1,
             location: 1,
-            asset: 1
+            asset: 1,
+            client: 1
         })
             .exec(function(err, devices) {
                 if (err) {
@@ -559,9 +560,6 @@ exports.listDevices = function(req, res) {
 
 exports.insertDevice = function(req, res) {
     authorize.validate(endpoint, req, res, 'admin', function() {
-        var sensors = _.map(req.body.sensors, function(s) {
-            return s.tagCode;
-        });
 
         var device = {
             serialNumber: req.body.serialNumber,
