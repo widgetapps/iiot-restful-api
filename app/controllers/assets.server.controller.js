@@ -296,7 +296,7 @@ exports.addDevice = function(req, res) {
                      }
                      /* TODO: Copy the alert limits from the Asset to the Device. The models need to be updated to do this. */
                      device.asset = mongoose.Types.ObjectId(asset._id);
-                     device.location = mongoose.Types.ObjectId(asset.location);
+                     device.location = mongoose.Types.ObjectId(asset.location._id);
                      device.save(function (err, deviceSaved) {
                          if (err) {
                              res.status(400).send({
