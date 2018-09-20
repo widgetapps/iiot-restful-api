@@ -25,6 +25,9 @@ exports.getOne = function(req, res) {
         promise.then(function(asset) {
             var authorized = false;
 
+            console.log('User client ID:  ' + req.user.client);
+            console.log('Asset client ID: ' + asset.client);
+
             switch (req.user.role) {
                 case 'user':
                     if (req.user.client === asset.client) {
