@@ -320,7 +320,7 @@ exports.addDevice = function(req, res) {
                                      description: {
                                          location: asset.location.description,
                                          asset: asset.description,
-                                         sensor: sensorData.sensor.description
+                                         sensor: sensorData.description
                                      },
                                      unit: sensorData.unit,
                                      active: true,
