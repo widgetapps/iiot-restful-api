@@ -18,6 +18,45 @@ var mongoose = require('mongoose'),
 
 exports.getOne = function(req, res) {
     // TODO: Get this v2 ready
+    authorize.validate(endpoint, req, res, 'asset', function() {
+
+        var promise = Asset.findById(req.params.assetId).exec();
+
+        promise.then(function(asset) {
+            var authorized = false;
+
+            switch (req.user.role) {
+                case 'user':
+                    if (req.user.client === asset.client) {
+                        authorized = true;
+                    }
+                    break;
+                case 'manager':
+                case 'admin':
+                    if (req.user.client === asset.client || _.contains(req.user.resellerClients, asset.client)) {
+                        authorized = true;
+                    }
+                    break;
+                case 'super':
+                    authorized = true;
+                    break;
+            }
+
+            if (!authorized) {
+                res.status(401).send({
+                    message: 'You are not authorized to access this resource.'
+                });
+                return;
+            }
+
+            res.json(asset);
+
+        }).catch(function(error) {
+            res.status(404).send({
+                message: 'Error with the database.'
+            });
+        });
+    });
 
 };
 
@@ -31,14 +70,110 @@ exports.listDevices = function(req, res) {
 
 exports.listSettings = function(req, res) {
     // TODO: Get this v2 ready
+    authorize.validate(endpoint, req, res, 'asset', function() {
+
+        var promise = Asset.findById(req.params.assetId).exec();
+
+        promise.then(function(asset) {
+            var authorized = false;
+
+            switch (req.user.role) {
+                case 'user':
+                    if (req.user.client === asset.client) {
+                        authorized = true;
+                    }
+                    break;
+                case 'manager':
+                case 'admin':
+                    if (req.user.client === asset.client || _.contains(req.user.resellerClients, asset.client)) {
+                        authorized = true;
+                    }
+                    break;
+                case 'super':
+                    authorized = true;
+                    break;
+            }
+
+            if (!authorized) {
+                res.status(401).send({
+                    message: 'You are not authorized to access this resource.'
+                });
+                return;
+            }
+
+            res.json(asset.settings);
+
+        }).catch(function(error) {
+            res.status(404).send({
+                message: 'Error with the database.'
+            });
+        });
+    });
 };
 
 exports.getSetting = function(req, res) {
     // TODO: Get this v2 ready
+    var promise = Asset.findOne({ _id: req.params.assetId, 'settings.key': req.params.settingKey }, {client: 1, 'settings.$': 1}).exec();
+
+    promise.then(function(asset) {
+        var authorized = false;
+
+        switch (req.user.role) {
+            case 'user':
+                if (req.user.client === asset.client) {
+                    authorized = true;
+                }
+                break;
+            case 'manager':
+            case 'admin':
+                if (req.user.client === asset.client || _.contains(req.user.resellerClients, asset.client)) {
+                    authorized = true;
+                }
+                break;
+            case 'super':
+                authorized = true;
+                break;
+        }
+
+        if (!authorized) {
+            res.status(401).send({
+                message: 'You are not authorized to access this resource.'
+            });
+            return;
+        }
+
+        res.json(asset.settings[0]);
+
+    }).catch(function(error) {
+        res.status(404).send({
+            message: 'Error with the database.'
+        });
+    });
 };
 
 exports.updateSetting = function(req, res) {
     // TODO: Get this v2 ready
+    Asset.findOneAndUpdate(
+        { '_id': req.params.assetId, 'settings.key': req.params.settingKey},
+        {
+            '$set': {
+                'settings.$.value': req.body.value
+            }
+        },
+        function (err, asset) {
+
+            if (err) {
+                res.status(404).send({
+                    message: 'Error with the database.'
+                });
+            }
+
+            res.json({
+                key: asset.settings[0].key,
+                value: asset.settings[0].value
+            });
+        }
+    );
 };
 
 // Remember to add/update the tag when a device is added to an asset. Think about other things that need updating!

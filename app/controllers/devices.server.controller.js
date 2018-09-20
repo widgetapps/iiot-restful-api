@@ -38,7 +38,7 @@ exports.list = function(req, res) {
 };
 
 exports.getOne = function(req, res) {
-    // TODO: Get this v2 ready
+    // TODO: Secure this!
     var clientId = mongoose.Types.ObjectId(req.user.client);
     var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
@@ -48,9 +48,10 @@ exports.getOne = function(req, res) {
             updated: 1,
             serialNumber: 1,
             type: 1,
+            description: 1,
             sensors: 1,
-            code: 1,
-            descriptor: 1
+            location: 1,
+            asset: 1
         },function(err, device) {
             if (!device || err) {
                 res.status(404).send({

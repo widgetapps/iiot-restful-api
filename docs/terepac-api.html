@@ -237,51 +237,61 @@ x-access-token: [jwt]
     }
 }
 </code></pre></div></div></div></div></div></div></div></div><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_assets__asset_id__settings"><span class="parent">/assets/{asset_id}</span>/settings</a> <span class="methods"><a href="#assets__asset_id__settings_get"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span></a></span></h4></div><div id="panel_assets__asset_id__settings" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#assets__asset_id__settings_get'" class="list-group-item"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span><div class="method_description"><p>Allows you to get and alter the settings for a asset.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="assets__asset_id__settings_get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get <span class="glyphicon glyphicon-lock" title="Authentication required"></span></span> <span class="parent">/assets/{asset_id}</span>/settings</h4></div><div class="modal-body"><div class="alert alert-info"><p>Allows you to get and alter the settings for a asset.</p></div><div class="alert alert-warning"><span class="glyphicon glyphicon-lock" title="Authentication required"></span> Secured by <b>JWT</b><p>A JSON Web Token &amp; Client ID must be sent in the request header.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#assets__asset_id__settings_get_request" data-toggle="tab">Request</a></li><li><a href="#assets__asset_id__settings_get_response" data-toggle="tab">Response</a></li><li><a href="#assets__asset_id__settings_get_securedby" data-toggle="tab">Security</a></li></ul><div class="tab-content"><div class="tab-pane active" id="assets__asset_id__settings_get_request"><h3>URI Parameters</h3><ul><li><strong>asset_id</strong>: <em>required (string)</em><p>The asset&#39;s ObjectId.</p></li></ul></div><div class="tab-pane" id="assets__asset_id__settings_get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns an array of the setting names (key).</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>[{
+  "key": "pressure-interval",
   "name": "pressure-interval",
   "datatype": "int",
   "range": "MIXED",
   "value": "MIXED"
 },{
+  "key": "battery-interval",
   "name": "battery-interval",
   "datatype": "int",
   "range": "MIXED",
   "value": "MIXED"
 },{
+  "key": "temperature-interval",
   "name": "temperature-interval",
   "datatype": "int",
   "range": "MIXED",
   "value": "MIXED"
 },{
+  "key": "connect-interval",
   "name": "connect-interval",
   "datatype": "int",
   "range": "MIXED",
   "value": "MIXED"
 },{
+  "key": "high-limit",
   "name": "high-limit",
   "datatype": "double",
   "range": "MIXED",
   "value": "MIXED"
 },{
+  "key": "low-limit",
   "name": "low-limit",
   "datatype": "double",
   "range": "MIXED",
   "value": "MIXED"
 },{
+  "key": "dead-band",
   "name": "dead-band",
   "datatype": "double",
   "range": "MIXED",
   "value": "MIXED"
 },{
+  "key": "pre-roll",
   "name": "pre-roll",
   "datatype": "int",
   "range": "MIXED",
   "value": "MIXED"
 },{
+  "key": "post-roll",
   "name": "post-roll",
   "datatype": "int",
   "range": "MIXED",
   "value": "MIXED"
 },{
+  "key": "start-time",
   "name": "start-time",
   "datatype": "date",
   "range": "MIXED",
@@ -292,15 +302,18 @@ x-access-token: [jwt]
   "message": "invalid api key"
 }
 </code></pre></div></div></div></div></div></div></div></div><div class="panel panel-white resource-modal"><div class="panel-heading"><h4 class="panel-title"><a class="collapsed" data-toggle="collapse" href="#panel_assets__asset_id__settings__setting_key_"><span class="parent">/assets/{asset_id}/settings</span>/{setting_key}</a> <span class="methods"><a href="#assets__asset_id__settings__setting_key__get"><span class="badge badge_get">get</span></a> <a href="#assets__asset_id__settings__setting_key__put"><span class="badge badge_put">put</span></a></span></h4></div><div id="panel_assets__asset_id__settings__setting_key_" class="panel-collapse collapse"><div class="panel-body"><div class="list-group"><div onclick="window.location.href = '#assets__asset_id__settings__setting_key__get'" class="list-group-item"><span class="badge badge_get">get</span><div class="method_description"><p>Gets an individual setting for an asset. The key is validated from the associated device settings.</p></div><div class="clearfix"></div></div><div onclick="window.location.href = '#assets__asset_id__settings__setting_key__put'" class="list-group-item"><span class="badge badge_put">put</span><div class="method_description"><p>Allows you to set an individual setting for an asset. All valures are posted as STRING. The value is cast based on setting data type and is validated from the associated settings range if present.</p></div><div class="clearfix"></div></div></div></div></div><div class="modal fade" tabindex="0" id="assets__asset_id__settings__setting_key__get"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_get">get</span> <span class="parent">/assets/{asset_id}/settings</span>/{setting_key}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Gets an individual setting for an asset. The key is validated from the associated device settings.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#assets__asset_id__settings__setting_key__get_request" data-toggle="tab">Request</a></li><li><a href="#assets__asset_id__settings__setting_key__get_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="assets__asset_id__settings__setting_key__get_request"><h3>URI Parameters</h3><ul><li><strong>asset_id</strong>: <em>required (string)</em><p>The asset&#39;s ObjectId.</p></li><li><strong>setting_key</strong>: <em>required (string)</em></li></ul></div><div class="tab-pane" id="assets__asset_id__settings__setting_key__get_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns the setting details.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+  "key": "STRING",
   "name": "STRING",
   "datatype": "STRING",
   "range": "MIXED",
   "value": "MIXED"
 }
 </code></pre></div></div></div></div></div></div></div><div class="modal fade" tabindex="0" id="assets__asset_id__settings__setting_key__put"><div class="modal-dialog modal-lg"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title" id="myModalLabel"><span class="badge badge_put">put</span> <span class="parent">/assets/{asset_id}/settings</span>/{setting_key}</h4></div><div class="modal-body"><div class="alert alert-info"><p>Allows you to set an individual setting for an asset. All valures are posted as STRING. The value is cast based on setting data type and is validated from the associated settings range if present.</p></div><ul class="nav nav-tabs"><li class="active"><a href="#assets__asset_id__settings__setting_key__put_request" data-toggle="tab">Request</a></li><li><a href="#assets__asset_id__settings__setting_key__put_response" data-toggle="tab">Response</a></li></ul><div class="tab-content"><div class="tab-pane active" id="assets__asset_id__settings__setting_key__put_request"><h3>URI Parameters</h3><ul><li><strong>asset_id</strong>: <em>required (string)</em><p>The asset&#39;s ObjectId.</p></li><li><strong>setting_key</strong>: <em>required (string)</em></li></ul><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+  "name": "STRING",
   "value": "80"
 }
 </code></pre></div></div><div class="tab-pane" id="assets__asset_id__settings__setting_key__put_response"><h2>HTTP status code <a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Returns the new setting details.</p><h3>Body</h3><p><strong>Media type</strong>: application/json</p><p><strong>Type</strong>: object</p><p><strong>Example</strong>:</p><div class="examples"><pre><code>{
+  "key": "STRING",
   "name": "STRING",
   "value": "MIXED"
 }

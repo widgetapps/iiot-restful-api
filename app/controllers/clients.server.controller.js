@@ -417,7 +417,6 @@ exports.insertLocation = function(req, res) {
 };
 
 exports.listAssets = function(req, res) {
-    // TODO: Get this v2 ready
     authorize.validate(endpoint, req, res, 'user', function() {
         var query;
 
@@ -449,7 +448,7 @@ exports.listAssets = function(req, res) {
             tagCode: 1,
             name: 1,
             description: 1,
-            client: 1,
+            settings: 1,
             location: 1,
             'location.tagCode': 1,
             'location.description': 1,
@@ -509,7 +508,6 @@ exports.insertAsset = function(req, res) {
 };
 
 exports.listDevices = function(req, res) {
-    // TODO: Get this v2 ready
     authorize.validate(endpoint, req, res, 'user', function() {
         var query;
 
@@ -540,14 +538,11 @@ exports.listDevices = function(req, res) {
             updated: 1,
             serialNumber: 1,
             type: 1,
-            sensors: 1,
             description: 1,
-            client: 1,
+            sensors: 1,
             location: 1,
             asset: 1
         })
-            .populate('assets')
-            .populate('location')
             .exec(function(err, devices) {
                 if (err) {
                     res.status(500).send({

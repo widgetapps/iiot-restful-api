@@ -16,9 +16,9 @@ var User = require('@terepac/terepac-models').User,
 exports.authenticate = function(req, res) {
 
     console.log('STARTING AUTHENTICATION...');
-    console.log('NODE VERSION: ' + process.version);
+    //console.log('NODE VERSION: ' + process.version);
     console.log('EMAIL: ' + req.body.email);
-    console.log('PASSWORD: ' + req.body.password);
+    //console.log('PASSWORD: ' + req.body.password);
 
     var promise = User.findOne({ email: req.body.email }).exec();
 
