@@ -305,6 +305,10 @@ exports.addDevice = function(req, res) {
                              return;
                          }
 
+                         res.json(device);
+
+                         return;
+
                          console.log('Device added to asset.');
                          console.log('Sensors: ' + JSON.stringify(device));
 
