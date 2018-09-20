@@ -259,7 +259,7 @@ exports.updateSetting = function(req, res) {
 
             res.json({
                 key: asset.settings[0].key,
-                value: asset.settings[0].value
+                value: req.body.value
             });
         }
     );
