@@ -82,8 +82,8 @@ exports.listSettings = function(req, res) {
                         authorized = true;
                     }
                     break;
-                case 'manager':
                 case 'admin':
+                case 'manager':
                     if (req.user.client.toString() === asset.client.toString() || _.contains(req.user.resellerClients, asset.client)) {
                         authorized = true;
                     }
@@ -212,8 +212,8 @@ exports.getSetting = function(req, res) {
                     authorized = true;
                 }
                 break;
-            case 'manager':
             case 'admin':
+            case 'manager':
                 if (req.user.client.toString() === asset.client.toString() || _.contains(req.user.resellerClients, asset.client)) {
                     authorized = true;
                 }
