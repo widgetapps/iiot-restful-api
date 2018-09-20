@@ -305,6 +305,8 @@ exports.addDevice = function(req, res) {
                              return;
                          }
 
+                         console.log('Device added to asset.');
+
                          async.each(device.sensors, function (sensorData, callback) {
                              var fullTag = asset.location.tagCode + '_' + asset.tagCode + '_' + sensorData.tagCode,
                                  query = {'tag.full': fullTag},
@@ -329,6 +331,7 @@ exports.addDevice = function(req, res) {
                                      device: deviceId,
                                      asset: assetId
                                  };
+                             console.log('Tag: ' + fullTag);
 
                              Tag.findOneAndUpdate(query, update, options, function(err, result) {
                                  if (err) {
