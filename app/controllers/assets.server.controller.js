@@ -146,7 +146,7 @@ exports.getSetting = function(req, res) {
 
     }).catch(function(error) {
         res.status(404).send({
-            message: 'Error with the database.'
+            message: 'Error with the database. ' + error
         });
     });
 };
@@ -162,9 +162,9 @@ exports.updateSetting = function(req, res) {
         },
         function (err, asset) {
 
-            if (err) {
+            if (!asset || err) {
                 res.status(404).send({
-                    message: 'Error with the database.'
+                    message: 'Setting not found.'
                 });
             }
 
