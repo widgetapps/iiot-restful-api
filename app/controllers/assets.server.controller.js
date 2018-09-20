@@ -39,6 +39,7 @@ exports.getOne = function(req, res) {
                 case 'manager':
                     console.log('Yes, you should be authorized.');
                     if (req.user.client === asset.client || _.contains(req.user.resellerClients, asset.client)) {
+                        console.log('Illuminati confirmed.');
                         authorized = true;
                     }
                     break;
