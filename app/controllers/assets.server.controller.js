@@ -306,7 +306,7 @@ exports.addDevice = function(req, res) {
                          }
 
                          console.log('Device added to asset.');
-                         console.log('Sensors: ' + JSON.stringify(device.sensors));
+                         console.log('Sensors: ' + JSON.stringify(device));
 
                          async.each(device.sensors, function (sensorData, callback) {
                              var fullTag = asset.location.tagCode + '_' + asset.tagCode + '_' + sensorData.tagCode,
