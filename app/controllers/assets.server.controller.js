@@ -111,6 +111,89 @@ exports.listSettings = function(req, res) {
     });
 };
 
+exports.resetSettings = function(req, res) {
+    Asset.findOneAndUpdate(
+        { '_id': req.params.assetId},
+        {
+            '$set': {
+                settings: [{
+                    key: "pressure-interval",
+                    name: "pressure-interval",
+                    datatype: "int",
+                    range: [1, 100],
+                    value: 10
+                },{
+                    key: "battery-interval",
+                    name: "battery-interval",
+                    datatype: "int",
+                    range: [1, 100],
+                    value: 10
+                },{
+                    key: "temperature-interval",
+                    name: "temperature-interval",
+                    datatype: "int",
+                    range: [1, 100],
+                    value: 10
+                },{
+                    key: "connect-interval",
+                    name: "connect-interval",
+                    datatype: "int",
+                    range: [1, 100],
+                    value: 10
+                },{
+                    key: "high-limit",
+                    name: "high-limit",
+                    datatype: "double",
+                    range: [1.0, 500.0],
+                    value: 80.0
+                },{
+                    key: "low-limit",
+                    name: "low-limit",
+                    datatype: "double",
+                    range: [1.0, 500.0],
+                    value: 80.0
+                },{
+                    key: "dead-band",
+                    name: "dead-band",
+                    datatype: "double",
+                    range: [1.0, 500.0],
+                    value: 80.0
+                },{
+                    key: "pre-roll",
+                    name: "pre-roll",
+                    datatype: "int",
+                    range: [1, 100],
+                    value: 10
+                },{
+                    key: "post-roll",
+                    name: "post-roll",
+                    datatype: "int",
+                    range: [1, 100],
+                    value: 10
+                },{
+                    key: "start-time",
+                    name: "start-time",
+                    datatype: "date",
+                    range: "",
+                    value: ""
+                }]
+            }
+        },
+        function (err, asset) {
+
+            if (!asset || err) {
+                res.status(404).send({
+                    message: 'Asset not found.'
+                });
+            }
+
+            res.json({
+                message: 'Settings have been reset'
+            });
+        }
+    );
+};
+
 exports.getSetting = function(req, res) {
     // TODO: Get this v2 ready
     var promise = Asset.findOne({ _id: req.params.assetId, 'settings.key': req.params.settingKey }, {client: 1, 'settings.$': 1}).exec();
@@ -140,6 +223,12 @@ exports.getSetting = function(req, res) {
                 message: 'You are not authorized to access this resource.'
             });
             return;
+        }
+
+        if (!asset) {
+            res.status(404).send({
+                message: 'Asset not found.'
+            });
         }
 
         res.json(asset.settings[0]);

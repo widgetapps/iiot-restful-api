@@ -11,6 +11,9 @@ module.exports = function(app) {
     app.route('/assets/:assetId/settings')
         .get(assets.listSettings);
 
+    app.route('/assets/:assetId/settings/reset')
+        .get(assets.resetSettings);
+
     app.route('/assets/:assetId/settings/:settingKey')
         .get(assets.getSetting)
         .put(assets.updateSetting);
