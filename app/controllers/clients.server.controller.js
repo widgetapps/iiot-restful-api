@@ -566,64 +566,45 @@ exports.insertDevice = function(req, res) {
         var device = {
             serialNumber: req.body.serialNumber,
             type: req.body.type,
-            tagCode: req.body.tagCode,
             description: req.body.description,
-            settings: req.body.settings,
             client: mongoose.Types.ObjectId(req.params.id)
         };
 
         var deviceSensors = [];
 
-        var sensorPromise = Sensor.find({tagCode: {$in: sensors}}).exec();
-        sensorPromise.then(function (dbSensors) {
+        for (var i = 0; i < req.body.sensors.length; i++) {
+            deviceSensors.push(mongoose.Types.ObjectId(req.body.sensors[i]));
+        }
 
-            _.each(dbSensors, function (sensor) {
-                deviceSensors.push({
-                    sensor: mongoose.Types.ObjectId(sensor._id),
-                    tagCode: sensor.tagCode,
-                    unit: sensor.unit,
-                    limits: {
-                        high: jsonQuery('sensors[tagCode=' + sensor.tagCode + '].limits.high', {data: req.body}).value,
-                        low: jsonQuery('sensors[tagCode=' + sensor.tagCode + '].limits.low', {data: req.body}).value
-                    }
+        device.sensors = deviceSensors;
+        var newDevice = new Device(device);
+
+        newDevice.save(function (err, d) {
+            if (err) {
+                res.status(400).send({
+                    message: 'Error inserting the device: ' + err
                 });
-            });
+            } else {
 
-            device.sensors = deviceSensors;
-            var newDevice = new Device(device);
+                var username = crypto.createHash('md5').update(Buffer.from(device.serialNumber)).digest('hex');
+                var password = util.createHash(username);
 
-            newDevice.save(function (err, d) {
-                if (err) {
-                    res.status(400).send({
-                        message: 'Error inserting the device: ' + err
+                var mqtt = new Mqtt({
+                    username: username,
+                    password: crypto.createHash('sha256').update(password).digest('hex'),
+                    is_superuser: false,
+                    publish: ['telemetry', '$client/' + device.serialNumber],
+                    subscribe: ['system', 'time', 'er/response', '$client/' + device.serialNumber, device.serialNumber + '/response']
+                });
+
+                mqtt.save(function (err, mu) {
+                    res.status(200).send({
+                        _id: d._id
                     });
-                } else {
-
-                    var username = crypto.createHash('md5').update(Buffer.from(device.serialNumber)).digest('hex');
-                    var password = util.createHash(username);
-
-                    /*
-                    console.log('Serial Number: ' + device.serialNumber);
-                    console.log('Username: ' + username);
-                    console.log('Password: ' + password);
-                    */
-
-                    var mqtt = new Mqtt({
-                        username: username,
-                        password: crypto.createHash('sha256').update(password).digest('hex'),
-                        is_superuser: false,
-                        publish: ['telemetry', '$client/' + device.serialNumber],
-                        subscribe: ['system', 'time', 'er/response', '$client/' + device.serialNumber, device.serialNumber + '/response']
-                    });
-
-                    mqtt.save(function (err, mu) {
-                        res.status(200).send({
-                            _id: d._id
-                        });
-                    });
-                }
-            });
+                });
+            }
         });
+
     });
 };
 

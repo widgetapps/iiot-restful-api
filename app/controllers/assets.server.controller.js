@@ -69,7 +69,6 @@ exports.listDevices = function(req, res) {
 };
 
 exports.listSettings = function(req, res) {
-    // TODO: Get this v2 ready
     authorize.validate(endpoint, req, res, 'asset', function() {
 
         var promise = Asset.findById(req.params.assetId).exec();
@@ -195,7 +194,6 @@ exports.resetSettings = function(req, res) {
 };
 
 exports.getSetting = function(req, res) {
-    // TODO: Get this v2 ready
     var promise = Asset.findOne({ _id: req.params.assetId, 'settings.key': req.params.settingKey }, {client: 1, 'settings.$': 1}).exec();
 
     promise.then(function(asset) {
@@ -241,7 +239,6 @@ exports.getSetting = function(req, res) {
 };
 
 exports.updateSetting = function(req, res) {
-    // TODO: Get this v2 ready
     Asset.findOneAndUpdate(
         { '_id': req.params.assetId, 'settings.key': req.params.settingKey},
         {
