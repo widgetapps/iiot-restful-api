@@ -25,21 +25,15 @@ exports.getOne = function(req, res) {
         promise.then(function(asset) {
             var authorized = false;
 
-            console.log('User client ID:  ' + req.user.client);
-            console.log('Asset client ID: ' + asset.client);
-            console.log('Role: ' + req.user.role);
-
             switch (req.user.role) {
                 case 'user':
-                    if (req.user.client === asset.client) {
+                    if (req.user.client.toString() === asset.client.toString()) {
                         authorized = true;
                     }
                     break;
                 case 'admin':
                 case 'manager':
-                    console.log('Yes, you should be authorized.');
                     if (req.user.client.toString() === asset.client.toString() || _.contains(req.user.resellerClients, asset.client)) {
-                        console.log('Illuminati confirmed.');
                         authorized = true;
                     }
                     break;
@@ -84,13 +78,13 @@ exports.listSettings = function(req, res) {
 
             switch (req.user.role) {
                 case 'user':
-                    if (req.user.client === asset.client) {
+                    if (req.user.client.toString() === asset.client.toString()) {
                         authorized = true;
                     }
                     break;
                 case 'manager':
                 case 'admin':
-                    if (req.user.client === asset.client || _.contains(req.user.resellerClients, asset.client)) {
+                    if (req.user.client.toString() === asset.client.toString() || _.contains(req.user.resellerClients, asset.client)) {
                         authorized = true;
                     }
                     break;
@@ -117,6 +111,13 @@ exports.listSettings = function(req, res) {
 };
 
 exports.resetSettings = function(req, res) {
+    if (req.user.role !== 'super') {
+        res.status(401).send({
+            message: 'You are not authorized to access this resource.'
+        });
+        return;
+    }
+
     Asset.findOneAndUpdate(
         { '_id': req.params.assetId},
         {
@@ -207,13 +208,13 @@ exports.getSetting = function(req, res) {
 
         switch (req.user.role) {
             case 'user':
-                if (req.user.client === asset.client) {
+                if (req.user.client.toString() === asset.client.toString()) {
                     authorized = true;
                 }
                 break;
             case 'manager':
             case 'admin':
-                if (req.user.client === asset.client || _.contains(req.user.resellerClients, asset.client)) {
+                if (req.user.client.toString() === asset.client.toString() || _.contains(req.user.resellerClients, asset.client)) {
                     authorized = true;
                 }
                 break;
