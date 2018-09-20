@@ -24,45 +24,42 @@ var mongoose = require('mongoose'),
     jsonQuery = require('json-query');
 
 exports.list = function(req, res) {
-    authorize.validate(endpoint, req, res, 'user', function() {
-        // Build the query based on role.
-        var query;
+    var query;
 
-        switch (req.user.role) {
-            case 'user':
-                query = {
-                    _id: req.user.client
-                };
-                break;
-            case 'manager':
-            case 'admin':
-                query = {
-                    $or: [{_id: req.user.client}, {resellerClients: req.user.client}]
-                };
-                break;
-            case 'super':
-                query = {};
-                break;
-            default:
-                res.status(401).send({
-                    message: 'You are not authorized to access this resource.'
-                });
-                return;
-        }
-
-        Client.find( query,
-            {
-                created: 1,
-                updated: 1,
-                'apikey.id': 1,
-                companyName: 1,
-                address: 1,
-                contact: 1,
-                reseller: 1
-            }, function(err, clients) {
-                res.json(clients);
+    switch (req.user.role) {
+        case 'user':
+            query = {
+                _id: req.user.client
+            };
+            break;
+        case 'manager':
+        case 'admin':
+            query = {
+                $or: [{_id: req.user.client}, {resellerClients: req.user.client}]
+            };
+            break;
+        case 'super':
+            query = {};
+            break;
+        default:
+            res.status(401).send({
+                message: 'You are not authorized to access this resource.'
             });
-    });
+            return;
+    }
+
+    Client.find( query,
+        {
+            created: 1,
+            updated: 1,
+            'apikey.id': 1,
+            companyName: 1,
+            address: 1,
+            contact: 1,
+            reseller: 1
+        }, function(err, clients) {
+            res.json(clients);
+        });
 
 
 };
