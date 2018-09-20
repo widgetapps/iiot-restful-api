@@ -42,6 +42,8 @@ function validateClientEndpoint(req, res, role, callback) {
     }
 
     // Sandbox into the user's client and/or resellers
+    console.log('User Client ID: ' + req.user.client);
+    console.log('Param Client ID: ' + req.params.id);
     if (req.user.client === req.params.id || _.contains(req.user.resellerClients, req.params.id)){
         if (req.user.role === 'admin') {
             callback();
