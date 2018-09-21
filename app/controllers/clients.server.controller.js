@@ -541,6 +541,7 @@ exports.listDevices = function(req, res) {
             asset: 1,
             client: 1
         })
+            .populate(sensors)
             .exec(function(err, devices) {
                 if (err) {
                     res.status(500).send({
