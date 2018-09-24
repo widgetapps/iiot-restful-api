@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    config = require('./config/config'),
+    config = require('../../config/config'),
     mqtt = require('mqtt'),
     Client = require('@terepac/terepac-models').Client,
     Asset = require('@terepac/terepac-models').Asset,
