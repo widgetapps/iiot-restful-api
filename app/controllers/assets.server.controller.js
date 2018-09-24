@@ -402,11 +402,11 @@ function sendConfigToDevice(app, asset, callback) {
             return;
         }
 
-        var config = {};
+        var configSettings = {};
 
         switch (device.type) {
             case 'hydrant':
-                config = device.asset.settings.map(function(setting) {
+                configSettings = device.asset.settings.map(function(setting) {
                     var rObj = {};
                     rObj[setting.key] = setting.value;
                     return rObj;
@@ -425,8 +425,8 @@ function sendConfigToDevice(app, asset, callback) {
 
         client.on('connect', function () {
             console.log('Connected to MQTT server.');
-            console.log('Publishing config: ' + JSON.stringify(config));
-            client.publish('configuration', config, {qos: 2});
+            console.log('Publishing config: ' + JSON.stringify(configSettings));
+            client.publish('configuration', configSettings, {qos: 2});
             client.end(false, function() {
                 console.log('Disconnected from MQTT server.');
                 callback();
