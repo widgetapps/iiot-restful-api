@@ -17,10 +17,9 @@ var mongoose = require('mongoose'),
     endpoint = 'asset';
 
 exports.getOne = function(req, res) {
-    // TODO: Get this v2 ready
     authorize.validate(endpoint, req, res, 'asset', function() {
 
-        var promise = Asset.findById(req.params.assetId).exec();
+        var promise = Asset.findById(req.params.assetId).populate('location').exec();
 
         promise.then(function(asset) {
             var authorized = false;
@@ -261,6 +260,9 @@ exports.updateSetting = function(req, res) {
                 });
             }
 
+            // TODO: Publish to the configuration MQTT topic for the attached device.
+            sendConfigToDevice(asset);
+
             res.json({
                 key: asset.settings[0].key,
                 value: req.body.value
@@ -388,3 +390,10 @@ exports.removeDevice = function(req, res) {
 
     });
 };
+
+function sendConfigToDevice(asset) {
+    /**
+     * Need to get the serialNumber from the Device using the Asset_Id to query the device collection
+     * Use that to pub to EMQTT
+     */
+}
