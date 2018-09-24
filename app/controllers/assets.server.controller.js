@@ -252,6 +252,7 @@ exports.updateSetting = function(req, res) {
                 'settings.$.value': req.body.value
             }
         },
+        { new: true },
         function (err, asset) {
 
             if (!asset || err) {
@@ -260,12 +261,13 @@ exports.updateSetting = function(req, res) {
                 });
             }
 
-            // TODO: Publish to the configuration MQTT topic for the attached device.
-            sendConfigToDevice(asset);
+            sendConfigToDevice(req.app, asset, function() {
 
-            res.json({
-                key: asset.settings[0].key,
-                value: req.body.value
+                res.json({
+                    key: asset.settings[0].key,
+                    value: asset.settings[0].value
+                });
+
             });
         }
     );
@@ -303,7 +305,7 @@ exports.addDevice = function(req, res) {
                          });
                          return;
                      }
-                     /* TODO: Copy the alert limits from the Asset to the Device. The models need to be updated to do this. */
+
                      device.asset = mongoose.Types.ObjectId(asset._id);
                      device.location = mongoose.Types.ObjectId(asset.location._id);
                      device.save(function (err, deviceSaved) {
@@ -391,9 +393,32 @@ exports.removeDevice = function(req, res) {
     });
 };
 
-function sendConfigToDevice(asset) {
-    /**
-     * Need to get the serialNumber from the Device using the Asset_Id to query the device collection
-     * Use that to pub to EMQTT
-     */
+function sendConfigToDevice(app, asset, callback) {
+    var promise = Device.findById(asset._id).populate('asset').exec();
+
+    promise.then(function(device) {
+
+        var config = {};
+
+        switch (device.type) {
+            case 'hydrant':
+                config = device.asset.settings.map(function(setting) {
+                    var rObj = {};
+                    rObj[setting.key] = setting.value;
+                    return rObj;
+                });
+                break;
+            default:
+                callback();
+                return;
+        }
+
+        var mqttclient = app.get('mqttclient');
+        if (mqttclient.connected) {
+            console.log('Publishing config: ' + JSON.stringify(config));
+            //mqttclient.publish('configuration', config, {qos: 2});
+        }
+
+        callback();
+    });
 }
