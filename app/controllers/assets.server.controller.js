@@ -417,6 +417,7 @@ function sendConfigToDevice(app, asset, callback) {
                 callback();
                 return;
         }
+        console.log('About to publish ' + JSON.stringify(config));
 
         var mqttclient = app.get('mqttclient');
         if (mqttclient.connected) {
