@@ -6,6 +6,7 @@
 var mongoose = require('mongoose'),
     config = require('../../config/config'),
     mqtt = require('mqtt'),
+    cbor = require('cbor'),
     Client = require('@terepac/terepac-models').Client,
     Asset = require('@terepac/terepac-models').Asset,
     Device = require('@terepac/terepac-models').Device,
@@ -426,7 +427,7 @@ function sendConfigToDevice(app, asset, callback) {
         client.on('connect', function () {
             console.log('Connected to MQTT server.');
             console.log('Publishing config: ' + JSON.stringify(configSettings));
-            client.publish('configuration', Buffer.from(JSON.stringify(configSettings)), {qos: 2});
+            client.publish('configuration', cbor.encode(configSettings), {qos: 2});
             client.end(false, function() {
                 console.log('Disconnected from MQTT server.');
                 callback();
