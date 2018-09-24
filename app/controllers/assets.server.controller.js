@@ -417,13 +417,12 @@ function sendConfigToDevice(app, asset, callback) {
                 callback();
                 return;
         }
-        console.log('About to publish ' + JSON.stringify(config));
 
         var mqttclient = app.get('mqttclient');
-        if (mqttclient.connected) {
+        //if (mqttclient.connected) {
             console.log('Publishing config: ' + JSON.stringify(config));
-            //mqttclient.publish('configuration', config, {qos: 2});
-        }
+            mqttclient.publish('configuration', config, {qos: 2});
+        //}
 
         callback();
     });
