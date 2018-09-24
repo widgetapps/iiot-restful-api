@@ -394,9 +394,14 @@ exports.removeDevice = function(req, res) {
 };
 
 function sendConfigToDevice(app, asset, callback) {
-    var promise = Device.findById(asset._id).populate('asset').exec();
+    var promise = Device.findOne({asset: asset._id}).populate('asset').exec();
 
     promise.then(function(device) {
+
+        if (!device) {
+            callback();
+            return;
+        }
 
         var config = {};
 
