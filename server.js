@@ -8,8 +8,7 @@
 require('./config/init')()
 
 var config = require('./config/config'),
-	mongoose = require('mongoose'),
-	mqtt = require('mqtt');
+	mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
@@ -58,18 +57,6 @@ var app = require('./config/express')(db);
 
 // Start the app by listening on <port>
 app.listen(config.port, config.ip);
-
-// TODO: Make MQTT connection, save it in app.set('mqttclient', client);
-var  client  = mqtt.connect(config.mqtt, config.mqttoptions);
-app.set('mqttclient', client);
-
-client.on('error', function (error) {
-    console.log('Error connecting to MQTT Server with username ' + config.mqttoptions.username + ' - ' + error);
-});
-
-client.on('connect', function () {
-    console.log('Connected to MQTT server.');
-});
 
 // Expose app
 var exports = module.exports = app;

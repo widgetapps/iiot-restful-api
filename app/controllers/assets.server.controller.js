@@ -4,15 +4,14 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
-    errorHandler = require('./errors.server.controller'),
+    config = require('./config/config'),
+    mqtt = require('mqtt'),
     Client = require('@terepac/terepac-models').Client,
     Asset = require('@terepac/terepac-models').Asset,
     Device = require('@terepac/terepac-models').Device,
     Tag = require('@terepac/terepac-models').Tag,
     _ = require('lodash'),
-    moment = require('moment'),
     async = require('async'),
-    randomstring = require('randomstring'),
     authorize = require('../lib/authorize.server.lib'),
     endpoint = 'asset';
 
@@ -264,8 +263,8 @@ exports.updateSetting = function(req, res) {
             sendConfigToDevice(req.app, asset, function() {
 
                 res.json({
-                    key: asset.settings[0].key,
-                    value: asset.settings[0].value
+                    key: req.params.settingKey,
+                    value: req.body.value
                 });
 
             });
@@ -418,12 +417,20 @@ function sendConfigToDevice(app, asset, callback) {
                 return;
         }
 
-        var mqttclient = app.get('mqttclient');
-        //if (mqttclient.connected) {
-            console.log('Publishing config: ' + JSON.stringify(config));
-            mqttclient.publish('configuration', config, {qos: 2});
-        //}
+        var client  = mqtt.connect(config.mqtt, config.mqttoptions);
 
-        callback();
+        client.on('error', function (error) {
+            console.log('Error connecting to MQTT Server with username ' + config.mqttoptions.username + ' - ' + error);
+        });
+
+        client.on('connect', function () {
+            console.log('Connected to MQTT server.');
+            console.log('Publishing config: ' + JSON.stringify(config));
+            client.publish('configuration', config, {qos: 2});
+            client.end(false, function() {
+                console.log('Disconnected from MQTT server.');
+                callback();
+            });
+        });
     });
 }
