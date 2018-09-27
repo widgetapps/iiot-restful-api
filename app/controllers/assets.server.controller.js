@@ -407,10 +407,8 @@ function sendConfigToDevice(app, asset, callback) {
 
         switch (device.type) {
             case 'hydrant':
-                configSettings = device.asset.settings.map(function(setting) {
-                    var rObj = {};
-                    rObj[setting.key] = setting.value;
-                    return rObj;
+                _.forEach(device.asset.settings, function (setting) {
+                    configSettings[setting.key] = setting.value;
                 });
                 break;
             default:
