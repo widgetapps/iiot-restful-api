@@ -424,7 +424,7 @@ function sendConfigToDevice(app, asset, callback) {
 
         client.on('connect', function () {
             console.log('Connected to MQTT server.');
-            console.log('Publishing config: ' + JSON.stringify(configSettings));
+            console.log('Publishing config topic ' + device.serialNumber + '/v1/configuration: ' + JSON.stringify(configSettings));
             client.publish(device.serialNumber + '/v1/configuration', cbor.encode(configSettings), {qos: 2});
             client.end(false, function() {
                 console.log('Disconnected from MQTT server.');
