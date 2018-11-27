@@ -30,6 +30,9 @@ module.exports = function(app) {
         .get(clients.listDevices)
         .post(clients.insertDevice);
 
+    app.route('/clients/:id/events')
+        .get(clients.listEvents);
+
     app.route('/clients/:id/users')
         .get(clients.getUsers)
         .post(clients.insertUser);
