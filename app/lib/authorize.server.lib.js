@@ -20,6 +20,9 @@ exports.validate = function (endpoint, req, res, role, callback) {
         case 'asset':
             validateAssetEndpoint(req, res, role, callback);
             break;
+        case 'event':
+            validateEventEndpoint(req, res, role, callback);
+            break;
     }
 
 };
@@ -73,6 +76,10 @@ function validateUserEndpoint(req, res, role, callback) {
 }
 
 function validateAssetEndpoint(req, res, role, callback) {
+    callback();
+}
+
+function validateEventEndpoint(req, res, role, callback) {
     callback();
 }
 

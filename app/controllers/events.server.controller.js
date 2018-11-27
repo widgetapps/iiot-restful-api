@@ -10,7 +10,6 @@ var Event = require('@terepac/terepac-models').Event,
     endpoint = 'event';
 
 exports.getOne = function(req, res) {
-    res.json({eventId: req.params.eventId}); return;
     authorize.validate(endpoint, req, res, 'user', function() {
 
         var promise = Event.findById(req.params.eventId).populate('asset').populate('device').populate('sensor').exec();
