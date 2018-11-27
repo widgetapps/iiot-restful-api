@@ -12,7 +12,11 @@ var Event = require('@terepac/terepac-models').Event,
 exports.getOne = function(req, res) {
     authorize.validate(endpoint, req, res, 'user', function() {
 
-        var promise = Event.findById(req.params.eventId).populate('asset').populate('device').populate('sensor').exec();
+        var promise = Event.findById(req.params.eventId)
+            .populate('asset', {tagCode: 1, name: 1, description: 1, location: 1})
+            .populate('device', {serialNumber: 1, type: 1, description: 1})
+            .populate('sensor', {type: 1, typeString: 1, description: 1, unit: 1})
+            .exec();
 
         promise.then(function(event) {
             var authorized = false;
