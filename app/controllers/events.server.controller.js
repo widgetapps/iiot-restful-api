@@ -4,9 +4,11 @@
  * Module dependencies.
  */
 var Event = require('@terepac/terepac-models').Event,
+    EventTelemetry = require('@terepac/terepac-models').EventTelemetry,
     _ = require('lodash'),
     moment = require('moment'),
     authorize = require('../lib/authorize.server.lib'),
+    JSONStream = require('JSONStream'),
     endpoint = 'event';
 
 exports.getOne = function(req, res) {
@@ -57,33 +59,31 @@ exports.getOne = function(req, res) {
 
 exports.searchTelemetry = function(req, res) {
     authorize.validate(endpoint, req, res, 'user', function() {
-        var authorized = false;
+        var query;
 
         switch (req.user.role) {
             case 'user':
-                if (req.user.client === req.params.id) {
-                    authorized = true;
-                }
+                query = {
+                    client: req.user.client
+                };
                 break;
             case 'manager':
             case 'admin':
-                if (req.user.client === req.params.id || _.contains(req.user.resellerClients, req.params.id)) {
-                    authorized = true;
-                }
+                query = {
+                    $or: [{client: req.user.client}, {resellerClients: req.user.client}]
+                };
                 break;
             case 'super':
-                authorized = true;
+                query = {};
                 break;
+            default:
+                res.status(401).send({
+                    message: 'You are not authorized to access this resource.'
+                });
+                return;
         }
 
-        if (!authorized) {
-            res.status(401).send({
-                message: 'You are not authorized to access this resource.'
-            });
-            return;
-        }
-
-        var tags = req.query.tags.split(',');
+        query.event = req.param.eventId;
 
         var fields = {
             tag: 1,
@@ -106,10 +106,7 @@ exports.searchTelemetry = function(req, res) {
             'Cache-Control': 'no-cache'
         });
 
-        Telemetry.find({
-            'tag.full': {$in: tags},
-            timestamp: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)}
-        }, fields)
+        EventTelemetry.find(query, fields)
             .sort({timestamp: 1})
             .cursor()
             .pipe(JSONStream.stringify())
