@@ -83,7 +83,7 @@ exports.searchTelemetry = function(req, res) {
                 return;
         }
 
-        query.event = req.param.eventId;
+        query.event = req.params.eventId;
 
         var fields = {
             tag: 1,
