@@ -8,10 +8,10 @@ var mongoose = require('mongoose'),
     Tag = require('@terepac/terepac-models').Tag,
     Telemetry = require('@terepac/terepac-models').Telemetry,
     User = require('@terepac/terepac-models').User,
-    Sensor = require('@terepac/terepac-models').Sensor,
     Device = require('@terepac/terepac-models').Device,
     Location = require('@terepac/terepac-models').Location,
     Asset = require('@terepac/terepac-models').Asset,
+    Event = require('@terepac/terepac-models').Event,
     Mqtt = require('@terepac/terepac-models').Mqtt,
     _ = require('lodash'),
     moment = require('moment'),
@@ -602,6 +602,55 @@ exports.insertDevice = function(req, res) {
         });
 
     });
+};
+
+exports.listEvents = function(req, res) {
+    authorize.validate(endpoint, req, res, 'user', function() {
+        var query;
+
+        switch (req.user.role) {
+            case 'user':
+                query = {
+                    client: req.user.client
+                };
+                break;
+            case 'manager':
+            case 'admin':
+                query = {
+                    $or: [{client: req.user.client}, {resellerClients: req.user.client}]
+                };
+                break;
+            case 'super':
+                query = {};
+                break;
+            default:
+                res.status(401).send({
+                    message: 'You are not authorized to access this resource.'
+                });
+                return;
+        }
+
+        Event.find( query, {
+            _id: 1,
+            tag: 1,
+            type: 1,
+            description: 1,
+            start: 1,
+            end: 1,
+            count: 1
+        })
+            .exec(function(err, events) {
+                if (err) {
+                    res.status(500).send({
+                        message: 'Database error.'
+                    });
+                    return;
+                }
+
+                res.json(events);
+            });
+    });
+
 };
 
 exports.getUsers = function(req, res) {

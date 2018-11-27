@@ -6,37 +6,30 @@
 var User = require('@terepac/terepac-models').User,
     Client = require('@terepac/terepac-models').Client,
     _ = require('lodash'),
-    moment = require('moment'),
-    jwt = require('jsonwebtoken'),
-    randomstring = require('randomstring');
+    jwt = require('jsonwebtoken');
 
 /**
  * Module dependencies.
  */
 exports.authenticate = function(req, res) {
 
-    console.log('STARTING AUTHENTICATION...');
-    //console.log('NODE VERSION: ' + process.version);
-    console.log('EMAIL: ' + req.body.email);
-    //console.log('PASSWORD: ' + req.body.password);
-
     var promise = User.findOne({ email: req.body.email }).exec();
 
-    console.log('PROMISES HAVE BEEN MADE');
+    // console.log('PROMISES HAVE BEEN MADE');
 
     promise.then(function (user) {
 
-        console.log('QUERY SUCCESSFUL');
+        // console.log('QUERY SUCCESSFUL');
 
         if (!user) {
-            console.log('ERROR: NO USER');
+            // console.log('ERROR: NO USER');
             res.status(404).send({
                 message: 'Authentication failed. User not found.'
             });
         } else {
-            console.log('USER FOUND');
+            // console.log('USER FOUND');
             if (!user.authenticate(req.body.password)) {
-                console.log('ERROR: BAD PASSWORD - ' + user.hashPassword(req.body.password) + ' vs ' + user.password);
+                // console.log('ERROR: BAD PASSWORD - ' + user.hashPassword(req.body.password) + ' vs ' + user.password);
                 res.status(404).send({
                     message: 'Authentication failed. Incorrect password.'
                 });
@@ -82,23 +75,5 @@ exports.authenticate = function(req, res) {
             message: 'Error with the database.'
         });
     });
-
-    /*
-    User.findOne({
-        email: req.body.email
-    },{
-        firstName: 1,
-        lastName: 1,
-        email: 1,
-        password: 1,
-        salt: 1,
-        phone: 1,
-        role: 1,
-        active: 1,
-        client: 1
-    }).exec(function(err, user) {
-
-    });
-    */
 
 };

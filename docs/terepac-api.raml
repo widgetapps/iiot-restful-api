@@ -911,6 +911,25 @@ documentation:
                     "message": "Added added",
                     "_id": "OBJECT_ID"
                   }
+    /events:
+      securedBy: [JWT]
+      get:
+        description: Gets a list of the client's events (pressure & accoustic).
+        responses:
+          200:
+            description: Returns the list of events.
+            body:
+              application/json:
+                example: |
+                  [{
+                    "_id": "OBJECT_ID",
+                    "type": "STRING",
+                    "tag": "STRING",
+                    "description": "STRING",
+                    "start": "DATE",
+                    "end": "END",
+                    "count": "NUMBER"
+                  }]
     /tags:
       securedBy: [JWT]
       get:
@@ -1310,6 +1329,110 @@ documentation:
                       "description": "STRING",
                       "unit": "STRING"
                     }
+
+/events/{event_id}:
+  displayName: EVENTS
+  securedBy: [JWT]
+  get:
+    description: Gets a single event.
+    responses:
+      200:
+        description: Returns the event.
+        body:
+          application/json:
+            example: |
+              [{
+                "_id": "OBJECT_ID",
+                "type": "STRING",
+                "tag": "STRING",
+                "description": "STRING",
+                "start": "DATE",
+                "end": "END",
+                "count": "NUMBER",
+                "device": {
+                  "serialNumber": "STRING",
+                  "type": "STRING",
+                  "description": "STRING"
+                 },
+                "asset": {
+                  "tagCode": "STRING",
+                  "name": "STRING",
+                  "description": "STRING",
+                  "location": {
+                    "tagCode": "STRING",
+                    "description": "STRING",
+                    "geolocation": ["NUMBER", "NUMBER"]
+                  }
+                },
+                "sensor": {
+                  "type": "NUMBER",
+                  "typeString": "STRING",
+                  "description": "STRING",
+                  "unit": "STRING"
+                }
+              }]
+  /telemetries:
+    securedBy: [JWT]
+    get:
+      description: Gets the event data.
+      queryParameters:
+        start:
+          type: string
+          description: The start date of the data.
+          example: start=2016-01-29T16:04:27.000Z
+          required: false
+        end:
+          type: string
+          description: The end date of the data.
+          example: end=2016-01-29T16:04:27.000Z
+          required: false
+        asset:
+          type: string
+          description: A flag to include asset data.
+          example: asset=1
+          required: false
+        device:
+          type: string
+          description: A flag to include device data.
+          example: device=1
+          required: false
+        sensor:
+          type: string
+          description: A flag to include sensor data.
+          example: sensor=1
+          required: false
+      responses:
+        200:
+          description: Returns the event data.
+          body:
+            application/json:
+              example: |
+                [{
+                  "timestamp": "DATE MICROSECONDS",
+                  "tag": "STRING",
+                  "data": "NUMBER",
+                  "device": {
+                    "serialNumber": "STRING",
+                    "type": "STRING",
+                    "description": "STRING"
+                   },
+                  "asset": {
+                    "tagCode": "STRING",
+                    "name": "STRING",
+                    "description": "STRING",
+                    "location": {
+                      "tagCode": "STRING",
+                      "description": "STRING",
+                      "geolocation": ["NUMBER", "NUMBER"]
+                    }
+                  },
+                  "sensor": {
+                    "type": "NUMBER",
+                    "typeString": "STRING",
+                    "description": "STRING",
+                    "unit": "STRING"
+                  }
+                }]
 /locations/{location_id}:
   displayName: LOCATIONS
   description: |

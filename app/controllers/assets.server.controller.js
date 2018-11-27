@@ -408,6 +408,7 @@ function sendConfigToDevice(app, asset, callback) {
         switch (device.type) {
             case 'hydrant':
                 _.forEach(device.asset.settings, function (setting) {
+                    // TODO: Need to cast here.
                     configSettings[setting.key] = setting.value;
                 });
                 break;
