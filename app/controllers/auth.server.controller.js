@@ -34,7 +34,7 @@ exports.authenticate = function(req, res) {
                     message: 'Authentication failed. Incorrect password.'
                 });
             } else {
-                console.log(user._id);
+                console.log('USER ID: ' + user._id);
                 Client.findById(user.client, function(err, client) {
                     if (err) throw err;
 
