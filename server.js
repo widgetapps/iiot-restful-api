@@ -53,6 +53,8 @@ mongoose.Promise = require('bluebird');
 
 var db = mongoose.connect(config.db, dbOptions);
 
+mongoose.set('debug', true);
+
 // Init the express application
 var app = require('./config/express')(db);
 
