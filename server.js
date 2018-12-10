@@ -23,23 +23,23 @@ var dbOptions = {
 
 var conn = mongoose.connection;
 conn.on('connecting', function() {
-    console.log('connecting');
+    console.log('Connecting to MongoDB...');
 });
 conn.on('error', function(error) {
     console.error('Error in MongoDb connection: ' + error);
     mongoose.disconnect();
 });
 conn.on('connected', function() {
-    console.log('connected!');
+    console.log('Connected to MongoDG.');
 });
 conn.once('open', function() {
-    console.log('connection open');
+    console.log('Connection to MongoDB open.');
 });
 conn.on('reconnected', function () {
-    console.log('reconnected');
+    console.log('Reconnected to MongoDB');
 });
 conn.on('disconnected', function() {
-    console.log('disconnected');
+    console.log('Disconnected from MongoDB.');
     console.log('DB URI is: ' + config.db);
     mongoose.connect(config.db, dbOptions);
 });
