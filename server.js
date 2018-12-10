@@ -27,11 +27,11 @@ conn.on('connecting', function() {
     console.log('Connecting to MongoDB...');
 });
 conn.on('error', function(error) {
-    console.error('Error in MongoDb connection: ' + error);
+    console.error('Error in MongoDB connection: ' + error);
     mongoose.disconnect();
 });
 conn.on('connected', function() {
-    console.log('Connected to MongoDG.');
+    console.log('Connected to MongoDB.');
 });
 conn.once('open', function() {
     console.log('Connection to MongoDB open.');

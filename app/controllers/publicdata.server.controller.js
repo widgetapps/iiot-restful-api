@@ -10,7 +10,7 @@ var mongoose = require('mongoose'),
     Telemetry = require('@terepac/terepac-models').Telemetry;
 
 exports.index = function(req, res) {
-	res.json({message: 'There is not data available from the root.'});
+	res.json({message: 'There is no data available from the root.'});
 };
 
 exports.dataNumbers = function(req, res) {

@@ -33,7 +33,7 @@
     "lodash": "~4.17.11",
     "method-override": "~3.0.0",
     "moment": "^2.22.2",
-    "mongoose": "^5.3.15",
+    "mongoose": "^4.13.17",
     "morgan": "~1.9.1",
     "mqtt": "^2.18.8",
     "randomstring": "^1.1.5",
