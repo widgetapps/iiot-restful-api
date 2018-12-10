@@ -322,6 +322,8 @@ exports.searchTelemetry = function(req, res) {
             'Cache-Control': 'no-cache'
         });
 
+        //TODO: Validate the start and end dates as ISO.
+
         Telemetry.find({
             'tag.full': {$in: tags},
             timestamp: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)}

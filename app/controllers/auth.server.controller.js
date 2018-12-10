@@ -15,21 +15,21 @@ exports.authenticate = function(req, res) {
 
     var promise = User.findOne({ email: req.body.email }).exec();
 
-    // console.log('PROMISES HAVE BEEN MADE');
+    console.log('PROMISES HAVE BEEN MADE');
 
     promise.then(function (user) {
 
-        // console.log('QUERY SUCCESSFUL');
+        console.log('QUERY SUCCESSFUL');
 
         if (!user) {
-            // console.log('ERROR: NO USER');
+            console.log('ERROR: NO USER');
             res.status(404).send({
                 message: 'Authentication failed. User not found.'
             });
         } else {
-            // console.log('USER FOUND');
+            console.log('USER FOUND');
             if (!user.authenticate(req.body.password)) {
-                // console.log('ERROR: BAD PASSWORD - ' + user.hashPassword(req.body.password) + ' vs ' + user.password);
+                console.log('ERROR: BAD PASSWORD - ' + user.hashPassword(req.body.password) + ' vs ' + user.password);
                 res.status(404).send({
                     message: 'Authentication failed. Incorrect password.'
                 });

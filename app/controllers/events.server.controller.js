@@ -9,6 +9,7 @@ var Event = require('@terepac/terepac-models').Event,
     moment = require('moment'),
     authorize = require('../lib/authorize.server.lib'),
     JSONStream = require('JSONStream'),
+    microdate = require('../lib/microdate'),
     endpoint = 'event';
 
 exports.getOne = function(req, res) {
