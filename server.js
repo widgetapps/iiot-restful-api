@@ -19,6 +19,7 @@ mongoose.Promise = global.Promise;
 
 
 var dbOptions = {
+    useNewUrlParser: true
 };
 
 var conn = mongoose.connection;
