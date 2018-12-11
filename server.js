@@ -11,7 +11,7 @@ var config = require('./config/config'),
 	mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-mongoose.set('debug', true);
+//mongoose.set('debug', true);
 
 /**
  * Main application entry file.
