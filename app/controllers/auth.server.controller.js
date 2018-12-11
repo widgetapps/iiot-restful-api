@@ -57,7 +57,7 @@ exports.authenticate = function(req, res) {
                             user.reseller = false;
                         }
 
-                        var token = jwt.sign(JSON.stringify(user), client.apikey.secret, {
+                        var token = jwt.sign(Buffer.from(user), client.apikey.secret, {
                             expiresIn: '1d'
                         });
 
