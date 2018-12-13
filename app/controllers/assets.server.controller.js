@@ -433,7 +433,7 @@ function sendConfigToDevice(app, asset, callback) {
                             configSettings[setting.key] = parseInt(setting.value);
                             break;
                         case 'decimal':
-                            configSettings[setting.key] = decimal(setting.value).toFixed(2);
+                            configSettings[setting.key] = decimal(setting.value).toDecimalPlaces(2);
                             break;
                         case 'date':
                             configSettings[setting.key] = new Date(setting.value);
