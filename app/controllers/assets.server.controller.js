@@ -14,7 +14,7 @@ var mongoose = require('mongoose'),
     _ = require('lodash'),
     async = require('async'),
     authorize = require('../lib/authorize.server.lib'),
-    decimal = require('decimal.js-light'),
+    Decimal = require('decimal.js-light'),
     endpoint = 'asset';
 
 exports.getOne = function(req, res) {
@@ -433,7 +433,8 @@ function sendConfigToDevice(app, asset, callback) {
                             configSettings[setting.key] = parseInt(setting.value);
                             break;
                         case 'decimal':
-                            configSettings[setting.key] = decimal(setting.value).toDecimalPlaces(2);
+                            var value = new Decimal(setting.value);
+                            configSettings[setting.key] = value.toDecimalPlaces(2);
                             break;
                         case 'date':
                             configSettings[setting.key] = new Date(setting.value);
