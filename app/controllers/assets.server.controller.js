@@ -155,21 +155,21 @@ exports.resetSettings = function(req, res) {
                 },{
                     key: "high-limit",
                     name: "high-limit",
-                    datatype: "decimal",
+                    datatype: "double",
                     range: [-14.5, 347.7],
                     unit: "psi",
                     value: 80.5
                 },{
                     key: "low-limit",
                     name: "low-limit",
-                    datatype: "decimal",
+                    datatype: "double",
                     range: [-14.5, 347.7],
                     unit: "psi",
                     value: 80.5
                 },{
                     key: "dead-band",
                     name: "dead-band",
-                    datatype: "decimal",
+                    datatype: "double",
                     range: [-14.5, 347.7],
                     unit: "psi",
                     value: 80.5
@@ -428,12 +428,21 @@ function sendConfigToDevice(app, asset, callback) {
         switch (device.type) {
             case 'hydrant':
                 _.forEach(device.asset.settings, function (setting) {
+                    var val = 0;
                     switch (setting.datatype) {
                         case 'int':
-                            configSettings[setting.key] = parseInt(setting.value);
+                            val = parseInt(setting.value);
+                            if (isNaN(val)) {
+                                val = 0;
+                            }
+                            configSettings[setting.key] = val;
                             break;
-                        case 'decimal':
-                            configSettings[setting.key] = BigNumber(setting.value).dp(2);
+                        case 'double':
+                            val = parseFloat(setting.value);
+                            if (isNaN(val)) {
+                                val = 0;
+                            }
+                            configSettings[setting.key] = val;
                             break;
                         case 'date':
                             var timestamp = Date.parse(setting.value);
