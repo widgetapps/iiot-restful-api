@@ -117,7 +117,7 @@ exports.resetSettings = function(req, res) {
         return;
     }
 
-    // TODO: Need to allow a user manage setting keys for an asset. Maybe use a setting key map by device type?
+    // TODO: Need to allow a user manage setting keys for an asset. Maybe use a setting key map by device type? Also add unit for each setting.
 
     Asset.findOneAndUpdate(
         { '_id': req.params.assetId},
