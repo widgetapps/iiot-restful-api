@@ -456,8 +456,12 @@ function sendConfigToDevice(app, asset, callback) {
         client.on('connect', function () {
             console.log('Connected to MQTT server.');
             console.log('Publishing config topic ' + device.serialNumber + '/v1/configuration: ' + JSON.stringify(configSettings));
-            client.publish(device.serialNumber + '/v1/configuration', cbor.encode(configSettings), {qos: 2, retain: true});
-            console.log('Settings published.');
+            try {
+                client.publish(device.serialNumber + '/v1/configuration', cbor.encode(configSettings), {qos: 2, retain: true});
+                console.log('Settings published.');
+            } catch (e) {
+                console.log('Error publishing settings: ' + e.toString());
+            }
             client.end(false, function() {
                 console.log('Disconnected from MQTT server.');
                 callback();
