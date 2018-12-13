@@ -437,7 +437,13 @@ function sendConfigToDevice(app, asset, callback) {
                             configSettings[setting.key] = value.toFixed(2);
                             break;
                         case 'date':
-                            configSettings[setting.key] = new Date(setting.value);
+                            var timestamp = Date.parse(setting.value);
+
+                            if (isNaN(timestamp) === false) {
+                                configSettings[setting.key] = new Date(timestamp);
+                            } else {
+                                configSettings[setting.key] = new Date('1970-01-01T00:00:00');
+                            }
                             break;
                     }
                 });
