@@ -433,8 +433,7 @@ function sendConfigToDevice(app, asset, callback) {
                             configSettings[setting.key] = parseInt(setting.value);
                             break;
                         case 'decimal':
-                            var value = new BigNumber(setting.value);
-                            configSettings[setting.key] = value.toFixed(2);
+                            configSettings[setting.key] = BigNumber(setting.value).dp(2);
                             break;
                         case 'date':
                             var timestamp = Date.parse(setting.value);
