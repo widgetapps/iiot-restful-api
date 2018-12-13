@@ -178,21 +178,21 @@ exports.resetSettings = function(req, res) {
                     name: "pre-roll",
                     datatype: "int",
                     range: [0, 300],
-                    unit: 'seconds',
+                    unit: "seconds",
                     value: 0
                 },{
                     key: "post-roll",
                     name: "post-roll",
                     datatype: "int",
                     range: [0, 300],
-                    unit: 'seconds',
+                    unit: "seconds",
                     value: 0
                 },{
                     key: "start-time",
                     name: "start-time",
                     datatype: "date",
                     unit: "date",
-                    range: null,
+                    range: "",
                     value: ""
                 },{
                     key: "rssi-interval",
