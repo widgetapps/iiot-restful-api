@@ -117,6 +117,8 @@ exports.resetSettings = function(req, res) {
         return;
     }
 
+    // TODO: Need to allow a user manage setting keys for an asset. Maybe use a setting key map by device type?
+
     Asset.findOneAndUpdate(
         { '_id': req.params.assetId},
         {
@@ -181,6 +183,12 @@ exports.resetSettings = function(req, res) {
                     datatype: "date",
                     range: "",
                     value: ""
+                },{
+                    key: "rssi-interval",
+                    name: "rssi-interval",
+                    datatype: "int",
+                    range: [1, 600],
+                    value: 60
                 }]
             }
         },
