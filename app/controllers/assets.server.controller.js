@@ -158,21 +158,21 @@ exports.resetSettings = function(req, res) {
                     datatype: "decimal",
                     range: [-14.5, 347.7],
                     unit: "psi",
-                    value: 80.0
+                    value: 80.5
                 },{
                     key: "low-limit",
                     name: "low-limit",
                     datatype: "decimal",
                     range: [-14.5, 347.7],
                     unit: "psi",
-                    value: 80.0
+                    value: 80.5
                 },{
                     key: "dead-band",
                     name: "dead-band",
                     datatype: "decimal",
                     range: [-14.5, 347.7],
                     unit: "psi",
-                    value: 80.0
+                    value: 80.5
                 },{
                     key: "pre-roll",
                     name: "pre-roll",
@@ -457,6 +457,7 @@ function sendConfigToDevice(app, asset, callback) {
             console.log('Connected to MQTT server.');
             console.log('Publishing config topic ' + device.serialNumber + '/v1/configuration: ' + JSON.stringify(configSettings));
             client.publish(device.serialNumber + '/v1/configuration', cbor.encode(configSettings), {qos: 2, retain: true});
+            console.log('Settings published.');
             client.end(false, function() {
                 console.log('Disconnected from MQTT server.');
                 callback();
