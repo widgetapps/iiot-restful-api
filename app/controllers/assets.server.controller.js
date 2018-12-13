@@ -14,6 +14,7 @@ var mongoose = require('mongoose'),
     _ = require('lodash'),
     async = require('async'),
     authorize = require('../lib/authorize.server.lib'),
+    decimal = require('decimal.js-light'),
     endpoint = 'asset';
 
 exports.getOne = function(req, res) {
@@ -127,67 +128,78 @@ exports.resetSettings = function(req, res) {
                     key: "pressure-interval",
                     name: "pressure-interval",
                     datatype: "int",
-                    range: [1, 100],
-                    value: 10
+                    range: [1, 1440],
+                    unit: "minutes",
+                    value: 60
                 },{
                     key: "battery-interval",
                     name: "battery-interval",
                     datatype: "int",
-                    range: [1, 100],
-                    value: 10
+                    range: [1, 1440],
+                    unit: "minutes",
+                    value: 60
                 },{
                     key: "temperature-interval",
                     name: "temperature-interval",
                     datatype: "int",
-                    range: [1, 100],
-                    value: 10
+                    range: [1, 1440],
+                    unit: "minutes",
+                    value: 60
                 },{
                     key: "connect-interval",
                     name: "connect-interval",
                     datatype: "int",
-                    range: [1, 100],
+                    range: [5, 1440],
+                    unit: "minutes",
                     value: 10
                 },{
                     key: "high-limit",
                     name: "high-limit",
-                    datatype: "double",
-                    range: [1.0, 500.0],
+                    datatype: "decimal",
+                    range: [-14.5, 347.7],
+                    unit: "psi",
                     value: 80.0
                 },{
                     key: "low-limit",
                     name: "low-limit",
-                    datatype: "double",
-                    range: [1.0, 500.0],
+                    datatype: "decimal",
+                    range: [-14.5, 347.7],
+                    unit: "psi",
                     value: 80.0
                 },{
                     key: "dead-band",
                     name: "dead-band",
-                    datatype: "double",
-                    range: [1.0, 500.0],
+                    datatype: "decimal",
+                    range: [-14.5, 347.7],
+                    unit: "psi",
                     value: 80.0
                 },{
                     key: "pre-roll",
                     name: "pre-roll",
                     datatype: "int",
-                    range: [1, 100],
-                    value: 10
+                    range: [0, 300],
+                    unit: 'seconds',
+                    value: 0
                 },{
                     key: "post-roll",
                     name: "post-roll",
                     datatype: "int",
-                    range: [1, 100],
-                    value: 10
+                    range: [0, 300],
+                    unit: 'seconds',
+                    value: 0
                 },{
                     key: "start-time",
                     name: "start-time",
                     datatype: "date",
-                    range: "",
+                    unit: "date",
+                    range: null,
                     value: ""
                 },{
                     key: "rssi-interval",
                     name: "rssi-interval",
                     datatype: "int",
-                    range: [1, 600],
+                    range: [1, 24],
+                    unit: "hours",
                     value: 60
                 }]
             }
@@ -416,8 +428,17 @@ function sendConfigToDevice(app, asset, callback) {
         switch (device.type) {
             case 'hydrant':
                 _.forEach(device.asset.settings, function (setting) {
-                    // TODO: Need to cast here.
-                    configSettings[setting.key] = setting.value;
+                    switch (setting.datatype) {
+                        case 'int':
+                            configSettings[setting.key] = parseInt(setting.value);
+                            break;
+                        case 'decimal':
+                            configSettings[setting.key] = decimal(setting.value).toFixed(2);
+                            break;
+                        case 'date':
+                            configSettings[setting.key] = new Date(setting.value);
+                            break;
+                    }
                 });
                 break;
             default:

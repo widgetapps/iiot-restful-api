@@ -8,9 +8,24 @@ var User = require('@terepac/terepac-models').User,
     _ = require('lodash'),
     jwt = require('jsonwebtoken');
 
-/**
- * Module dependencies.
- */
+
+exports.login = function(req, res) {
+    /**
+     * 1) Hit the DB to check the credentials. (get the user record)
+     * 2) If valid, create a PKI pair
+     * 3) Encode the JWT with the private key
+     * 4) Store the private & public keys into the DB
+     * 5) Return the JWT and the public key
+     *
+     * NOTE: The headers for API auth stay the same, a client ID and the JWT. Will need to allow a customer to change their client ID
+     */
+
+};
+
+exports.logout = function(req, res) {
+
+};
+
 exports.authenticate = function(req, res) {
 
     var promise = User.findOne({ email: req.body.email }).exec();
