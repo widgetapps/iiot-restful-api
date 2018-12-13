@@ -200,7 +200,7 @@ exports.resetSettings = function(req, res) {
                     datatype: "int",
                     range: [1, 24],
                     unit: "hours",
-                    value: 60
+                    value: 1
                 }]
             }
         },
@@ -431,11 +431,22 @@ function sendConfigToDevice(app, asset, callback) {
                     var val = 0;
                     switch (setting.datatype) {
                         case 'int':
+                            var multiplier = 1;
+
+                            switch (setting.unit) {
+                                case 'minutes':
+                                    multiplier = 60;
+                                    break;
+                                case 'hours':
+                                    multiplier = 3600;
+                                    break;
+                            }
+
                             val = parseInt(setting.value);
                             if (isNaN(val)) {
                                 val = 0;
                             }
-                            configSettings[setting.key] = val;
+                            configSettings[setting.key] = val * multiplier;
                             break;
                         case 'double':
                             val = parseFloat(setting.value);
