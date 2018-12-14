@@ -32,13 +32,14 @@ module.exports = function(req, res, next) {
                         });
                     }
 
-                    if (user.client.valueOf() != client._id.valueOf()) {
+                    /*
+                    if (user.client.valueOf() !== client._id.valueOf()) {
                         res.status(401).send({
                             message: 'Authentication error: User does not belong to supplied Client ID.',
                             ref: 'https://developers.terepac.one/#authentication',
                             details: 'User Client ID ' + user.client.valueOf() + ' supplied Client ID ' + client._id.valueOf()
                         });
-                    }
+                    }*/
 
                     jwt.verify(token, user.pki.publicKey, function(err, decoded) {
                         if (err) {
