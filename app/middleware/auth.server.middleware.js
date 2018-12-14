@@ -3,6 +3,7 @@
 module.exports = function(req, res, next) {
 
     var Client = require('@terepac/terepac-models').Client;
+    var User = require('@terepac/terepac-models').User;
     var jwt = require('jsonwebtoken');
 
     var token = req.headers['x-access-token'];
@@ -12,8 +13,7 @@ module.exports = function(req, res, next) {
         Client.findOne({
             'apikey.id': clientId
         },{
-            apikey: 1,
-            pki: 1
+            apikey: 1
         }).exec(function(err, client) {
             if (client === null) {
                 res.status(401).send({
@@ -21,18 +21,36 @@ module.exports = function(req, res, next) {
                     ref: 'https://developers.terepac.one/#authentication'
                 });
             } else {
-                jwt.verify(token, client.pki.publicKey, function(err, decoded) {
-                    if (err) {
-                        res.status(401).send({
-                            message: 'The supplied x-access-token (JWT) is not valid. Please login again.',
-                            ref: 'https://developers.terepac.one/#authentication',
-                            error: err
+                var decodedUser = jwt.decode(token);
+
+                User.findById(decodedUser._id, {pki: 1}).exec(function(err, user) {
+                    if (!user || err) {
+                        res.status(404).send({
+                            message: 'Authentication error: User not found.',
+                            ref: 'https://developers.terepac.one/#authentication'
                         });
-                    } else {
-                        // if everything is good, save to request for use in other routes
-                        req.user = decoded;
-                        next();
                     }
+
+                    if (user.client !== client._id) {
+                        res.status(401).send({
+                            message: 'Authentication error: User does not belong to supplied Client ID.',
+                            ref: 'https://developers.terepac.one/#authentication'
+                        });
+                    }
+
+                    jwt.verify(token, user.pki.publicKey, function(err, decoded) {
+                        if (err) {
+                            res.status(401).send({
+                                message: 'The supplied x-access-token (JWT) is not valid. Please login again.',
+                                ref: 'https://developers.terepac.one/#authentication',
+                                error: err
+                            });
+                        } else {
+                            // if everything is good, save to request for use in other routes
+                            req.user = decoded;
+                            next();
+                        }
+                    });
                 });
             }
         });
