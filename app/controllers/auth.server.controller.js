@@ -6,7 +6,8 @@
 var User = require('@terepac/terepac-models').User,
     Client = require('@terepac/terepac-models').Client,
     _ = require('lodash'),
-    jwt = require('jsonwebtoken');
+    jwt = require('jsonwebtoken'),
+    crypto = require('crypto');
 
 
 exports.login = function(req, res) {
@@ -19,6 +20,83 @@ exports.login = function(req, res) {
      *
      * NOTE: The headers for API auth stay the same, a client ID and the JWT. Will need to allow a customer to change their client ID
      */
+
+    var promise = User.findOne({ email: req.body.email }).exec();
+    promise.then(function (user) {
+        if (!user) {
+            res.status(404).send({
+                message: 'Authentication failed. User not found.'
+            });
+        } else {
+            if (!user.authenticate(req.body.password)) {
+                res.status(404).send({
+                    message: 'Authentication failed. Incorrect password.'
+                });
+            } else {
+                Client.findById(user.client, function(err, client) {
+                    if (err) throw err;
+
+                    if (!client) {
+                        res.status(404).send({
+                            message: 'No client associated with user, your are an orphan!'
+                        });
+                    } else {
+                        var diffHell = crypto.createDiffieHellman(60);
+                        diffHell.generateKeys();
+
+                        var privateKey = diffHell.getPrivateKey('hex');
+                        var publicKey = diffHell.getPublicKey('hex');
+
+                        user.keys.private = privateKey;
+                        user.keys.public = publicKey;
+
+                        user.save(function (err, savedUser){
+                            if (err) {
+                                res.status(500).send({
+                                    message: 'Error saving the keys.'
+                                });
+                                return;
+                            }
+
+                            // Don't store private stuff in the jwt
+                            savedUser.password = undefined;
+                            savedUser.salt = undefined;
+                            savedUser.provider = undefined;
+                            savedUser.providerData = undefined;
+                            savedUser.additionalProviderData = undefined;
+                            savedUser.active = undefined;
+                            savedUser.resetPasswordToken = undefined;
+                            savedUser.resetPasswordExpires = undefined;
+                            savedUser.keys = undefined;
+
+                            // Add reseller info to the user
+                            if (client.reseller) {
+                                savedUser.reseller = true;
+                                savedUser.resellerClients = client.resellerClients;
+                            } else {
+                                savedUser.reseller = false;
+                            }
+
+                            var token = jwt.sign(savedUser.toObject(), privateKey, {
+                                expiresIn: '1d'
+                            });
+
+                            // return the information, including token, as JSON
+                            res.json({
+                                message: 'Authentication successful.',
+                                token: token,
+                                publicKey: publicKey
+                            });
+                        });
+                    }
+                });
+            }
+        }
+    }).catch(function() {
+        res.status(500).send({
+            message: 'Error with the database.'
+        });
+    });
 
 };
 
@@ -44,7 +122,7 @@ exports.authenticate = function(req, res) {
         } else {
             console.log('USER FOUND');
             if (!user.authenticate(req.body.password)) {
-                console.log('ERROR: BAD PASSWORD - ' + user.hashPassword(req.body.password) + ' vs ' + user.password);
+                // console.log('ERROR: BAD PASSWORD - ' + user.hashPassword(req.body.password) + ' vs ' + user.password);
                 res.status(404).send({
                     message: 'Authentication failed. Incorrect password.'
                 });
