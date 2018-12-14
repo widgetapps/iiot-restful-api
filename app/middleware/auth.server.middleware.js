@@ -13,7 +13,7 @@ module.exports = function(req, res, next) {
             'apikey.id': clientId
         },{
             apikey: 1,
-            'pki.publicKey': 1
+            pki: 1
         }).exec(function(err, client) {
             if (client === null) {
                 res.status(401).send({
