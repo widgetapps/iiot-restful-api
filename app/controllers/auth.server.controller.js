@@ -55,7 +55,8 @@ exports.login = function(req, res) {
                             {
                                 '$set': {
                                     'pki.privateKey': privateKey,
-                                    'pki.publicKey': publicKey
+                                    'pki.publicKey': publicKey,
+                                    updated: Date.now()
                                 }
                             },
                             function (err, savedUser) {
