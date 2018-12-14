@@ -32,7 +32,7 @@ module.exports = function(req, res, next) {
                         });
                     }
 
-                    /*
+                    /* NOot sure why this evaluates to true when both values are the same :P
                     if (user.client.valueOf() !== client._id.valueOf()) {
                         res.status(401).send({
                             message: 'Authentication error: User does not belong to supplied Client ID.',
