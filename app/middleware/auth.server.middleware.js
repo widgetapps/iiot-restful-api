@@ -23,7 +23,7 @@ module.exports = function(req, res, next) {
             } else {
                 var decodedUser = jwt.decode(token);
 
-                User.findById(decodedUser._id, {pki: 1}).exec(function(err, user) {
+                User.findById(decodedUser._id, {pki: 1, client: 1}).exec(function(err, user) {
                     if (!user || err) {
                         res.status(404).send({
                             message: 'Authentication error: User not found.',
