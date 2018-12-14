@@ -11,6 +11,7 @@ module.exports = function(req, res, next) {
 
     if (token && clientId) {
         Client.findOne({
+            _id: 1,
             'apikey.id': clientId
         },{
             apikey: 1
@@ -34,7 +35,8 @@ module.exports = function(req, res, next) {
                     if (user.client !== client._id) {
                         res.status(401).send({
                             message: 'Authentication error: User does not belong to supplied Client ID.',
-                            ref: 'https://developers.terepac.one/#authentication'
+                            ref: 'https://developers.terepac.one/#authentication',
+                            details: 'User Client ID ' + user.client + ' supplied Client ID ' + client._id
                         });
                     }
 
