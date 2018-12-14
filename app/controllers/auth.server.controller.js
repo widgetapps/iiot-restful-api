@@ -47,47 +47,56 @@ exports.login = function(req, res) {
                         var privateKey = diffHell.getPrivateKey('hex');
                         var publicKey = diffHell.getPublicKey('hex');
 
-                        user.keys.private = privateKey;
-                        user.keys.public = publicKey;
+                        user.pki.privateKey = privateKey;
+                        user.pki.publicKey = publicKey;
 
-                        user.save(function (err, savedUser){
-                            if (err) {
-                                res.status(500).send({
-                                    message: 'Error saving the keys.'
+                        User.findByIdAndUpdate(
+                            user._id,
+                            {
+                                '$set': {
+                                    'pki.privateKey': privateKey,
+                                    'pki.publicKey': publicKey
+                                }
+                            },
+                            function (err, savedUser) {
+
+                                if (!savedUser || err) {
+                                    res.status(404).send({
+                                        message: 'Error saving keys.'
+                                    });
+                                }
+
+                                // Don't store private stuff in the jwt
+                                savedUser.password = undefined;
+                                savedUser.salt = undefined;
+                                savedUser.provider = undefined;
+                                savedUser.providerData = undefined;
+                                savedUser.additionalProviderData = undefined;
+                                savedUser.active = undefined;
+                                savedUser.resetPasswordToken = undefined;
+                                savedUser.resetPasswordExpires = undefined;
+                                savedUser.keys = undefined;
+
+                                // Add reseller info to the user
+                                if (client.reseller) {
+                                    savedUser.reseller = true;
+                                    savedUser.resellerClients = client.resellerClients;
+                                } else {
+                                    savedUser.reseller = false;
+                                }
+
+                                var token = jwt.sign(savedUser.toObject(), privateKey, {
+                                    expiresIn: '1d'
                                 });
-                                return;
+
+                                // return the information, including token, as JSON
+                                res.json({
+                                    message: 'Login successful.',
+                                    token: token,
+                                    publicKey: publicKey
+                                });
                             }
-
-                            // Don't store private stuff in the jwt
-                            savedUser.password = undefined;
-                            savedUser.salt = undefined;
-                            savedUser.provider = undefined;
-                            savedUser.providerData = undefined;
-                            savedUser.additionalProviderData = undefined;
-                            savedUser.active = undefined;
-                            savedUser.resetPasswordToken = undefined;
-                            savedUser.resetPasswordExpires = undefined;
-                            savedUser.keys = undefined;
-
-                            // Add reseller info to the user
-                            if (client.reseller) {
-                                savedUser.reseller = true;
-                                savedUser.resellerClients = client.resellerClients;
-                            } else {
-                                savedUser.reseller = false;
-                            }
-
-                            var token = jwt.sign(savedUser.toObject(), privateKey, {
-                                expiresIn: '1d'
-                            });
-
-                            // return the information, including token, as JSON
-                            res.json({
-                                message: 'Authentication successful.',
-                                token: token,
-                                publicKey: publicKey
-                            });
-                        });
+                        );
                     }
                 });
             }
