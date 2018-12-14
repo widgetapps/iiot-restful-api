@@ -41,7 +41,7 @@ exports.login = function(req, res) {
                             message: 'No client associated with user, your are an orphan!'
                         });
                     } else {
-                        var diffHell = crypto.createDiffieHellman(60);
+                        var diffHell = crypto.createDiffieHellman(1536);
                         diffHell.generateKeys();
 
                         var privateKey = diffHell.getPrivateKey('hex');
