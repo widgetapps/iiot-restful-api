@@ -36,7 +36,7 @@ module.exports = function(req, res, next) {
                         res.status(401).send({
                             message: 'Authentication error: User does not belong to supplied Client ID.',
                             ref: 'https://developers.terepac.one/#authentication',
-                            details: 'User Client ID ' + user.client + ' supplied Client ID ' + client._id
+                            details: 'User Client ID ' + user.client.valueOf() + ' supplied Client ID ' + client._id.valueOf()
                         });
                     }
 
