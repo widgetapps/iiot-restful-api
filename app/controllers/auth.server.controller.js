@@ -49,9 +49,7 @@ exports.login = function(req, res) {
                             },
                             privateKeyEncoding: {
                                 type: 'pkcs8',
-                                format: 'pem',
-                                cipher: 'aes-256-cbc',
-                                passphrase: client.apikey.secret
+                                format: 'pem'
                             }
                         }, function (err, publicKey, privateKey) {
                             // Handle errors and use the generated key pair.
@@ -101,6 +99,7 @@ exports.login = function(req, res) {
                                     }
 
                                     var token = jwt.sign(savedUser.toObject(), privateKey, {
+                                        algorithm: 'RS256',
                                         expiresIn: '1d'
                                     });
 
