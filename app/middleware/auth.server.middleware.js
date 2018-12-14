@@ -11,9 +11,9 @@ module.exports = function(req, res, next) {
 
     if (token && clientId) {
         Client.findOne({
-            _id: 1,
             'apikey.id': clientId
         },{
+            _id: 1,
             apikey: 1
         }).exec(function(err, client) {
             if (client === null) {
