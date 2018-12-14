@@ -2,7 +2,6 @@
 
 module.exports = function(req, res, next) {
 
-    var mongoose = require('mongoose');
     var Client = require('@terepac/terepac-models').Client;
     var jwt = require('jsonwebtoken');
 
@@ -13,18 +12,19 @@ module.exports = function(req, res, next) {
         Client.findOne({
             'apikey.id': clientId
         },{
-            apikey: 1
+            apikey: 1,
+            'pki.publicKey': 1
         }).exec(function(err, client) {
             if (client === null) {
                 res.status(401).send({
-                    message: 'Client not found',
+                    message: 'Client ID not found',
                     ref: 'https://developers.terepac.one/#authentication'
                 });
             } else {
-                jwt.verify(token, client.apikey.secret, function(err, decoded) {
+                jwt.verify(token, client.pki.publicKey, function(err, decoded) {
                     if (err) {
                         res.status(401).send({
-                            message: 'The supplied x-access-token (JWT) is not valid.',
+                            message: 'The supplied x-access-token (JWT) is not valid. Please login again.',
                             ref: 'https://developers.terepac.one/#authentication',
                             error: err
                         });
