@@ -32,7 +32,7 @@ module.exports = function(req, res, next) {
                         });
                     }
 
-                    if (user.client !== client._id) {
+                    if (user.client.valueOf() !== client._id.valueOf()) {
                         res.status(401).send({
                             message: 'Authentication error: User does not belong to supplied Client ID.',
                             ref: 'https://developers.terepac.one/#authentication',
