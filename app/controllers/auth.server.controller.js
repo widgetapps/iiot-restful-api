@@ -75,7 +75,7 @@ exports.login = function(req, res) {
                                 savedUser.active = undefined;
                                 savedUser.resetPasswordToken = undefined;
                                 savedUser.resetPasswordExpires = undefined;
-                                savedUser.keys = undefined;
+                                savedUser.pki = undefined;
 
                                 // Add reseller info to the user
                                 if (client.reseller) {
