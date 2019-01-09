@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var morgan = require('morgan'),
+	express = require('express'),
 	bodyParser = require('body-parser'),
 	compress = require('compression'),
 	methodOverride = require('method-override'),
