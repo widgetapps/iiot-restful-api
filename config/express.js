@@ -5,7 +5,6 @@
  */
 var morgan = require('morgan'),
 	bodyParser = require('body-parser'),
-	util = require('../lib/util'),
 	compress = require('compression'),
 	methodOverride = require('method-override'),
 	cookieParser = require('cookie-parser'),
