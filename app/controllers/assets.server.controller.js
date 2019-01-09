@@ -14,7 +14,7 @@ var mongoose = require('mongoose'),
     _ = require('lodash'),
     async = require('async'),
     authorize = require('../lib/authorize.server.lib'),
-    BigNumber = require('bignumber.js'),
+    bignumber = require('bignumber.js'),
     endpoint = 'asset';
 
 exports.getOne = function(req, res) {
@@ -124,6 +124,7 @@ exports.resetSettings = function(req, res) {
         { '_id': req.params.assetId},
         {
             '$set': {
+                updated: new Date(),
                 settings: [{
                     key: "pressure-interval",
                     name: "pressure-interval",
@@ -155,23 +156,23 @@ exports.resetSettings = function(req, res) {
                 },{
                     key: "high-limit",
                     name: "high-limit",
-                    datatype: "double",
+                    datatype: "decimal",
                     range: [-14.5, 347.7],
-                    unit: "psi",
+                    unit: "kPa",
                     value: 80.5
                 },{
                     key: "low-limit",
                     name: "low-limit",
-                    datatype: "double",
+                    datatype: "decimal",
                     range: [-14.5, 347.7],
-                    unit: "psi",
+                    unit: "kPa",
                     value: 80.5
                 },{
                     key: "dead-band",
                     name: "dead-band",
-                    datatype: "double",
+                    datatype: "decimal",
                     range: [-14.5, 347.7],
-                    unit: "psi",
+                    unit: "kPa",
                     value: 80.5
                 },{
                     key: "pre-roll",
@@ -269,6 +270,7 @@ exports.updateSetting = function(req, res) {
         { '_id': req.params.assetId, 'settings.key': req.params.settingKey},
         {
             '$set': {
+                updated: new Date(),
                 'settings.$.value': req.body.value
             }
         },
@@ -453,6 +455,17 @@ function sendConfigToDevice(app, asset, callback) {
                             if (isNaN(val)) {
                                 val = 0;
                             }
+                            configSettings[setting.key] = val;
+                            break;
+                        case 'decimal':
+                            val = parseFloat(setting.value);
+
+                            if (isNaN(val)) {
+                                val = bignumber(0).dp(2);
+                            } else {
+                                val = bignumber(parseFloat(setting.value)).dp(2);
+                            }
+
                             configSettings[setting.key] = val;
                             break;
                         case 'date':

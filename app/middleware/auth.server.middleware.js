@@ -26,13 +26,13 @@ module.exports = function(req, res, next) {
 
                 User.findById(decodedUser._id, {pki: 1, client: 1}).exec(function(err, user) {
                     if (!user || err) {
-                        res.status(404).send({
+                        res.status(401).send({
                             message: 'Authentication error: User not found.',
                             ref: 'https://developers.terepac.one/#authentication'
                         });
                     }
 
-                    /* NOot sure why this evaluates to true when both values are the same :P
+                    /* Not sure why this evaluates to true when both values are the same :P
                     if (user.client.valueOf() !== client._id.valueOf()) {
                         res.status(401).send({
                             message: 'Authentication error: User does not belong to supplied Client ID.',

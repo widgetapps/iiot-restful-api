@@ -2,7 +2,9 @@
 
 module.exports = function(app) {
 	// Root routing
-    var clients = require('../../../app/controllers/clients.server.controller');
+    var clients = require('../../../app/controllers/clients.server.controller'),
+        alerts = require('../../../app/controllers/alerts.server.controller'),
+        alertGroups = require('../../../app/controllers/alertgroups.server.controller');
 
     app.route('/clients')
         .get(clients.list)
@@ -36,4 +38,22 @@ module.exports = function(app) {
     app.route('/clients/:id/users')
         .get(clients.getUsers)
         .post(clients.insertUser);
+
+    app.route('/clients/:id/alerts')
+        .get(alerts.list)
+        .post(alerts.insert);
+
+    app.route('/clients/:id/alerts/:alertId')
+        .get(alerts.get)
+        .put(alerts.update)
+        .delete(alerts.remove);
+
+    app.route('/clients/:id/alertgroups')
+        .get(alertGroups.list)
+        .post(alertGroups.insert);
+
+    app.route('/client/:id/alertgroups/:code')
+        .get(alertGroups.get)
+        .put(alertGroups.update)
+        .delete(alertGroups.remove);
 };

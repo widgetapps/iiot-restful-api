@@ -8,5 +8,5 @@ module.exports = function(app) {
 	app.route('/').get(core.index);
 
 	app.route('/dbcheck').get(core.dbCheck);
-	app.route('/createhash/:serialNumber').get(core.getHashes);
+	// app.route('/createhash/:serialNumber').get(core.getHashes);
 };

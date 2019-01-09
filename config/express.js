@@ -3,13 +3,9 @@
 /**
  * Module dependencies.
  */
-var fs = require('fs'),
-	http = require('http'),
-	https = require('https'),
-	express = require('express'),
-	morgan = require('morgan'),
+var morgan = require('morgan'),
 	bodyParser = require('body-parser'),
-	session = require('express-session'),
+	util = require('../lib/util'),
 	compress = require('compression'),
 	methodOverride = require('method-override'),
 	cookieParser = require('cookie-parser'),
@@ -110,12 +106,14 @@ var fs = require('fs'),
 		console.error(err.stack);
 
 		// Error page
-		res.status(500).json({message: 'Server error: ' +  err.stack});
+		res.status(500).json({message: 'Internal server error.'});
 	});
 
-	// Assume 404 since no middleware responded
+	// Assume 501 since no middleware responded
 	app.use(function(req, res) {
-		res.status(404).json({message: 'Resource not found'});
+		res.status(501).send({
+			message: 'The requested endpoint does not exists or is not implemented.'
+		});
 	});
 
 	// Return Express server instance

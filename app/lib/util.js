@@ -2,6 +2,12 @@
 
 var crypto = require('crypto');
 
+exports.sendUnauthorized = function (res) {
+    res.status(403).send({
+        message: 'You are not authorized to access this resource.'
+    });
+};
+
 exports.createHash = function (buffer) {
     var key = 'DIbwxjIzrF6Ucr0itJma';
     if (process.env.SECRET_KEY) {

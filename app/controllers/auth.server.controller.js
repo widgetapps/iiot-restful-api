@@ -91,7 +91,7 @@ exports.login = function(req, res) {
 
                                     var token = jwt.sign(savedUser.toObject(), privateKey, {
                                         algorithm: 'RS256',
-                                        expiresIn: '1d'
+                                        expiresIn: '7d'
                                     });
 
                                     // return the information, including token, as JSON
