@@ -150,7 +150,7 @@ exports.resetSettings = function(req, res) {
                     key: "connect-interval",
                     name: "connect-interval",
                     datatype: "int",
-                    range: [5, 1440],
+                    range: [1, 1440],
                     unit: "minutes",
                     value: 10
                 },{
@@ -199,8 +199,8 @@ exports.resetSettings = function(req, res) {
                     key: "rssi-interval",
                     name: "rssi-interval",
                     datatype: "int",
-                    range: [1, 24],
-                    unit: "hours",
+                    range: [1, 1440],
+                    unit: "minutes",
                     value: 1
                 }]
             }
