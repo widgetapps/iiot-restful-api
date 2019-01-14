@@ -463,7 +463,7 @@ function sendConfigToDevice(app, asset, callback) {
                             if (isNaN(val)) {
                                 val = bignumber(0).dp(2);
                             } else {
-                                val = bignumber(parseFloat(setting.value)).dp(2);
+                                val = bignumber(parseFloat(setting.value).toFixed(2)).dp(2);
                             }
 
                             configSettings[setting.key] = val;
