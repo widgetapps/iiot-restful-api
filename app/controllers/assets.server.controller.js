@@ -265,6 +265,61 @@ exports.getSetting = function(req, res) {
     });
 };
 
+exports.updateSettings = function (req, res) {
+
+    // TODO: Update this to update all settings in one call.
+    /**
+     * Find the asset.
+     * Get the settings
+     * Loop through each setting and update value
+     * Save the document
+     */
+    var promise = Asset.findOne({ _id: req.params.assetId}, {client: 1, 'settings': 1}).exec();
+
+    promise.then(function(asset) {
+        var authorized = false;
+
+        switch (req.user.role) {
+            case 'user':
+                if (req.user.client.toString() === asset.client.toString()) {
+                    authorized = true;
+                }
+                break;
+            case 'admin':
+            case 'manager':
+                if (req.user.client.toString() === asset.client.toString() || _.contains(req.user.resellerClients, asset.client)) {
+                    authorized = true;
+                }
+                break;
+            case 'super':
+                authorized = true;
+                break;
+        }
+
+        if (!authorized) {
+            res.status(401).send({
+                message: 'You are not authorized to access this resource.'
+            });
+            return;
+        }
+
+        if (!asset) {
+            res.status(404).send({
+                message: 'Asset not found.'
+            });
+        }
+
+        _.forEach(req.body, function (setting) {
+
+        })
+
+    }).catch(function(error) {
+        res.status(404).send({
+            message: 'Error with the database. ' + error
+        });
+    });
+};
+
 exports.updateSetting = function(req, res) {
     Asset.findOneAndUpdate(
         { '_id': req.params.assetId, 'settings.key': req.params.settingKey},
@@ -463,7 +518,7 @@ function sendConfigToDevice(app, asset, callback) {
                             if (isNaN(val)) {
                                 val = bignumber(0).dp(2);
                             } else {
-                                val = bignumber(parseFloat(setting.value).toFixed(2)).dp(2);
+                                val = bignumber(parseFloat(setting.value)).dp(2);
                             }
 
                             configSettings[setting.key] = val;
