@@ -536,6 +536,7 @@ exports.listDevices = function(req, res) {
             created: 1,
             updated: 1,
             serialNumber: 1,
+            topicId: 1,
             type: 1,
             description: 1,
             sensors: 1,
@@ -563,6 +564,7 @@ exports.insertDevice = function(req, res) {
 
         var device = {
             serialNumber: req.body.serialNumber,
+            topicId: req.body.topicId,
             type: req.body.type,
             description: req.body.description,
             client: mongoose.Types.ObjectId(req.params.id)
