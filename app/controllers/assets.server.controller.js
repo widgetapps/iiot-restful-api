@@ -202,6 +202,34 @@ exports.resetSettings = function(req, res) {
                     range: [1, 1440],
                     unit: "minutes",
                     value: 1
+                },{
+                    key: "hydrophone-start",
+                    name: "hydrophone-start",
+                    datatype: "int",
+                    range: [0, 86399],
+                    unit: "seconds",
+                    value: 1
+                },{
+                    key: "hydrophone-count",
+                    name: "hydrophone-count",
+                    datatype: "int",
+                    range: [0, 3600],
+                    unit: "events per day",
+                    value: 1
+                },{
+                    key: "hydrophone-interval",
+                    name: "hydrophone-interval",
+                    datatype: "int",
+                    range: [0, 86400],
+                    unit: "seconds",
+                    value: 1
+                },{
+                    key: "hydrophone-on-time",
+                    name: "hydrophone-on-time",
+                    datatype: "int",
+                    range: [0, 86400],
+                    unit: "seconds",
+                    value: 1
                 }]
             }
         },
@@ -516,9 +544,9 @@ function sendConfigToDevice(app, asset, callback) {
                             val = parseFloat(setting.value);
 
                             if (isNaN(val)) {
-                                val = bignumber(0).dp(2);
+                                val = bignumber(0.001).dp(2);
                             } else {
-                                val = bignumber(parseFloat(setting.value)).dp(2);
+                                val = bignumber(parseFloat(setting.value) + 0.001).dp(2);
                             }
 
                             configSettings[setting.key] = val;
