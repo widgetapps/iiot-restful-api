@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    authorize = require('../lib/authorize.server.lib'),
     Client = require('@terepac/terepac-models').Client,
     _ = require('lodash'),
     util = require('../lib/util'),
