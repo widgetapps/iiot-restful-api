@@ -29,7 +29,7 @@ exports.login = function(req, res) {
 
                     if (!client) {
                         res.status(404).send({
-                            message: 'No client associated with user, your are an orphan!'
+                            message: 'No client associated with user, you are an orphan!'
                         });
                     } else {
                         crypto.generateKeyPair('rsa', {

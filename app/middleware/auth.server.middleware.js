@@ -24,6 +24,8 @@ module.exports = function(req, res, next) {
             } else {
                 var decodedUser = jwt.decode(token);
 
+                console.log(token);
+
                 User.findById(decodedUser._id, {pki: 1, client: 1}).exec(function(err, user) {
                     if (!user || err) {
                         res.status(401).send({

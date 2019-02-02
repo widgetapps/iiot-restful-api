@@ -669,7 +669,7 @@ exports.getUsers = function(req, res) {
                 lastName: 1,
                 email: 1,
                 phone: 1,
-                roles: 1,
+                role: 1,
                 active: 1
             }, function(err, users) {
                 res.json(users);
