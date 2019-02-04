@@ -24,7 +24,13 @@ module.exports = function(req, res, next) {
             } else {
                 var decodedUser = jwt.decode(token);
 
-                console.log(decodedUser);
+                if (decodedUser === null) {
+                    res.status(401).send({
+                        message: 'The JWT is corrupt.',
+                        ref: 'https://developers.terepac.one/#authentication'
+                    });
+                    return;
+                }
 
                 User.findById(decodedUser._id, {pki: 1, client: 1}).exec(function(err, user) {
                     if (!user || err) {

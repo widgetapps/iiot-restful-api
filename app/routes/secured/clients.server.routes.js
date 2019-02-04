@@ -32,6 +32,9 @@ module.exports = function(app) {
         .get(clients.listDevices)
         .post(clients.insertDevice);
 
+    app.route('/clients/:id/devices/onboard/:type')
+        .post(clients.onboardDevice);
+
     app.route('/clients/:id/events')
         .get(clients.listEvents);
 
