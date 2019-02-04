@@ -12,5 +12,5 @@ module.exports = function(app) {
         .put(users.update);
 
     app.route('/users/:id/password')
-        .put(users.resetPassword);
+        .put(users.changePassword);
 };

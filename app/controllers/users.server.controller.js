@@ -48,7 +48,7 @@ exports.update = function(req, res) {
     });
 };
 
-exports.resetPassword = function(req, res) {
+exports.changePassword = function(req, res) {
     if (!_.contains(req.user.roles, 'admin')) {
         res.status(401).send({
             message: 'You are not authorized to access this resource.'
@@ -56,7 +56,21 @@ exports.resetPassword = function(req, res) {
         return;
     }
 
-    res.status(400).send({
-        message: 'Not implemented yet.'
+    var promise = User.findOne({ email: req.body.email }).exec();
+    promise.then(function (user) {
+        user.pasword = req.body.password;
+
+        user.save(function (err, user) {
+            if (err) {
+                res.status(400).send({
+                    message: 'Error resetting password: ' + err
+                });
+                return;
+            } else {
+                res.status(200).send({
+                    message: 'The password has been changed.'
+                });
+            }
+        });
     });
 };
