@@ -610,7 +610,7 @@ exports.insertDevice = function(req, res) {
 
 exports.onboardDevice = function(req, res) {
 
-    if (req.user.role !== ' manufacturer' && req.user.role !== 'super') {
+    if (req.user.role !== 'manufacturer' && req.user.role !== 'super') {
         res.status(401).send({
             message: 'You are not authorized to access this resource.'
         });
