@@ -49,7 +49,7 @@ exports.update = function(req, res) {
 };
 
 exports.changePassword = function(req, res) {
-    if (!_.contains(req.user.roles, 'admin')) {
+    if (req.user.role !== 'super' && req.user.role !== 'admin') {
         res.status(401).send({
             message: 'You are not authorized to access this resource.'
         });
