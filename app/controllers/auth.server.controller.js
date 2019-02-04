@@ -20,7 +20,7 @@ exports.login = function(req, res) {
             });
         } else {
             if (!user.authenticate(req.body.password)) {
-                res.status(404).send({
+                res.status(401).send({
                     message: 'Authentication failed. Incorrect password.'
                 });
             } else {
