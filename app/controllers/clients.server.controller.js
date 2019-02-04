@@ -625,8 +625,8 @@ exports.onboardDevice = function(req, res) {
     }
 
     var device = {
-        serialNumber: req.body['hydrant-id'],
-        topicId: req.body['hydrant-id'],
+        serialNumber: req.body['serial-number'],
+        topicId: req.body['topic-id'],
         type: 'hydrant',
         components: {
             digitalPcb: req.body['digital-pcb-id'],
