@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    crypto = require('crypto'),
     Device = require('@terepac/terepac-models').Device,
     Mqtt = require('@terepac/terepac-models').Mqtt;
 
