@@ -378,7 +378,6 @@ exports.updateSetting = function(req, res) {
     );
 };
 
-// Remember to add/update the tag when a device is added to an asset. Think about other things that need updating!
 exports.addDevice = function(req, res) {
     authorize.validate(endpoint, req, res, 'manager', function() {
         var assetId  = mongoose.Types.ObjectId(req.params.assetId),
@@ -467,7 +466,7 @@ exports.addDevice = function(req, res) {
                              }
 
                              res.status(200).send({
-                                 message: 'Device ' + device.serialNumber + ' added to asset ' + asset.tagCode
+                                 message: 'Device ' + device.serialNumber + ' assigned to asset ' + asset.tagCode
                              });
                          });
 
@@ -479,21 +478,73 @@ exports.addDevice = function(req, res) {
     });
 };
 
-// Remember to add/update the tag when a device is removed from an asset
 exports.removeDevice = function(req, res) {
     authorize.validate(endpoint, req, res, 'manager', function() {
-        /*
-         1) Get the device's tags
-         2) Tag: Place the activeStart as the historical start & the current date as the historical end with the deviceId
-         3) Tag: Clear the activeStart
-         4) Tag: Clear the deviceId
-         5) Tag: Set as not active
-         6) Get the device
-         7) Clear out the asset_id, location_id (make sure the asset_id's match) & alert limits
-         8) Save the device
-         */
-        var assetId  = mongoose.Types.ObjectId(req.params.assetId),
-            deviceId = mongoose.Types.ObjectId(req.params.deviceId);
+        var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
+
+        var tagPromise = Tag.find( { device: deviceId } ).exec();
+
+        tagPromise.then(function (tags) {
+            async.each(tags, function (tag, callback) {
+
+                var historical = {
+                    start: tag.activeStart,
+                    end: new Date(),
+                    deviceId: deviceId
+                };
+                tag.historical.push(historical);
+
+                tag.active = false;
+                tag.activeStart = null;
+                tag.device = null;
+
+                tag.save(function (err, savedTag) {
+                    if (err) {
+                        res.status(400).send({
+                            message: 'Error removing the device: ' + err
+                        });
+                        return;
+                    }
+
+                    callback();
+
+                });
+            }, function (err) {
+                if (err) {
+                    res.status(400).send({
+                        message: 'Error removing the device: ' + err
+                    });
+                    return;
+                }
+
+                var devicePromise = Device.findOne({ _id: deviceId }).exec();
+                devicePromise.then(function(device) {
+                    if (!device) {
+                        res.status(404).send({
+                            message: 'Device not found'
+                        });
+                        return;
+                    }
+
+                    device.asset = null;
+                    device.location = null;
+
+                    device.save(function(err, savedDevice) {
+                        if (err) {
+                            res.status(400).send({
+                                message: 'Error removing the device: ' + err
+                            });
+                            return;
+                        }
+
+                        res.status(200).send({
+                            message: 'Device ' + device.serialNumber + ' removed from asset ' + asset.tagCode
+                        });
+
+                    });
+                });
+            });
+        }).catch(console.warn);
 
     });
 };
