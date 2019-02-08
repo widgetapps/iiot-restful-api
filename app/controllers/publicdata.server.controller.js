@@ -46,7 +46,7 @@ exports.dataNumbers = function(req, res) {
 };
 
 exports.aggregated = function(req, res) {
-    if (req.params.sensor !== 'TI' && req.params.sensor !== 'VI') {
+    if (req.params.sensor !== 'TI' && req.params.sensor !== 'VI' && req.params.sensor !== 'PI') {
         res.status(404).send({
             message: 'Sensor type not found.'
         });
@@ -77,8 +77,8 @@ exports.aggregated = function(req, res) {
                 }
             },
             'count': {'$sum': 1},
-            'min': {'$min': min},
-            'max': {'$max': max},
+            'min': {'$min': '$data.values.min'},
+            'max': {'$max': '$data.values.max'},
             'average': {'$avg': '$data.values.average'}
         }},
         {'$sort': {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1}}
