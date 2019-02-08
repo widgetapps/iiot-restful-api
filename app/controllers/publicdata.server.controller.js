@@ -57,7 +57,7 @@ exports.aggregated = function(req, res) {
     var max = '$data.values.max';
     var average = '$data.values.average';
 
-    if (req.params.sensor === 'VI' || req.params.sensor === 'VI') {
+    if (req.params.sensor === 'VI' || req.params.sensor === 'TI') {
         min = '$data.values.point';
         max = '$data.values.point';
         average = '$data.values.point';
