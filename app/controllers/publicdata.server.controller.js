@@ -55,10 +55,12 @@ exports.aggregated = function(req, res) {
 
     var min = '$data.values.min';
     var max = '$data.values.max';
+    var average = '$data.values.average';
 
-    if (req.params.sensor === 'VI') {
-        min = '$data.values.average';
-        max = '$data.values.average';
+    if (req.params.sensor === 'VI' || req.params.sensor === 'VI') {
+        min = '$data.values.point';
+        max = '$data.values.point';
+        average = '$data.values.point';
     }
 
     Telemetry.aggregate([
@@ -77,9 +79,9 @@ exports.aggregated = function(req, res) {
                 }
             },
             'count': {'$sum': 1},
-            'min': {'$min': '$data.values.min'},
-            'max': {'$max': '$data.values.max'},
-            'average': {'$avg': '$data.values.average'}
+            'min': {'$min': min},
+            'max': {'$max': max},
+            'average': {'$avg': average}
         }},
         {'$sort': {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1}}
     ], function (err, result) {
