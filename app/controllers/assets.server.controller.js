@@ -34,7 +34,7 @@ exports.getOne = function(req, res) {
                 case 'manufacturer':
                 case 'admin':
                 case 'manager':
-                    if (req.user.client.toString() === asset.client.toString() || _.contains(req.user.resellerClients, asset.client)) {
+                    if (req.user.client.toString() === asset.client.toString() || _.includes(req.user.resellerClients, asset.client)) {
                         authorized = true;
                     }
                     break;
@@ -86,7 +86,7 @@ exports.listSettings = function(req, res) {
                 case 'manufacturer':
                 case 'admin':
                 case 'manager':
-                    if (req.user.client.toString() === asset.client.toString() || _.contains(req.user.resellerClients, asset.client)) {
+                    if (req.user.client.toString() === asset.client.toString() || _.includes(req.user.resellerClients, asset.client)) {
                         authorized = true;
                     }
                     break;
@@ -265,7 +265,7 @@ exports.getSetting = function(req, res) {
             case 'manufacturer':
             case 'admin':
             case 'manager':
-                if (req.user.client.toString() === asset.client.toString() || _.contains(req.user.resellerClients, asset.client)) {
+                if (req.user.client.toString() === asset.client.toString() || _.includes(req.user.resellerClients, asset.client)) {
                     authorized = true;
                 }
                 break;
@@ -319,7 +319,7 @@ exports.updateSettings = function (req, res) {
             case 'manufacturer':
             case 'admin':
             case 'manager':
-                if (req.user.client.toString() === asset.client.toString() || _.contains(req.user.resellerClients, asset.client)) {
+                if (req.user.client.toString() === asset.client.toString() || _.includes(req.user.resellerClients, asset.client)) {
                     authorized = true;
                 }
                 break;

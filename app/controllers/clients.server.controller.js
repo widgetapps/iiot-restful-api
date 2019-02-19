@@ -137,7 +137,7 @@ exports.getOne = function(req, res) {
             case 'manufacturer':
             case 'manager':
             case 'admin':
-                if (req.user.client === req.params.id || _.contains(req.user.resellerClients, req.params.id)) {
+                if (req.user.client === req.params.id || _.includes(req.user.resellerClients, req.params.id)) {
                     authorized = true;
                 }
                 break;
@@ -185,13 +185,13 @@ exports.update = function(req, res) {
 
         switch (req.user.role) {
             case 'manager':
-                if (_.contains(req.user.resellerClients, req.params.id)) {
+                if (_.includes(req.user.resellerClients, req.params.id)) {
                     authorized = true;
                 }
                 break;
             case 'manufacturer':
             case 'admin':
-                if (req.user.client === req.params.id || _.contains(req.user.resellerClients, req.params.id)) {
+                if (req.user.client === req.params.id || _.includes(req.user.resellerClients, req.params.id)) {
                     authorized = true;
                 }
                 break;
@@ -288,7 +288,7 @@ exports.searchTelemetry = function(req, res) {
             case 'manufacturer':
             case 'manager':
             case 'admin':
-                if (req.user.client === req.params.id || _.contains(req.user.resellerClients, req.params.id)) {
+                if (req.user.client === req.params.id || _.includes(req.user.resellerClients, req.params.id)) {
                     authorized = true;
                 }
                 break;

@@ -10,7 +10,7 @@ var mongoose = require('mongoose'),
     moment = require('moment');
 
 exports.list = function(req, res) {
-    if (!_.contains(req.user.roles, 'admin')) {
+    if (!_.includes(req.user.roles, 'admin')) {
         res.status(401).send({
             message: 'You are not authorized to access this resource.'
         });
@@ -23,7 +23,7 @@ exports.list = function(req, res) {
 };
 
 exports.getOne = function(req, res) {
-    if (!_.contains(req.user.roles, 'admin')) {
+    if (!_.includes(req.user.roles, 'admin')) {
         res.status(401).send({
             message: 'You are not authorized to access this resource.'
         });
@@ -36,7 +36,7 @@ exports.getOne = function(req, res) {
 };
 
 exports.update = function(req, res) {
-    if (!_.contains(req.user.roles, 'admin')) {
+    if (!_.includes(req.user.roles, 'admin')) {
         res.status(401).send({
             message: 'You are not authorized to access this resource.'
         });

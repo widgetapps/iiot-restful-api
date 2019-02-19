@@ -154,12 +154,12 @@ function authorized(req) {
 
     switch (req.user.role) {
         case 'manager':
-            if (_.contains(req.user.resellerClients, req.params.id)) {
+            if (_.includes(req.user.resellerClients, req.params.id)) {
                 return true;
             }
             break;
         case 'admin':
-            if (req.user.client === req.params.id || _.contains(req.user.resellerClients, req.params.id)) {
+            if (req.user.client === req.params.id || _.includes(req.user.resellerClients, req.params.id)) {
                 return true;
             }
             break;
