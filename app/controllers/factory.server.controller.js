@@ -25,14 +25,10 @@ exports.insert = function(req, res) {
     }
 
     var device = {
-        serialNumber: req.body['topic-id'],
-        topicId: req.body['topic-id'],
+        serialNumber: req.body['serial-number'],
+        topicId: req.body['serial-number'],
         type: 'hydrant',
-        components: {
-            digitalPcb: req.body['digital-pcb-id'],
-            sensorPcb: req.body['sensor-pcb-id']
-        },
-        client: mongoose.Types.ObjectId(req.body['client-id'])
+        client: mongoose.Types.ObjectId('5c55bb32e46c3b302f4d2bd8') // This is the factory ID
     };
 
     device.sensors = [
@@ -135,7 +131,7 @@ exports.remove = function(req, res) {
                 return;
             }
 
-            if (device.asset === null) {
+            if (device.client !== '5c55bb32e46c3b302f4d2bd8') {
                 device.remove(function (err, deletedDevice) {
                     if (err) {
                         res.status(500).send({
@@ -152,7 +148,7 @@ exports.remove = function(req, res) {
             }
 
             res.status(400).send({
-                message: 'Cannot delete a device assigned to an asset.'
+                message: 'Cannot delete a device assigned to a client.'
             });
         });
 };

@@ -31,6 +31,7 @@ exports.getOne = function(req, res) {
                         authorized = true;
                     }
                     break;
+                case 'manufacturer':
                 case 'admin':
                 case 'manager':
                     if (req.user.client.toString() === asset.client.toString() || _.contains(req.user.resellerClients, asset.client)) {
@@ -82,6 +83,7 @@ exports.listSettings = function(req, res) {
                         authorized = true;
                     }
                     break;
+                case 'manufacturer':
                 case 'admin':
                 case 'manager':
                     if (req.user.client.toString() === asset.client.toString() || _.contains(req.user.resellerClients, asset.client)) {
@@ -260,6 +262,7 @@ exports.getSetting = function(req, res) {
                     authorized = true;
                 }
                 break;
+            case 'manufacturer':
             case 'admin':
             case 'manager':
                 if (req.user.client.toString() === asset.client.toString() || _.contains(req.user.resellerClients, asset.client)) {
@@ -313,6 +316,7 @@ exports.updateSettings = function (req, res) {
                     authorized = true;
                 }
                 break;
+            case 'manufacturer':
             case 'admin':
             case 'manager':
                 if (req.user.client.toString() === asset.client.toString() || _.contains(req.user.resellerClients, asset.client)) {
