@@ -32,7 +32,7 @@ exports.list = function(req, res) {
                 _id: req.user.client
             };
             break;
-        case'manufacturer':
+        case 'manufacturer':
         case 'manager':
         case 'admin':
             query = {
@@ -483,6 +483,114 @@ exports.insertAsset = function(req, res) {
         var asset = new Asset(req.body);
         asset.client = clientId;
         asset.location = mongoose.Types.ObjectId(req.body.location);
+        if (req.body.type === null) {
+            asset.settings = [{
+                    key: "pressure-interval",
+                    name: "pressure-interval",
+                    datatype: "int",
+                    range: [1, 1440],
+                    unit: "minutes",
+                    value: 60
+                },{
+                    key: "battery-interval",
+                    name: "battery-interval",
+                    datatype: "int",
+                    range: [1, 1440],
+                    unit: "minutes",
+                    value: 60
+                },{
+                    key: "temperature-interval",
+                    name: "temperature-interval",
+                    datatype: "int",
+                    range: [1, 1440],
+                    unit: "minutes",
+                    value: 60
+                },{
+                    key: "connect-interval",
+                    name: "connect-interval",
+                    datatype: "int",
+                    range: [1, 1440],
+                    unit: "minutes",
+                    value: 10
+                },{
+                    key: "high-limit",
+                    name: "high-limit",
+                    datatype: "decimal",
+                    range: [-14.5, 347.7],
+                    unit: "kPa",
+                    value: 80.5
+                },{
+                    key: "low-limit",
+                    name: "low-limit",
+                    datatype: "decimal",
+                    range: [-14.5, 347.7],
+                    unit: "kPa",
+                    value: 80.5
+                },{
+                    key: "dead-band",
+                    name: "dead-band",
+                    datatype: "decimal",
+                    range: [-14.5, 347.7],
+                    unit: "kPa",
+                    value: 80.5
+                },{
+                    key: "pre-roll",
+                    name: "pre-roll",
+                    datatype: "int",
+                    range: [0, 300],
+                    unit: "seconds",
+                    value: 0
+                },{
+                    key: "post-roll",
+                    name: "post-roll",
+                    datatype: "int",
+                    range: [0, 300],
+                    unit: "seconds",
+                    value: 0
+                },{
+                    key: "start-time",
+                    name: "start-time",
+                    datatype: "date",
+                    unit: "date",
+                    range: "",
+                    value: ""
+                },{
+                    key: "rssi-interval",
+                    name: "rssi-interval",
+                    datatype: "int",
+                    range: [1, 1440],
+                    unit: "minutes",
+                    value: 1
+                },{
+                    key: "hydrophone-start",
+                    name: "hydrophone-start",
+                    datatype: "int",
+                    range: [0, 86399],
+                    unit: "seconds",
+                    value: 1
+                },{
+                    key: "hydrophone-count",
+                    name: "hydrophone-count",
+                    datatype: "int",
+                    range: [0, 3600],
+                    unit: "events per day",
+                    value: 1
+                },{
+                    key: "hydrophone-interval",
+                    name: "hydrophone-interval",
+                    datatype: "int",
+                    range: [0, 86400],
+                    unit: "seconds",
+                    value: 1
+                },{
+                    key: "hydrophone-on-time",
+                    name: "hydrophone-on-time",
+                    datatype: "int",
+                    range: [0, 86400],
+                    unit: "seconds",
+                    value: 1
+                }];
+        }
 
         asset.save(function (err, ass) {
             if (err) {

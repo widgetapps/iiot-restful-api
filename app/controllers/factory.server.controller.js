@@ -26,7 +26,7 @@ exports.insert = function(req, res) {
 
     var device = {
         serialNumber: req.body['serial-number'],
-        topicId: req.body['serial-number'],
+        topicId: req.body['topic-id'],
         type: 'hydrant',
         client: mongoose.Types.ObjectId('5c55bb32e46c3b302f4d2bd8') // This is the factory ID
     };
@@ -52,7 +52,7 @@ exports.insert = function(req, res) {
             });
         } else {
             var mqtt = new Mqtt({
-                username: d.topicId,
+                username: req.body['mqtt-username'],
                 password: crypto.createHash('sha256').update(req.body['mqtt-password']).digest('hex'),
                 is_superuser: false,
                 publish: [
@@ -94,7 +94,7 @@ exports.changePassword = function(req, res) {
         return;
     }
 
-    Mqtt.findOne ( { username: req.params.topicId } )
+    Mqtt.findOne ( { username: req.params.username } )
         .exec(function (err, mqtt) {
             if (err) {
                 res.status(500).send({
@@ -122,7 +122,7 @@ exports.remove = function(req, res) {
         return;
     }
 
-    Device.findOne( { topicId: req.params.topicId } )
+    Device.findOne( { _id: req.params.deviceId } )
         .exec(function (err, device) {
             if (err) {
                 res.status(500).send({
@@ -131,7 +131,7 @@ exports.remove = function(req, res) {
                 return;
             }
 
-            if (device.client !== '5c55bb32e46c3b302f4d2bd8') {
+            if (device.client === '5c55bb32e46c3b302f4d2bd8' && device.asset === null) {
                 device.remove(function (err, deletedDevice) {
                     if (err) {
                         res.status(500).send({
@@ -141,14 +141,14 @@ exports.remove = function(req, res) {
                     }
 
                     res.json({
-                        message: 'The device with topicID ' + deletedDevice.topicId + ' has been deleted.'
+                        message: 'The device has been deleted.'
                     });
                     return;
                 });
             }
 
             res.status(400).send({
-                message: 'Cannot delete a device assigned to a client.'
+                message: 'Cannot delete the device, it is assigned to a client and/or an asset.'
             });
         });
 };
