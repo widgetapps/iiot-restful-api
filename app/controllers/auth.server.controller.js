@@ -115,3 +115,7 @@ exports.login = function(req, res) {
 exports.logout = function(req, res) {
 
 };
+
+exports.validate = function(req, res) {
+    res.json({message: "The JWT is valid."});
+};
