@@ -98,7 +98,7 @@ function getClient(req, res) {
                 break;
             case 'manager':
             case 'admin':
-                if (req.user.client === req.params.id || _.contains(req.user.resellerClients, req.params.id)) {
+                if (req.user.client === req.params.id || _.includes(req.user.resellerClients, req.params.id)) {
                     authorized = true;
                 }
                 break;

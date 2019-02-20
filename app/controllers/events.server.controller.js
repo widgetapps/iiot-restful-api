@@ -30,9 +30,10 @@ exports.getOne = function(req, res) {
                         authorized = true;
                     }
                     break;
+                case 'manufacturer':
                 case 'admin':
                 case 'manager':
-                    if (req.user.client.toString() === event.client.toString() || _.contains(req.user.resellerClients, event.client)) {
+                    if (req.user.client.toString() === event.client.toString() || _.includes(req.user.resellerClients, event.client)) {
                         authorized = true;
                     }
                     break;
@@ -68,6 +69,7 @@ exports.searchTelemetry = function(req, res) {
                     client: req.user.client
                 };
                 break;
+            case 'manufacturer':
             case 'manager':
             case 'admin':
                 query = {
