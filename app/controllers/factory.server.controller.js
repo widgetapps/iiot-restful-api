@@ -133,6 +133,10 @@ exports.remove = function(req, res) {
 
             var assetId = device.asset;
 
+            if (!assetId){
+                assetId = 'hello';
+            }
+
             res.json({
                 client: device.client,
                 asset: assetId
