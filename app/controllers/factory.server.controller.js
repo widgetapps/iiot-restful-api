@@ -133,7 +133,7 @@ exports.remove = function(req, res) {
 
             res.json({
                 client: device.client,
-                asset: device['asset']
+                asset: 'hello'
             });
             return;
 
