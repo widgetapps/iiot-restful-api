@@ -131,7 +131,7 @@ exports.remove = function(req, res) {
                 return;
             }
 
-            if (!('asset' in device)) {
+            if (device['asset'] === false) {
                 device.asset = 'no asset';
             }
 
