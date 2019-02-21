@@ -131,6 +131,10 @@ exports.remove = function(req, res) {
                 return;
             }
 
+            if (!('asset' in device)) {
+                device.asset = 'no asset';
+            }
+
             res.json({
                 client: device.client,
                 asset: device.asset
