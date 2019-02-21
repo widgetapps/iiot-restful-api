@@ -5,7 +5,8 @@
 /**
  * Module dependencies.
  */
-require('./config/init')()
+require('./config/init')();
+require('./app/lib/acl');
 
 var config = require('./config/config'),
 	mongoose = require('mongoose');

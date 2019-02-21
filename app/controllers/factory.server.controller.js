@@ -122,7 +122,7 @@ exports.remove = function(req, res) {
         return;
     }
 
-    Device.findOne( { _id: req.params.deviceId } )
+    Device.findOne( { serialNumber: req.params.serialNumber } )
         .exec(function (err, device) {
             if (err) {
                 res.status(500).send({
