@@ -443,6 +443,13 @@ exports.addDevice = function(req, res) {
                 return;
             }
 
+            if (!asset.location || asset.location === null) {
+                res.status(400).send({
+                    message: 'The asset most belong to a location.'
+                });
+                return;
+            }
+
              var devicePromise = Device.findOne({ _id: deviceId }).populate('sensors').exec();
              devicePromise.then(function (device) {
                  if (!device) {
