@@ -132,7 +132,12 @@ exports.remove = function(req, res) {
             }
 
             if (device['asset'] === false) {
-                device.asset = 'no asset';
+                res.json({
+                    client: device.client,
+                    asset: 'no asset'
+                });
+
+                return;
             }
 
             res.json({
