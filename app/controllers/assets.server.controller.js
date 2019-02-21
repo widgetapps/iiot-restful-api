@@ -548,8 +548,8 @@ exports.removeDevice = function(req, res) {
                             return;
                         }
 
-                        res.status(200).send({
-                            message: 'Device ' + device.serialNumber + ' removed from asset ' + asset.tagCode
+                        res.json({
+                            message: 'Device ' + device.serialNumber + ' removed from asset'
                         });
 
                     });
