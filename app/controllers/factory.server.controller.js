@@ -131,6 +131,13 @@ exports.remove = function(req, res) {
                 return;
             }
 
+            if (!device) {
+                res.status(404).send({
+                    message: 'Device not found.'
+                });
+                return;
+            }
+
             var assetId = device.asset;
 
             if (device.client.toString() === '5c55bb32e46c3b302f4d2bd8' && (!assetId || device.asset === null)) {
