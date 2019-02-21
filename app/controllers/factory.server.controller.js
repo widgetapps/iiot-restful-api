@@ -72,7 +72,7 @@ exports.insert = function(req, res) {
             mqtt.save(function (err, mu) {
                 if (err) {
                     res.status(400).send({
-                        message: 'Error saving the device MQTT credentials: ' + err + '. The device was added.',
+                        message: 'The device was added but there was an error saving the device MQTT credentials: ' + err,
                         _id: d._id
                     });
                 }
