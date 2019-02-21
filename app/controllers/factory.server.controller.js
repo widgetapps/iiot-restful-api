@@ -131,19 +131,11 @@ exports.remove = function(req, res) {
                 return;
             }
 
-            if (device['asset'] === false) {
-                res.json({
-                    client: device.client,
-                    asset: 'no asset'
-                });
-
-                return;
-            }
-
             res.json({
                 client: device.client,
-                asset: device.asset
+                asset: device['asset']
             });
+            return;
 
             if (device.client.toString() === '5c55bb32e46c3b302f4d2bd8' && (!('asset' in device) || device.asset === null)) {
                 device.remove(function (err, deletedDevice) {
