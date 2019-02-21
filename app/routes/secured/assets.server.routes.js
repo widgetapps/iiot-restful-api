@@ -24,6 +24,6 @@ module.exports = function(app) {
     app.route('/assets/:assetId/devices/:deviceId/add')
         .post(assets.addDevice);
 
-    app.route('/asset/:assetId/devices/:deviceId/remove')
+    app.route('/assets/:assetId/devices/:deviceId/remove')
         .delete(assets.removeDevice);
 };
