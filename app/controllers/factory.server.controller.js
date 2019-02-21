@@ -131,7 +131,7 @@ exports.remove = function(req, res) {
                 return;
             }
 
-            if (device.client === '5c55bb32e46c3b302f4d2bd8' && (!device.hasOwnProperty('asset') || device.asset === null)) {
+            if (device.client === '5c55bb32e46c3b302f4d2bd8' && (device.asset === undefined || device.asset === null)) {
                 device.remove(function (err, deletedDevice) {
                     if (err) {
                         res.status(500).send({
