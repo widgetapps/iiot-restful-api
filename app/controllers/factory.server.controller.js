@@ -131,9 +131,6 @@ exports.remove = function(req, res) {
                 return;
             }
 
-            res.json({message: device.asset});
-            return;
-
             if (device.client.toString() === '5c55bb32e46c3b302f4d2bd8' && (!('asset' in device) || device.asset === null)) {
                 device.remove(function (err, deletedDevice) {
                     if (err) {
@@ -148,10 +145,11 @@ exports.remove = function(req, res) {
                     });
                     return;
                 });
-            }
+            } else {
+                res.status(400).send({
+                    message: 'Cannot delete the device, it is assigned to a client and/or an asset.'
+                });
 
-            res.status(400).send({
-                message: 'Cannot delete the device, it is assigned to a client and/or an asset.'
-            });
+            }
         });
 };
