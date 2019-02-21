@@ -3,15 +3,7 @@
 /**
  * Module dependencies.
  */
-var mongoose = require('mongoose'),
-    errorHandler = require('./errors.server.controller'),
-    Client = require('@terepac/terepac-models').Client,
-    User = require('@terepac/terepac-models').User,
-    _ = require('lodash'),
-    moment = require('moment'),
-    randomstring = require('randomstring'),
-    authorize = require('../lib/authorize.server.lib'),
-    endpoint = 'asset';
+var Location = require('@terepac/terepac-models').Location;
 
 
 exports.getOne = function(req, res) {
@@ -20,4 +12,51 @@ exports.getOne = function(req, res) {
 
 exports.update = function(req, res) {
 
+    Location.findByIdAndUpdate(
+        req.params.locationId,
+        req.body,
+        {new: true},
+        (err, location) => {
+            var authorized = false;
+
+            switch (req.user.role) {
+                case 'user':
+                    if (req.user.client.toString() === location.client.toString()) {
+                        authorized = true;
+                    }
+                    break;
+                case 'manufacturer':
+                case 'admin':
+                case 'manager':
+                    if (req.user.client.toString() === location.client.toString() || _.includes(req.user.resellerClients, location.client)) {
+                        authorized = true;
+                    }
+                    break;
+                case 'super':
+                    authorized = true;
+                    break;
+            }
+
+            if (!authorized) {
+                res.status(401).send({
+                    message: 'You are not authorized to access this resource.'
+                });
+                return;
+            }
+
+            if (err) {
+                res.status(400).send({
+                    message: 'Error with the database.'
+                });
+            }
+
+            if (!location) {
+                res.status(404).send({
+                    message: 'Location not found.'
+                });
+            }
+
+            res.json(location);
+        }
+    );
 };

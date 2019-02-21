@@ -53,7 +53,7 @@ exports.getOne = function(req, res) {
             res.json(asset);
 
         }).catch(function(error) {
-            res.status(404).send({
+            res.status(400).send({
                 message: 'Error with the database.'
             });
         });
@@ -63,6 +63,53 @@ exports.getOne = function(req, res) {
 
 exports.update = function(req, res) {
 
+    Asset.findByIdAndUpdate(
+        req.params.assetId,
+        req.body,
+        {new: true},
+        (err, asset) => {
+            var authorized = false;
+
+            switch (req.user.role) {
+                case 'user':
+                    if (req.user.client.toString() === asset.client.toString()) {
+                        authorized = true;
+                    }
+                    break;
+                case 'manufacturer':
+                case 'admin':
+                case 'manager':
+                    if (req.user.client.toString() === asset.client.toString() || _.includes(req.user.resellerClients, asset.client)) {
+                        authorized = true;
+                    }
+                    break;
+                case 'super':
+                    authorized = true;
+                    break;
+            }
+
+            if (!authorized) {
+                res.status(401).send({
+                    message: 'You are not authorized to access this resource.'
+                });
+                return;
+            }
+
+            if (err) {
+                res.status(400).send({
+                    message: 'Error with the database.'
+                });
+            }
+
+            if (!asset) {
+                res.status(404).send({
+                    message: 'Asset not found.'
+                });
+            }
+
+            res.json(asset);
+        }
+    );
 };
 
 exports.listDevices = function(req, res) {
