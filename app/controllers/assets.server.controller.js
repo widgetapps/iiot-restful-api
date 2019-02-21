@@ -405,6 +405,13 @@ exports.addDevice = function(req, res) {
                      return;
                  }
 
+                 if (device.asset !== null) {
+                     res.status(400).send({
+                         message: 'This device is already assigned to an asset.'
+                     });
+                     return;
+                 }
+
                  var clientPromise = Client.findOne({ _id: asset.client}).exec();
                  clientPromise.then(function (client) {
                      if (!client) {
