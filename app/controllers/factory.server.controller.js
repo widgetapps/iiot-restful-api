@@ -149,10 +149,17 @@ exports.remove = function(req, res) {
                         return;
                     }
 
-                    res.json({
-                        message: 'The device has been deleted.'
-                    });
-                    return;
+                    Mqtt.findOneAndRemove(
+                        {username: req.params.serialNumber},
+                        function (err, mqtt) {
+
+                            res.json({
+                                message: 'The device has been deleted.'
+                            });
+                            return;
+
+                        }
+                    );
                 });
             } else {
                 res.status(400).send({
