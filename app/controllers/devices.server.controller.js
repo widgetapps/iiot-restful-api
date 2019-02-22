@@ -260,3 +260,49 @@ exports.updateSettings = function(req, res) {
         }
     );
 };
+
+exports.onboard = function(req, res) {
+    var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
+    var clientId = mongoose.Types.ObjectId(req.params.clientId);
+
+    Device.findOne( { _id: deviceId }, function(err, device) {
+
+        if (!device || err) {
+            res.status(404).send({
+                message: 'Device not found.'
+            });
+            return;
+        }
+
+        if (device.client.toString() === '5c55bb32e46c3b302f4d2bd8') {
+
+            if (device.asset && (device.asset !== null || device.asset !=='')) {
+                res.status(400).send({
+                    message: 'The device is assigned to an asset. Please remove it to onboard to a client.'
+                });
+                return;
+            }
+
+            if (device.location && (device.location !== null || device.location !=='')) {
+                res.status(400).send({
+                    message: 'The device is assigned to a location. Please remove it to onboard to a client.'
+                });
+                return;
+            }
+
+            device.client = clientId;
+
+            device.save(function (err, updatedDevice) {
+                res.json({
+                    message: 'The device is now assigned to the client.'
+                });
+            });
+
+        } else {
+            res.status(400).send({
+                message: 'The device is already assigned to a client.'
+            });
+            return;
+        }
+    });
+};

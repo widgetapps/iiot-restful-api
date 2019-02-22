@@ -24,4 +24,7 @@ module.exports = function(app) {
     app.route('/devices/:deviceId/settings')
         .get(devices.getSettings)
         .put(devices.updateSettings);
+
+    app.route('/devices/:deviceId/onboard/:clientId')
+        .post(devices.onboard);
 };
