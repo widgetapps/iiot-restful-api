@@ -107,6 +107,9 @@ exports.update = function(req, res) {
                 });
             }
 
+            asset.settings = undefined;
+            asset.__v = undefined;
+
             res.json(asset);
         }
     );
