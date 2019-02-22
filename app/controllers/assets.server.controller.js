@@ -110,7 +110,16 @@ exports.update = function(req, res) {
             asset.settings = undefined;
             asset.__v = undefined;
 
-            res.json(asset);
+            asset.populate('location', function() {
+
+                asset.location.created = undefined;
+                asset.location.updated = undefined;
+                asset.location.client = undefined;
+                asset.location.assets = undefined;
+
+                res.json(asset);
+
+            });
         }
     );
 };
