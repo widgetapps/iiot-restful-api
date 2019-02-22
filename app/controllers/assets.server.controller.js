@@ -116,6 +116,7 @@ exports.update = function(req, res) {
                 asset.location.updated = undefined;
                 asset.location.client = undefined;
                 asset.location.assets = undefined;
+                asset.location.__v = undefined;
 
                 res.json(asset);
 
