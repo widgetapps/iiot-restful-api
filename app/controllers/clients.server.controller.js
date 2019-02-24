@@ -516,21 +516,21 @@ exports.insertAsset = function(req, res) {
                 key: 'high-limit',
                 name: 'high-limit',
                 datatype: 'decimal',
-                range: [-14.5, 347.7],
+                range: [-101.3, 2397],
                 unit: 'kPa',
                 value: 80.5
             },{
                 key: 'low-limit',
                 name: 'low-limit',
                 datatype: 'decimal',
-                range: [-14.5, 347.7],
+                range: [-101.3, 2397],
                 unit: 'kPa',
                 value: 80.5
             },{
                 key: 'dead-band',
                 name: 'dead-band',
                 datatype: 'decimal',
-                range: [-14.5, 347.7],
+                range: [10, 2500],
                 unit: 'kPa',
                 value: 80.5
             },{
