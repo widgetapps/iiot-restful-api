@@ -472,7 +472,7 @@ exports.addDevice = function(req, res) {
                      return;
                  }
 
-                 if (device.asset !== null) {
+                 if (device.asset && device.asset !== null) {
                      res.status(400).send({
                          message: 'This device is already assigned to an asset.'
                      });
