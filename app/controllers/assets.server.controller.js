@@ -193,7 +193,7 @@ exports.resetSettings = function(req, res) {
                     datatype: 'int',
                     range: [1, 1440],
                     unit: 'minutes',
-                    value: 60
+                    value: 5
                 },{
                     key: 'battery-interval',
                     name: 'battery-interval',
@@ -221,21 +221,21 @@ exports.resetSettings = function(req, res) {
                     datatype: 'decimal',
                     range: [-101.3, 2397],
                     unit: 'kPa',
-                    value: 80.5
+                    value: 2379.46
                 },{
                     key: 'low-limit',
                     name: 'low-limit',
                     datatype: 'decimal',
                     range: [-101.3, 2397],
                     unit: 'kPa',
-                    value: 80.5
+                    value: -99.98
                 },{
                     key: 'dead-band',
                     name: 'dead-band',
                     datatype: 'decimal',
                     range: [10, 2500],
                     unit: 'kPa',
-                    value: 80.5
+                    value: 555
                 },{
                     key: 'pre-roll',
                     name: 'pre-roll',
@@ -263,35 +263,35 @@ exports.resetSettings = function(req, res) {
                     datatype: 'int',
                     range: [1, 1440],
                     unit: 'minutes',
-                    value: 1
+                    value: 10
                 },{
                     key: 'hydrophone-start',
                     name: 'hydrophone-start',
                     datatype: 'int',
                     range: [0, 86399],
                     unit: 'seconds',
-                    value: 1
+                    value: 25200
                 },{
                     key: 'hydrophone-count',
                     name: 'hydrophone-count',
                     datatype: 'int',
                     range: [0, 3600],
                     unit: 'events per day',
-                    value: 1
+                    value: 5
                 },{
                     key: 'hydrophone-interval',
                     name: 'hydrophone-interval',
                     datatype: 'int',
                     range: [0, 86400],
                     unit: 'seconds',
-                    value: 1
+                    value: 1800
                 },{
                     key: 'hydrophone-on-time',
                     name: 'hydrophone-on-time',
                     datatype: 'int',
                     range: [0, 86400],
                     unit: 'seconds',
-                    value: 1
+                    value: 300
                 }]
             }
         },
