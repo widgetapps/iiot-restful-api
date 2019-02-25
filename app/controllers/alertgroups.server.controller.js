@@ -122,7 +122,8 @@ function getClient(req, res) {
                 companyName: 1,
                 address: 1,
                 contact: 1,
-                reseller: 1
+                reseller: 1,
+                alertGroups: 1
             }, function(err, client) {
                 if (!client || err) {
                     res.status(404).send({
