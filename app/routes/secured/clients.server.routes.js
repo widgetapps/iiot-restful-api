@@ -52,7 +52,7 @@ module.exports = function(app) {
         .get(alertGroups.list)
         .post(alertGroups.insert);
 
-    app.route('/client/:id/alertgroups/:code')
+    app.route('/clients/:id/alertgroups/:code')
         .get(alertGroups.get)
         .put(alertGroups.update)
         .delete(alertGroups.remove);
