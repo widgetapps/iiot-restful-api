@@ -25,7 +25,7 @@ exports.list = function(req, res) {
                 created: 1,
                 updated: 1,
                 assets: 1,
-                sensor: 1,
+                sensorCode: 1,
                 alertGroupCodes: 1,
                 active: 1,
                 frequencyMinutes: 1,
