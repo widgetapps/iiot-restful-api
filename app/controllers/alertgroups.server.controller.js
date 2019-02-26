@@ -44,6 +44,7 @@ exports.get = function(req, res) {
         _.forEach(client.alertGroups, function (alertGroup) {
             if (alertGroup.code === req.params.code) {
                 res.json(alertGroup);
+                return;
             }
         });
 

@@ -104,10 +104,8 @@ exports.update = function(req, res) {
             return;
         }
 
-        Alert.findByIdAndUpdate(
+        Alert.findById(
             req.params.alertId,
-            req.body,
-            {safe: true, new : true},
             function(err, alert) {
                 if (!alert || err) {
                     res.status(404).send({
@@ -116,7 +114,20 @@ exports.update = function(req, res) {
                     return;
                 }
 
-                res.json(alert);
+                alert = _.assignIn(alert, req.body);
+
+                alert.save(function(err, newAlert) {
+                    if (err){
+                        res.status(400).send({
+                            message: 'Error saving alert.'
+                        });
+                    }
+
+                    res.json({
+                        message: 'Alert has been updated.'
+                    });
+                });
+
             }
         );
     });
