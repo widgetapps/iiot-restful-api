@@ -628,6 +628,37 @@ exports.removeDevice = function(req, res) {
 };
 
 function sendConfigToDevice(app, asset, callback) {
+
+    // Set the CBOR options to handle decimals properly.
+    const cborOpts = { genTypes: [ bignumber, (gen, obj) => {
+        if (obj.isNaN()) {
+            return false;
+        }
+        if (!obj.isFinite()) {
+            return false;
+        }
+
+        if (!(gen._pushTag(4) &&
+            gen._pushInt(2, 4))) {
+            return false;
+        }
+
+        const dec = obj.decimalPlaces();
+        if (dec !== 0) {
+            const slide = obj.times(new bignumber(10).pow(dec));
+            if (!gen._pushIntNum(-dec)) {
+                return false;
+            }
+            return gen._pushIntNum(slide.toNumber());
+        }
+        else {
+            if (!gen._pushIntNum(0)) {
+                return false;
+            }
+            return gen._pushIntNum(obj.toNumber());
+        }
+    }]};
+
     var promise = Device.findOne({asset: asset._id}).populate('asset').exec();
 
     promise.then(function(device) {
@@ -673,9 +704,9 @@ function sendConfigToDevice(app, asset, callback) {
                             val = parseFloat(setting.value);
 
                             if (isNaN(val)) {
-                                val = bignumber(0.001).dp(2);
+                                val = bignumber(0).dp(2);
                             } else {
-                                val = bignumber(parseFloat(setting.value) + 0.001).dp(2);
+                                val = bignumber(val).dp(2);
                             }
 
                             configSettings[setting.key] = val;
@@ -707,7 +738,7 @@ function sendConfigToDevice(app, asset, callback) {
             console.log('Connected to MQTT server.');
             console.log('Publishing config topic ' + device.serialNumber + '/v1/configuration: ' + JSON.stringify(configSettings));
             try {
-                client.publish(device.serialNumber + '/v1/configuration', cbor.encode(configSettings), {qos: 2, retain: true});
+                client.publish(device.serialNumber + '/v1/configuration', cbor.encodeOne(configSettings, cborOpts), {qos: 2, retain: true});
                 console.log('Settings published.');
             } catch (e) {
                 console.log('Error publishing settings: ' + e.toString());
