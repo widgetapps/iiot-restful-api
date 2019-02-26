@@ -543,8 +543,12 @@ exports.addDevice = function(req, res) {
                                  return;
                              }
 
-                             res.status(200).send({
-                                 message: 'Device ' + device.serialNumber + ' assigned to asset ' + asset.tagCode
+                             // TODO: Publish settings to device if it's a hydrant
+
+                             sendConfigToDevice(req.app, asset, function() {
+                                 res.status(200).send({
+                                     message: 'Device ' + device.serialNumber + ' assigned to asset ' + asset.tagCode
+                                 });
                              });
                          });
 
