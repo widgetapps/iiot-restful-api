@@ -121,16 +121,7 @@ function getClient(req, res, callback) {
         var clientId = mongoose.Types.ObjectId(req.params.id);
 
         Client.findOne(
-            { _id: clientId }, {
-                created: 1,
-                updated: 1,
-                'apikey.id': 1,
-                companyName: 1,
-                address: 1,
-                contact: 1,
-                reseller: 1,
-                alertGroups: 1
-            }, function(err, client) {
+            { _id: clientId }, function(err, client) {
                 if (!client || err) {
                     res.status(404).send({
                         message: 'Client not found.'
