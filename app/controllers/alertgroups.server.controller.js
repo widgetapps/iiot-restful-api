@@ -25,6 +25,13 @@ exports.insert = function(req, res) {
         }
         client.alertGroups.push(req.body);
         client.save(function(err, client) {
+            if (err) {
+                res.status(400).send({
+                    message: 'Error saving alert group: ' + err
+                });
+                return;
+            }
+
             res.status(200).send({
                 message: 'Alert group has been added.'
             });
