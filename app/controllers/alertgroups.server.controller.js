@@ -18,6 +18,9 @@ exports.list = function(req, res) {
 
 exports.insert = function(req, res) {
     var client = getClient(req, res);
+    if (!client.alertGroups) {
+        client.alertGroups = [];
+    }
     client.alertGroups.push(req.body);
     client.save(function(err, client) {
         res.status(200).send({
