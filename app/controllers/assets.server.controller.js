@@ -619,8 +619,10 @@ exports.removeDevice = function(req, res) {
                             return;
                         }
 
-                        res.json({
-                            message: 'Device ' + device.serialNumber + ' removed from asset'
+                        sendEmptyConfigToDevice(savedDevice, function() {
+                            res.json({
+                                message: 'Device ' + device.serialNumber + ' removed from asset'
+                            });
                         });
 
                     });
@@ -630,6 +632,34 @@ exports.removeDevice = function(req, res) {
 
     });
 };
+
+function sendEmptyConfigToDevice(device, callback) {
+
+    if (device.type !== 'hydrant') {
+        callback();
+    }
+
+    var client  = mqtt.connect(config.mqtt, config.mqttoptions);
+
+    client.on('error', function (error) {
+        console.log('Error connecting to MQTT Server with username ' + config.mqttoptions.username + ' - ' + error);
+    });
+
+    client.on('connect', function () {
+        console.log('Connected to MQTT server.');
+        console.log('Publishing empty config topic ' + device.topicId + '/v1/configuration');
+        try {
+            client.publish(device.topicId + '/v1/configuration', '', {qos: 2, retain: true});
+            console.log('Empty settings published.');
+        } catch (e) {
+            console.log('Error publishing empty settings: ' + e.toString());
+        }
+        client.end(false, function() {
+            console.log('Disconnected from MQTT server.');
+            callback();
+        });
+    });
+}
 
 function sendConfigToDevice(app, asset, callback) {
 
@@ -740,9 +770,9 @@ function sendConfigToDevice(app, asset, callback) {
 
         client.on('connect', function () {
             console.log('Connected to MQTT server.');
-            console.log('Publishing config topic ' + device.serialNumber + '/v1/configuration: ' + JSON.stringify(configSettings));
+            console.log('Publishing config topic ' + device.topicId + '/v1/configuration: ' + JSON.stringify(configSettings));
             try {
-                client.publish(device.serialNumber + '/v1/configuration', cbor.encodeOne(configSettings, cborOpts), {qos: 2, retain: true});
+                client.publish(device.topicId + '/v1/configuration', cbor.encodeOne(configSettings, cborOpts), {qos: 2, retain: true});
                 console.log('Settings published.');
             } catch (e) {
                 console.log('Error publishing settings: ' + e.toString());
