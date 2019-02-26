@@ -59,7 +59,7 @@ exports.update = function(req, res) {
 
         _.forEach(client.alertGroups, function (alertGroup) {
             if (alertGroup.code === req.params.code) {
-                updatedAlertGroups.push(req.body);
+                updatedAlertGroups.push(_.assignIn(alertGroup, req.body));
             } else {
                 updatedAlertGroups.push(alertGroup);
             }
