@@ -11,82 +11,85 @@ var mongoose = require('mongoose'),
     endpoint = 'client';
 
 exports.list = function(req, res) {
-    var client = getClient(req, res);
+    getClient(req, res, function(client) {
 
-    res.json(client.alertGroups);
+        res.json(client.alertGroups);
+
+    });
 };
 
 exports.insert = function(req, res) {
-    var client = getClient(req, res);
-    if (!client.alertGroups) {
-        client.alertGroups = [];
-    }
-    client.alertGroups.push(req.body);
-    client.save(function(err, client) {
-        res.status(200).send({
-            message: 'Alert group has been added.'
+    getClient(req, res, function(client) {
+        if (!client.alertGroups) {
+            client.alertGroups = [];
+        }
+        client.alertGroups.push(req.body);
+        client.save(function(err, client) {
+            res.status(200).send({
+                message: 'Alert group has been added.'
+            });
         });
     });
-
 };
 
 exports.get = function(req, res) {
-    var client = getClient(req, res);
+    getClient(req, res, function (client) {
+        _.forEach(client.alertGroups, function (alertGroup) {
+            if (alertGroup.code === req.params.code) {
+                res.json(alertGroup);
+            }
+        });
 
-    _.forEach(client.alertGroups, function (alertGroup) {
-        if (alertGroup.code === req.params.code) {
-            res.json(alertGroup);
-        }
+        res.status(404).send({
+            message: 'Alert group not found.'
+        });
     });
-
-    res.status(404).send({
-        message: 'Alert group not found.'
-    });
-
 };
 
 exports.update = function(req, res) {
-    var client = getClient(req, res);
-    var updatedAlertGroups = [];
+    getClient(req, res, function (client) {
+        var updatedAlertGroups = [];
 
-    _.forEach(client.alertGroups, function (alertGroup) {
-        if (alertGroup.code === req.params.code) {
-            updatedAlertGroups.push(req.body);
-        } else {
-            updatedAlertGroups.push(alertGroup);
-        }
-    });
+        _.forEach(client.alertGroups, function (alertGroup) {
+            if (alertGroup.code === req.params.code) {
+                updatedAlertGroups.push(req.body);
+            } else {
+                updatedAlertGroups.push(alertGroup);
+            }
+        });
 
-    client.alertGroups = updatedAlertGroups;
+        client.alertGroups = updatedAlertGroups;
 
-    client.save(function(err, client) {
-        res.status(200).send({
-            message: 'Alert groups have been updated.'
+        client.save(function(err, client) {
+            res.status(200).send({
+                message: 'Alert groups have been updated.'
+            });
         });
     });
 };
 
 exports.remove = function(req, res) {
-    var client = getClient(req, res);
-    var updatedAlertGroups = [];
+    getClient(req, res, function (client) {
+        var updatedAlertGroups = [];
 
-    _.forEach(client.alertGroups, function (alertGroup) {
-        if (alertGroup.code !== req.params.code) {
-            updatedAlertGroups.push(alertGroup);
-        }
-    });
+        _.forEach(client.alertGroups, function (alertGroup) {
+            if (alertGroup.code !== req.params.code) {
+                updatedAlertGroups.push(alertGroup);
+            }
+        });
 
-    client.alertGroups = updatedAlertGroups;
+        client.alertGroups = updatedAlertGroups;
 
-    client.save(function(err, client) {
-        res.status(200).send({
-            message: 'Alert groups have been updated.'
+        client.save(function(err, client) {
+            res.status(200).send({
+                message: 'Alert groups have been updated.'
+            });
         });
     });
 };
 
 
-function getClient(req, res) {
+function getClient(req, res, callback) {
 
     authorize.validate(endpoint, req, res, 'user', function() {
 
@@ -135,7 +138,7 @@ function getClient(req, res) {
                     return;
                 }
 
-                return client;
+                callback(client);
             });
     });
 }
