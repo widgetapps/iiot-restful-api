@@ -89,7 +89,7 @@ exports.remove = function(req, res) {
 
         client.save(function(err, client) {
             res.status(200).send({
-                message: 'Alert groups have been updated.'
+                message: 'Alert group has been removed.'
             });
         });
     });
