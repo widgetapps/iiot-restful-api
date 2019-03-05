@@ -20,6 +20,9 @@ module.exports = function(app) {
     app.route('/clients/:id/telemetries/search')
         .get(clients.searchTelemetry);
 
+    app.route('/clients/:id/telemetries/latest/:tag')
+        .get(clients.getLatestTelemetry);
+
     app.route('/clients/:id/locations')
         .get(clients.listLocations)
         .post(clients.insertLocation);

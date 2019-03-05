@@ -401,8 +401,8 @@ exports.updateSettings = function (req, res) {
             });
         }
 
-        _.forEach(req.body, function (setting) {
-
+        _.forEach(asset.settings, function (setting) {
+            var v = req.body;
         });
 
     }).catch(function(error) {

@@ -340,6 +340,65 @@ exports.searchTelemetry = function(req, res) {
     });
 };
 
+exports.getLatestTelemetry = function(req, res) {
+    authorize.validate(endpoint, req, res, 'user', function() {
+        var authorized = false;
+
+        switch (req.user.role) {
+            case 'user':
+                if (req.user.client === req.params.id) {
+                    authorized = true;
+                }
+                break;
+            case 'manufacturer':
+            case 'manager':
+            case 'admin':
+                if (req.user.client === req.params.id || _.includes(req.user.resellerClients, req.params.id)) {
+                    authorized = true;
+                }
+                break;
+            case 'super':
+                authorized = true;
+                break;
+        }
+
+        if (!authorized) {
+            res.status(401).send({
+                message: 'You are not authorized to access this resource.'
+            });
+            return;
+        }
+
+        var fields = {
+            tag: 1,
+            timestamp: 1,
+            data: 1
+        };
+        if (req.query.asset === '1') {
+            fields.asset = 1;
+        }
+        if (req.query.device === '1') {
+            fields.device = 1;
+        }
+        if (req.query.sensor === '1') {
+            fields.sensor = 1;
+        }
+
+        Telemetry.findOne({ 'tag.full': req.params.tag }, fields)
+            .sort({timestamp: -1})
+            .exec(function (err, telemetry) {
+                if (err) {
+                    res.status(400).send({
+                        message: 'Database error.'
+                    });
+                    return;
+                }
+
+                res.json(telemetry);
+            });
+    });
+};
+
 exports.listLocations = function(req, res) {
     authorize.validate(endpoint, req, res, 'user', function() {
         var query;
