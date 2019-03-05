@@ -99,19 +99,26 @@ exports.update = function(req, res) {
 exports.remove = function(req, res) {
     getClient(req, res, function (client) {
         var updatedAlertGroups = [];
+        var mongoId = mongoose.Types.ObjectId(req.params.code);
 
-        _.forEach(client.alertGroups, function (alertGroup) {
-            if (alertGroup.code !== req.params.code) {
-                updatedAlertGroups.push(alertGroup);
-            }
-        });
+        if (mongoId.str === req.params.code) {
+            _.forEach(client.alertGroups, function (alertGroup) {
+                if (alertGroup._id.str !== mongoId.str) {
+                    updatedAlertGroups.push(alertGroup);
+                }
+            });
+        } else {
+            _.forEach(client.alertGroups, function (alertGroup) {
+                if (alertGroup.code !== req.params.code) {
+                    updatedAlertGroups.push(alertGroup);
+                }
+            });
+        }
 
         client.alertGroups = updatedAlertGroups;
 
-        client.save(function(err, client) {
-            res.status(200).send({
-                message: 'Alert group has been removed.'
-            });
+        client.save(function(err, newClient) {
+            res.json(client.alertGroups);
         });
     });
 };
