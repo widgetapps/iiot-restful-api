@@ -113,7 +113,7 @@ exports.remove = function(req, res) {
         // Check if the code is a mongo _id
         if (isId) {
             _.forEach(client.alertGroups, function (alertGroup) {
-                if (alertGroup._id !== code.str) {
+                if (alertGroup._id.toString() !== code.toString()) {
                     updatedAlertGroups.push(alertGroup);
                 }
             });
