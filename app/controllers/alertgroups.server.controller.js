@@ -99,17 +99,27 @@ exports.update = function(req, res) {
 exports.remove = function(req, res) {
     getClient(req, res, function (client) {
         var updatedAlertGroups = [];
-        var mongoId = mongoose.Types.ObjectId(req.params.code);
+        var code = req.params.code;
+        var isId = false;
 
-        if (mongoId.str === req.params.code) {
+        try {
+            code = mongoose.Types.ObjectId(code);
+            isId = true;
+        } catch (err) {
+            code = req.params.code;
+            isId = false;
+        }
+
+        // Check if the code is a mongo _id
+        if (isId) {
             _.forEach(client.alertGroups, function (alertGroup) {
-                if (alertGroup._id.str !== mongoId.str) {
+                if (alertGroup._id.str !== code.str) {
                     updatedAlertGroups.push(alertGroup);
                 }
             });
         } else {
             _.forEach(client.alertGroups, function (alertGroup) {
-                if (alertGroup.code !== req.params.code) {
+                if (alertGroup.code !== code) {
                     updatedAlertGroups.push(alertGroup);
                 }
             });
