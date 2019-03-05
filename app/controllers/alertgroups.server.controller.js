@@ -23,8 +23,30 @@ exports.insert = function(req, res) {
         if (!client.alertGroups) {
             client.alertGroups = [];
         }
+
+        if (!req.body.code || req.body.code === '') {
+            res.status(400).send({
+                message: 'Alert group code is missing.'
+            });
+            return;
+        }
+
+        if (!req.body.name || req.body.name === '') {
+            res.status(400).send({
+                message: 'Alert group name is missing.'
+            });
+            return;
+        }
+
+        if (!req.body.contacts || !Array.isArray(req.body.contacts)) {
+            res.status(400).send({
+                message: 'Alert group contacts is missing or is not an array.'
+            });
+            return;
+        }
+
         client.alertGroups.push(req.body);
-        client.save(function(err, client) {
+        client.save(function(err, newClient) {
             if (err) {
                 res.status(400).send({
                     message: 'Error saving alert group: ' + err
@@ -32,9 +54,7 @@ exports.insert = function(req, res) {
                 return;
             }
 
-            res.status(200).send({
-                message: 'Alert group has been added.'
-            });
+            res.json(client.alertGroups);
         });
     });
 };

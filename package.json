@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@google-cloud/logging-winston": "^0.10.2",
-    "@terepac/terepac-models": "^0.7.9",
+    "@terepac/terepac-models": "^0.7.10",
     "JSONStream": "^1.3.1",
     "async": "~2.6.1",
     "bignumber.js": "^8.0.1",
