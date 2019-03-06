@@ -24,6 +24,7 @@ exports.list = function(req, res) {
             { client: clientId }, {
                 created: 1,
                 updated: 1,
+                name: 1,
                 assets: 1,
                 sensorCode: 1,
                 alertGroupCodes: 1,
