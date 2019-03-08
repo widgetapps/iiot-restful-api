@@ -113,9 +113,11 @@ exports.listDevices = function (req, res) {
         .populate('client', {companyName: 1})
         .populate({
             path: 'asset',
+            select: 'tagCode name location -_id',
             populate: {
                 path: 'location',
-                model: 'Location'
+                model: 'Location',
+                select: 'tagCode description -_id'
             }
         })
         .exec();
