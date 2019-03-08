@@ -109,7 +109,7 @@ exports.listDevices = function (req, res) {
             client: 1,
             asset: 1
         })
-        .populate('sensors', {tagCode: 1, typeString: 1, unit: 1})
+        .populate('sensors', {tagCode: 1, type: 1, typeString: 1, unit: 1})
         .populate('client', {companyName: 1})
         .populate({
             path: 'asset',
