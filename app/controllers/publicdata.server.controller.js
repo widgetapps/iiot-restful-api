@@ -111,8 +111,13 @@ exports.listDevices = function (req, res) {
         })
         .populate('sensors', {tagCode: 1, typeString: 1, unit: 1})
         .populate('client', {companyName: 1})
-        .populate('asset', {tagCode: 1, name: 1, location: 1})
-        .populate('asset.location', {tagCode: 1, description: 1})
+        .populate({
+            path: 'asset',
+            populate: {
+                path: 'location',
+                model: 'Location'
+            }
+        })
         .exec();
 
     promise.then(function (devices) {
