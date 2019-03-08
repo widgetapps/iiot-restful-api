@@ -101,6 +101,7 @@ exports.listDevices = function (req, res) {
         {
             created: 1,
             updated: 1,
+            serialNumber: 1,
             type: 1,
             sensors: 1,
             description: 1,
