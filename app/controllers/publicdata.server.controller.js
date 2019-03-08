@@ -96,6 +96,34 @@ exports.aggregated = function(req, res) {
     });
 };
 
+exports.listDevices = function (req, res) {
+    var promise = Device.find({},
+        {
+            created: 1,
+            updated: 1,
+            type: 1,
+            sensors: 1,
+            description: 1,
+            lastTransmission: 1,
+            geolocation: 1,
+            client: 1,
+            asset: 1
+        })
+        .populate('sensors', {tagCode: 1, typeString: 1, unit: 1})
+        .populate('client', {companyName: 1})
+        .populate('asset', {tagCode: 1, name: 1, location: 1})
+        .exec();
+
+    promise.then(function (devices) {
+        devices.populate('asset.location', {tagCode: 1, description: 1});
+
+        res.json(devices);
+    }).catch(function (error) {
+        res.status(400).send({message: 'Error getting devices: ' + error});
+    });
+
+};
+
 exports.listAssets = function (req, res) {
     var promise =  Asset.find(
         {},
@@ -107,11 +135,11 @@ exports.listAssets = function (req, res) {
             client: 1,
             location: 1
         }
-    ).populate('client', {companyName: 1}).populate('location', {description: 1, tagCode: 1}).exec();
+    ).populate('client', {companyName: 1}).populate('asset', {description: 1, tagCode: 1}).exec();
     promise.then(function (assets) {
         res.json(assets);
     }).catch(function(error) {
-        res.status(500).send({message: 'Error getting assets: ' + error});
+        res.status(400).send({message: 'Error getting assets: ' + error});
     });
 };
 
