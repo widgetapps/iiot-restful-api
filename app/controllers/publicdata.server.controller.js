@@ -112,11 +112,10 @@ exports.listDevices = function (req, res) {
         .populate('sensors', {tagCode: 1, typeString: 1, unit: 1})
         .populate('client', {companyName: 1})
         .populate('asset', {tagCode: 1, name: 1, location: 1})
+        .populate('asset.location', {tagCode: 1, description: 1})
         .exec();
 
     promise.then(function (devices) {
-        devices.populate('asset.location', {tagCode: 1, description: 1});
-
         res.json(devices);
     }).catch(function (error) {
         res.status(400).send({message: 'Error getting devices: ' + error});
