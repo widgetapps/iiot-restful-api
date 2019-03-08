@@ -105,12 +105,9 @@ exports.listDevices = function (req, res) {
             sensors: 1,
             description: 1,
             lastTransmission: 1,
-            geolocation: 1,
-            client: 1,
             asset: 1
         })
         .populate('sensors', {tagCode: 1, type: 1, typeString: 1, unit: 1})
-        .populate('client', {companyName: 1})
         .populate({
             path: 'asset',
             select: 'tagCode name location -_id',
