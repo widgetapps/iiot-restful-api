@@ -97,7 +97,13 @@ exports.aggregated = function(req, res) {
 };
 
 exports.listDevices = function (req, res) {
-    var promise = Device.find({},
+    var query = {};
+
+    if (req.param.type && (req.param.type === 'hydrant' || req.param.type === 'machine')) {
+        query = {type: req.param.type};
+    }
+
+    var promise = Device.find(query,
         {
             created: 1,
             updated: 1,
