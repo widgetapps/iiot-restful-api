@@ -49,11 +49,9 @@ exports.getOne = function(req, res) {
 
 exports.update = function(req, res) {
 
-    Location.findByIdAndUpdate(
+    Location.findById(
         req.params.locationId,
-        req.body,
-        {new: true},
-        (err, location) => {
+        function (err, location) {
             var authorized = false;
 
             switch (req.user.role) {
@@ -81,19 +79,25 @@ exports.update = function(req, res) {
                 return;
             }
 
-            if (err) {
-                res.status(400).send({
-                    message: 'Error with the database.'
-                });
-            }
-
-            if (!location) {
+            if (!location || err) {
                 res.status(404).send({
                     message: 'Location not found.'
                 });
+                return;
             }
 
-            res.json(location);
+            location = _.assignIn(location, req.body);
+
+            location.save(function(err, newLocation) {
+                if (err){
+                    res.status(400).send({
+                        message: 'Error saving location.'
+                    });
+                }
+
+                res.json(newLocation);
+            });
+
         }
     );
 };

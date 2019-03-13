@@ -207,11 +207,10 @@ exports.update = function(req, res) {
             return;
         }
 
-        Client.findByIdAndUpdate(
-            req.user.client,
-            req.body,
-            {safe: true, new : true},
-            function(err, client) {
+        Client.findById(
+            req.params.id,
+            function (err, client) {
+
                 if (!client || err) {
                     res.status(404).send({
                         message: 'Client not found.'
@@ -219,7 +218,18 @@ exports.update = function(req, res) {
                     return;
                 }
 
-                res.json(client);
+                client = _.assignIn(client, req.body);
+
+                client.save(function(err, newClient) {
+                    if (err){
+                        res.status(400).send({
+                            message: 'Error saving client.'
+                        });
+                    }
+
+                    res.json(newClient);
+                });
+
             }
         );
     });
@@ -713,6 +723,7 @@ exports.listDevices = function(req, res) {
             topicId: 1,
             type: 1,
             description: 1,
+            geolocation: 1,
             sensors: 1,
             location: 1,
             asset: 1,

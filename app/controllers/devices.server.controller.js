@@ -23,6 +23,7 @@ exports.list = function(req, res) {
             serialNumber: 1,
             topicId: 1,
             type: 1,
+            geolocation: 1,
             sensors: 1,
             code: 1,
             descriptor: 1
@@ -39,7 +40,6 @@ exports.list = function(req, res) {
 };
 
 exports.getOne = function(req, res) {
-    // TODO: Secure this!
     var clientId = mongoose.Types.ObjectId(req.user.client);
     var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
@@ -50,11 +50,41 @@ exports.getOne = function(req, res) {
             serialNumber: 1,
             topicId: 1,
             type: 1,
+            geolocation: 1,
             description: 1,
             sensors: 1,
             location: 1,
-            asset: 1
+            asset: 1,
+            client: 1
         },function(err, device) {
+
+            let authorized = false;
+
+            switch (req.user.role) {
+                case 'user':
+                    if (req.user.client.toString() === device.client.toString()) {
+                        authorized = true;
+                    }
+                    break;
+                case 'manufacturer':
+                case 'admin':
+                case 'manager':
+                    if (req.user.client.toString() === device.client.toString() || _.includes(req.user.resellerClients, device.client)) {
+                        authorized = true;
+                    }
+                    break;
+                case 'super':
+                    authorized = true;
+                    break;
+            }
+
+            if (!authorized) {
+                res.status(401).send({
+                    message: 'You are not authorized to access this resource.'
+                });
+                return;
+            }
+
             if (!device || err) {
                 res.status(404).send({
                     message: 'No device found.'

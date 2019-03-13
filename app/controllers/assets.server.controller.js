@@ -63,11 +63,10 @@ exports.getOne = function(req, res) {
 
 exports.update = function(req, res) {
 
-    Asset.findByIdAndUpdate(
+    Asset.findById(
         req.params.assetId,
-        req.body,
-        {new: true},
-        (err, asset) => {
+        function (err, asset) {
+
             var authorized = false;
 
             switch (req.user.role) {
@@ -95,32 +94,38 @@ exports.update = function(req, res) {
                 return;
             }
 
-            if (err) {
-                res.status(400).send({
-                    message: 'Error with the database.'
-                });
-            }
-
-            if (!asset) {
+            if (!asset || err) {
                 res.status(404).send({
                     message: 'Asset not found.'
                 });
+                return;
             }
 
-            asset.settings = undefined;
-            asset.__v = undefined;
+            asset = _.assignIn(asset, req.body);
 
-            asset.populate('location', function() {
+            asset.save(function(err, newAsset) {
+                if (err){
+                    res.status(400).send({
+                        message: 'Error saving asset.'
+                    });
+                }
 
-                asset.location.created = undefined;
-                asset.location.updated = undefined;
-                asset.location.client = undefined;
-                asset.location.assets = undefined;
-                asset.location.__v = undefined;
+                newAsset.settings = undefined;
+                newAsset.__v = undefined;
 
-                res.json(asset);
+                newAsset.populate('location', function() {
 
+                    newAsset.location.created = undefined;
+                    newAsset.location.updated = undefined;
+                    newAsset.location.client = undefined;
+                    newAsset.location.assets = undefined;
+                    newAsset.location.__v = undefined;
+
+                    res.json(newAsset);
+
+                });
             });
+
         }
     );
 };

@@ -11,4 +11,5 @@ module.exports = function(app) {
     app.route('/status/assets').get(pdata.listAssets);
     app.route('/status/asset/:location/:asset').get(pdata.assetStatus);
     app.route('/status/devices').get(pdata.listDevices);
+    app.route('/status/devices/:type').get(pdata.listDevices);
 };
