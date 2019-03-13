@@ -124,9 +124,7 @@ exports.update = function(req, res) {
                         });
                     }
 
-                    res.json({
-                        message: 'Alert has been updated.'
-                    });
+                    res.json(newAlert);
                 });
 
             }
