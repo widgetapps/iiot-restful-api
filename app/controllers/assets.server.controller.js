@@ -130,6 +130,58 @@ exports.update = function(req, res) {
     );
 };
 
+exports.remove = function(req, res) {
+    Asset.findById(
+        req.params.assetId,
+        function (err, asset) {
+            var authorized = false;
+
+            switch (req.user.role) {
+                case 'manufacturer':
+                case 'admin':
+                case 'manager':
+                    if (req.user.client.toString() === asset.client.toString() || _.includes(req.user.resellerClients, asset.client)) {
+                        authorized = true;
+                    }
+                    break;
+                case 'super':
+                    authorized = true;
+                    break;
+            }
+
+            if (!authorized) {
+                res.status(401).send({
+                    message: 'You are not authorized to access this resource.'
+                });
+                return;
+            }
+
+            if (!asset || err) {
+                res.status(404).send({
+                    message: 'Asset not found.'
+                });
+                return;
+            }
+
+            asset.remove(function(err, removedAsset) {
+                if (err) {
+                    res.status(400).send({
+                        message: 'Database error.'
+                    });
+                    return;
+                }
+
+                res.json({
+                    message: 'The Asset has been deleted.'
+                });
+                return;
+
+            });
+
+        }
+    );
+};
+
 exports.listDevices = function(req, res) {
 
 };

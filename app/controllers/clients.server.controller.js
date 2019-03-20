@@ -90,7 +90,7 @@ exports.insert = function(req, res) {
         });
 
         if (req.user.reseller) {
-            client.resellerParent = mongoose.Types.ObjectId(req.params.id);
+            client.resellerParent = mongoose.Types.ObjectId(req.user.client);
         }
 
         client.save(function (err, client) {
@@ -208,7 +208,7 @@ exports.update = function(req, res) {
         }
 
         // Check to see if read-only fields are in the payload
-        if (req.body.created || req.body.updated || req.body.alertGroups || req.body.reseller || req.body.resellerParent || req.body.locations || req.body.assets || req.body.devices || req.body.users || req.body.apiKey) {
+        if (req.body._id || req.body.created || req.body.updated || req.body.alertGroups || req.body.reseller || req.body.resellerParent || req.body.locations || req.body.assets || req.body.devices || req.body.users || req.body.apiKey) {
             res.status(400).send({
                 message: 'Cannot update read-only field.'
             });
@@ -469,12 +469,12 @@ exports.listLocations = function(req, res) {
 exports.insertLocation = function(req, res) {
     authorize.validate(endpoint, req, res, 'manager', function() {
 
-        var clientId = mongoose.Types.ObjectId(req.params.id);
+        let clientId = mongoose.Types.ObjectId(req.params.id);
         req.body.geolocation = {
             type: 'Point',
             coordinates: req.body.geolocation
         };
-        var location = new Location(req.body);
+        let location = new Location(req.body);
         location.client = clientId;
 
         location.save(function (err, loc) {

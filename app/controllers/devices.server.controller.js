@@ -5,13 +5,9 @@
  */
 var mongoose = require('mongoose'),
     jsonQuery = require('json-query'),
-    errorHandler = require('./errors.server.controller'),
     Device = require('@terepac/terepac-models').Device,
-    Sensor = require('@terepac/terepac-models').Sensor,
-    _ = require('lodash'),
-    moment = require('moment'),
-    authorize = require('../lib/authorize.server.lib'),
-    endpoint = 'device';
+    Mqtt = require('@terepac/terepac-models').Mqtt,
+    _ = require('lodash');
 
 exports.list = function(req, res) {
     var clientId = mongoose.Types.ObjectId(req.user.client);
@@ -104,7 +100,6 @@ exports.updateDevice = function(req, res) {
         { _id: deviceId, $or: [{client: clientId}, {'acl.client': clientId}] },
         {
             $set: {
-                code: req.body.code,
                 descriptor: req.body.descriptor
             }
         }, function(err, device) {
@@ -192,103 +187,6 @@ exports.getSensor = function(req, res) {
 
             res.json(sensor);
         });
-};
-
-exports.getLimits = function(req, res) {
-    var clientId = mongoose.Types.ObjectId(req.user.client);
-    var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
-    var sensorId = mongoose.Types.ObjectId(req.params.sensorId);
-
-    Device.findOne(
-        { _id: deviceId, $or: [{client: clientId}, {'acl.client': clientId}] }, {
-            sensors: 1
-        })
-        .populate('sensors.sensor')
-        .exec(function (err, device) {
-            if (err) {
-                res.status(500).send({
-                    message: 'Database error.'
-                });
-                return;
-            }
-
-            var limits = jsonQuery('sensors[sensor=' + sensorId + '].limits', {data: device}).value;
-
-            res.json(limits);
-        });
-};
-
-exports.updateLimits = function(req, res) {
-    var clientId = mongoose.Types.ObjectId(req.user.client);
-    var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
-
-    Device.update(
-        { _id: deviceId, $or: [{client: clientId}, {'acl.client': clientId}] },
-        {
-            $set: {
-                limits: req.body
-            }
-        }, function(err, device) {
-            if (!device || err) {
-                res.status(404).send({
-                    message: 'No device found.'
-                });
-                return;
-            }
-
-            res.json({
-                message: 'Limits have been saved'
-            });
-        }
-    );
-};
-
-exports.getSettings = function(req, res) {
-    var clientId = mongoose.Types.ObjectId(req.user.client);
-    var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
-
-    Device.findOne(
-        { _id: deviceId, $or: [{client: clientId}, {'acl.client': clientId}] }, {
-            serialNumber: 1,
-            code: 1,
-            settings: 1
-        },function(err, device) {
-            if (!device || err) {
-                res.status(404).send({
-                    message: 'No device found.'
-                });
-                return;
-            }
-
-            res.json(
-                device.settings
-            );
-    });
-};
-
-exports.updateSettings = function(req, res) {
-    var clientId = mongoose.Types.ObjectId(req.user.client);
-    var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
-
-    Device.update(
-        { _id: deviceId, $or: [{client: clientId}, {'acl.client': clientId}] },
-        {
-            $set: {
-                settings: req.body
-            }
-        }, function(err, device) {
-            if (!device || err) {
-                res.status(404).send({
-                    message: 'No device found.'
-                });
-                return;
-            }
-
-            res.json({
-                message: 'Settings have been saved'
-            });
-        }
-    );
 };
 
 exports.onboard = function(req, res) {

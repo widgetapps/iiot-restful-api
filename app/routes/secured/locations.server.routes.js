@@ -6,5 +6,6 @@ module.exports = function(app) {
 
     app.route('/locations/:locationId')
         .get(locations.getOne)
-        .put(locations.update);
+        .put(locations.update)
+        .delete(locations.remove);
 };

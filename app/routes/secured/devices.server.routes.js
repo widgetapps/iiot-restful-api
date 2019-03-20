@@ -17,14 +17,6 @@ module.exports = function(app) {
     app.route('/devices/:deviceId/sensors/:sensorId')
         .get(devices.getSensor);
 
-    app.route('/devices/:deviceId/sensors/:sensorId/limits')
-        .get(devices.getLimits)
-        .put(devices.updateLimits);
-
-    app.route('/devices/:deviceId/settings')
-        .get(devices.getSettings)
-        .put(devices.updateSettings);
-
     app.route('/devices/:deviceId/onboard/:clientId')
         .post(devices.onboard);
 };

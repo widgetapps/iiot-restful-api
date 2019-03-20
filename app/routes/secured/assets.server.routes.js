@@ -8,7 +8,8 @@ module.exports = function(app) {
 
     app.route('/assets/:assetId')
         .get(assets.getOne)
-        .put(assets.update);
+        .put(assets.update)
+        .delete(assets.remove);
 
     app.route('/assets/:assetId/settings')
         .get(assets.listSettings);
