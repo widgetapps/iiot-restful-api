@@ -536,10 +536,10 @@ exports.listAssets = function(req, res) {
             location: 1
         })
             .populate('location', {
-                'location.tagCode': 1,
-                'location.description': 1,
-                'location.address': 1,
-                'location.geolocation.coordinates': 1
+                'tagCode': 1,
+                'description': 1,
+                'address': 1,
+                'geolocation.coordinates': 1
             })
             .exec(function(err, assets) {
                 if (err) {
