@@ -533,13 +533,14 @@ exports.listAssets = function(req, res) {
             name: 1,
             description: 1,
             settings: 1,
-            location: 1,
-            'location.tagCode': 1,
-            'location.description': 1,
-            'location.address': 1,
-            'location.geolocation.coordinates': 1
+            location: 1
         })
-            .populate('location')
+            .populate('location', {
+                'location.tagCode': 1,
+                'location.description': 1,
+                'location.address': 1,
+                'location.geolocation.coordinates': 1
+            })
             .exec(function(err, assets) {
                 if (err) {
                     res.status(500).send({
