@@ -207,6 +207,15 @@ exports.update = function(req, res) {
             return;
         }
 
+        // Check to see if read-only fields are in the payload
+        if (req.body.created || req.body.updated || req.body.alertGroups || req.body.reseller || req.body.resellerParent || req.body.locations || req.body.assets || req.body.devices || req.body.users || req.body.apiKey) {
+            res.status(400).send({
+                message: 'Cannot update read-only field.'
+            });
+
+            return;
+        }
+
         Client.findById(
             req.params.id,
             function (err, client) {
