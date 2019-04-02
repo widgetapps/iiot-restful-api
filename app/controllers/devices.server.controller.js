@@ -169,7 +169,7 @@ exports.onboard = function(req, res) {
     Device.findOne( { _id: deviceId }, function(err, device) {
         let authorized = false;
 
-        switch (req.user.role) {s
+        switch (req.user.role) {
             case 'admin':
             case 'manager':
                 if (req.user.client.toString() === device.client.toString() || _.includes(req.user.resellerClients, device.client)) {
