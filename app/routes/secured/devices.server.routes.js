@@ -2,7 +2,7 @@
 
 module.exports = function(app) {
 	// Root routing
-    var devices = require('../../../app/controllers/devices.server.controller');
+    const devices = require('../../../app/controllers/devices.server.controller');
 
     app.route('/devices')
         .get(devices.list);
@@ -17,10 +17,10 @@ module.exports = function(app) {
     app.route('/devices/:deviceId/sensors/:sensorId')
         .get(devices.getSensor);
 
+    app.route('/devices/:deviceId/offboard')
+        .put(devices.offboard);
+
     app.route('/devices/:deviceId/onboard/:clientId')
         .post(devices.onboard)
         .put(devices.onboard);
-
-    app.route('/devices/:deviceId/offboard')
-        .put(devices.offboard);
 };
