@@ -4,9 +4,6 @@ module.exports = function(app) {
 	// Root routing
     const devices = require('../../../app/controllers/devices.server.controller');
 
-    app.route('/devices')
-        .get(devices.list);
-
     app.route('/devices/:deviceId')
         .get(devices.getOne)
         .put(devices.updateDevice);

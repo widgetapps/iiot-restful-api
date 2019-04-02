@@ -8,32 +8,6 @@ var mongoose = require('mongoose'),
     Device = require('@terepac/terepac-models').Device,
     _ = require('lodash');
 
-exports.list = function(req, res) {
-    var clientId = mongoose.Types.ObjectId(req.user.client);
-
-    Device.find({$or: [{client: clientId}, {'acl.client': clientId}]},
-        {
-            created: 1,
-            updated: 1,
-            serialNumber: 1,
-            topicId: 1,
-            type: 1,
-            geolocation: 1,
-            sensors: 1,
-            code: 1,
-            descriptor: 1
-    }, function(err, devices) {
-            if (devices.length === 0 || err) {
-                res.status(404).send({
-                    message: 'No devices found.'
-                });
-                return;
-            }
-
-            res.json(devices);
-    });
-};
-
 exports.getOne = function(req, res) {
     var clientId = mongoose.Types.ObjectId(req.user.client);
     var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
@@ -193,6 +167,26 @@ exports.onboard = function(req, res) {
     let clientId = mongoose.Types.ObjectId(req.params.clientId);
 
     Device.findOne( { _id: deviceId }, function(err, device) {
+        let authorized = false;
+
+        switch (req.user.role) {s
+            case 'admin':
+            case 'manager':
+                if (req.user.client.toString() === device.client.toString() || _.includes(req.user.resellerClients, device.client)) {
+                    authorized = true;
+                }
+                break;
+            case 'super':
+                authorized = true;
+                break;
+        }
+
+        if (!authorized) {
+            res.status(401).send({
+                message: 'You are not authorized to access this resource.'
+            });
+            return;
+        }
 
         if (!device || err) {
             res.status(404).send({
@@ -235,9 +229,29 @@ exports.onboard = function(req, res) {
 };
 
 exports.offboard = function(req, res) {
-    let deviceId = mongoose.Types.ObjectId(req.params.deviceId);
+    const deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
     Device.findOne( { _id: deviceId }, function(err, device) {
+        let authorized = false;
+
+        switch (req.user.role) {
+            case 'admin':
+            case 'manager':
+                if (req.user.client.toString() === device.client.toString() || _.includes(req.user.resellerClients, device.client)) {
+                    authorized = true;
+                }
+                break;
+            case 'super':
+                authorized = true;
+                break;
+        }
+
+        if (!authorized) {
+            res.status(401).send({
+                message: 'You are not authorized to access this resource.'
+            });
+            return;
+        }
 
         if (!device || err) {
             res.status(404).send({
