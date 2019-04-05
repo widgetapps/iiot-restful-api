@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+    _ = require('lodash'),
     Location = require('@terepac/terepac-models').Location,
     Client = require('@terepac/terepac-models').Client,
     Asset = require('@terepac/terepac-models').Asset;
