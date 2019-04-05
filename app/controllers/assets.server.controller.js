@@ -163,20 +163,37 @@ exports.remove = function(req, res) {
                 return;
             }
 
-            asset.remove(function(err, removedAsset) {
-                if (err) {
-                    res.status(400).send({
-                        message: 'Database error.'
+            Device.find(
+                {asset: mongoose.Types.ObjectId(asset._id)},
+                function (err, devices) {
+                    if (err || devices.length > 0) {
+                        let word = 'device';
+                        if (devices.length > 1) {
+                            word = 'devices';
+                        }
+                        res.status(400).send({
+                            message: 'This asset has ' + devices.length + ' ' + word + ' assigned to it. You must un-assign before deleting this asset.'
+                        });
+                        return;
+                    }
+
+                    asset.remove(function(err, removedAsset) {
+                        if (err) {
+                            res.status(400).send({
+                                message: 'Database error.'
+                            });
+                            return;
+                        }
+
+                        res.json({
+                            message: 'The Asset has been deleted.'
+                        });
+                        return;
+
                     });
-                    return;
+
                 }
-
-                res.json({
-                    message: 'The Asset has been deleted.'
-                });
-                return;
-
-            });
+            );
 
         }
     );
