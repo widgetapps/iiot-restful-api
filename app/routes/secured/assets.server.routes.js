@@ -12,7 +12,8 @@ module.exports = function(app) {
         .delete(assets.remove);
 
     app.route('/assets/:assetId/settings')
-        .get(assets.listSettings);
+        .get(assets.listSettings)
+        .put(assets.updateSettings);
 
     app.route('/assets/:assetId/settings/reset')
         .get(assets.resetSettings);

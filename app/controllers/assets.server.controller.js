@@ -414,14 +414,6 @@ exports.getSetting = function(req, res) {
 };
 
 exports.updateSettings = function (req, res) {
-
-    // TODO: Update this to update all settings in one call.
-    /**
-     * Find the asset.
-     * Get the settings
-     * Loop through each setting and update value
-     * Save the document
-     */
     var promise = Asset.findOne({ _id: req.params.assetId}, {client: 1, 'settings': 1}).exec();
 
     promise.then(function(asset) {
@@ -458,8 +450,33 @@ exports.updateSettings = function (req, res) {
             });
         }
 
+        let updatedSettings = [];
+
         _.forEach(asset.settings, function (setting) {
-            var v = req.body;
+            let settings = req.body;
+
+            let found = _.find(settings, {key: setting.key});
+            if (found && setting.key === found.key) {
+                setting.value = found.value;
+            }
+
+            updatedSettings.push(setting);
+        });
+
+        asset.settings = updatedSettings;
+
+        asset.save(function (err, savedAsset) {
+            if (err){
+                res.status(400).send({
+                    message: 'Error saving settings.'
+                });
+            }
+
+            sendConfigToDevice(req.app, savedAsset, function() {
+
+                res.json(savedAsset.settings);
+
+            });
         });
 
     }).catch(function(error) {
