@@ -177,6 +177,7 @@ exports.onboard = function(req, res) {
                 }
                 break;
             case 'super':
+            case 'manufacturer':
                 authorized = true;
                 break;
         }
@@ -242,6 +243,7 @@ exports.offboard = function(req, res) {
                 }
                 break;
             case 'super':
+            case 'manufacturer':
                 authorized = true;
                 break;
         }
