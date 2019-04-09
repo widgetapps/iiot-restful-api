@@ -335,9 +335,9 @@ exports.resetSettings = function(req, res) {
                     key: 'rssi-interval',
                     name: 'rssi-interval',
                     datatype: 'int',
-                    range: [1, 1440],
-                    unit: 'minutes',
-                    value: 10
+                    range: [1, 86400],
+                    unit: 'seconds',
+                    value: 600
                 },{
                     key: 'hydrophone-start',
                     name: 'hydrophone-start',
