@@ -9,11 +9,10 @@ var mongoose = require('mongoose'),
     _ = require('lodash');
 
 exports.getOne = function(req, res) {
-    var clientId = mongoose.Types.ObjectId(req.user.client);
-    var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
-    Device.findOne(
-        { _id: deviceId, $or: [{client: clientId}, {'acl.client': clientId}] }, {
+    let promise = Device.findById(
+        req.params.deviceId,
+        {
             created: 1,
             updated: 1,
             serialNumber: 1,
@@ -25,49 +24,56 @@ exports.getOne = function(req, res) {
             location: 1,
             asset: 1,
             client: 1
-        },function(err, device) {
+        }
+    ).populate('sensors').exec();
 
-            let authorized = false;
+    promise.then(function(device) {
 
-            switch (req.user.role) {
-                case 'user':
-                    if (req.user.client.toString() === device.client.toString()) {
-                        authorized = true;
-                    }
-                    break;
-                case 'manufacturer':
-                case 'admin':
-                case 'manager':
-                    if (req.user.client.toString() === device.client.toString() || _.includes(req.user.resellerClients, device.client)) {
-                        authorized = true;
-                    }
-                    break;
-                case 'super':
+        let authorized = false;
+
+        switch (req.user.role) {
+            case 'user':
+                if (req.user.client.toString() === device.client.toString()) {
                     authorized = true;
-                    break;
-            }
+                }
+                break;
+            case 'manufacturer':
+            case 'admin':
+            case 'manager':
+                if (req.user.client.toString() === device.client.toString() || _.includes(req.user.resellerClients, device.client)) {
+                    authorized = true;
+                }
+                break;
+            case 'super':
+                authorized = true;
+                break;
+        }
 
-            if (!authorized) {
-                res.status(401).send({
-                    message: 'You are not authorized to access this resource.'
-                });
-                return;
-            }
+        if (!authorized) {
+            res.status(401).send({
+                message: 'You are not authorized to access this resource.'
+            });
+            return;
+        }
 
-            if (!device || err) {
-                res.status(404).send({
-                    message: 'No device found.'
-                });
-                return;
-            }
+        if (!device) {
+            res.status(404).send({
+                message: 'No device found.'
+            });
+            return;
+        }
 
-            res.json(device);
+        res.json(device);
+    }).catch(function(error) {
+        res.status(400).send({
+            message: 'Error with the database.'
+        });
     });
 };
 
 exports.updateDevice = function(req, res) {
-    var clientId = mongoose.Types.ObjectId(req.user.client);
-    var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
+    let clientId = mongoose.Types.ObjectId(req.user.client);
+    let deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
     Device.update(
         { _id: deviceId, $or: [{client: clientId}, {'acl.client': clientId}] },

@@ -19,6 +19,7 @@ exports.list = function(req, res) {
 };
 
 exports.insert = function(req, res) {
+    // TODO: Need to validate phone numbers with google-libphonenumber
     getClient(req, res, function(client) {
         if (!client.alertGroups) {
             client.alertGroups = [];
@@ -75,6 +76,7 @@ exports.get = function(req, res) {
 };
 
 exports.update = function(req, res) {
+    // TODO: Need to validate phone numbers with google-libphonenumber for E.164 formatting
     getClient(req, res, function (client) {
         var updatedAlertGroups = [];
 
