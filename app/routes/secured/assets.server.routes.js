@@ -1,7 +1,5 @@
 'use strict';
 
-var acl = require('../../lib/acl');
-
 module.exports = function(app) {
     // Root routing
     var assets = require('../../../app/controllers/assets.server.controller');
