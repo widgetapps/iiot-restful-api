@@ -196,7 +196,7 @@ exports.authenticate = function(req, res) {
                     userJwt.reseller = false;
                 }
 
-                let token = jwt.sign(userJwt.toObject(), privateKey, {
+                let token = jwt.sign(userJwt, privateKey, {
                     algorithm: 'RS256',
                     expiresIn: '7d'
                 });
