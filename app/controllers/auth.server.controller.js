@@ -73,6 +73,7 @@ exports.login = function(req, res) {
                                         lastName: savedUser.lastName,
                                         email: savedUser.email,
                                         role: savedUser.role,
+                                        client: client._id,
                                         apiKey: client.apikey.id
                                     };
 
@@ -182,6 +183,7 @@ exports.authenticate = function(req, res) {
                     lastName: user.lastName,
                     email: user.email,
                     role: user.role,
+                    client: client._id,
                     apiKey: client.apikey.id
                 };
 
