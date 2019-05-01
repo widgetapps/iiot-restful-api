@@ -141,6 +141,7 @@ exports.authenticate = function(req, res) {
             }
 
             // If the JTW in the DB is still valid, just return that.
+            /*
             let existingKey = false;
             if (user.pki && user.pki.token) {
                 jwt.verify(user.pki.token, user.pki.publicKey, function(err, decoded) {
@@ -156,7 +157,7 @@ exports.authenticate = function(req, res) {
                 });
             }
 
-            if (existingKey) return;
+            if (existingKey) return; */
 
             //  Create a new JTW
             crypto.generateKeyPair('rsa', {
