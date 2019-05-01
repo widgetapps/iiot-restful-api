@@ -12,7 +12,7 @@ var User = require('@terepac/terepac-models').User,
 
 exports.login = function(req, res) {
 
-    var promise = User.findOne({ email: req.body.email }).exec();
+    let promise = User.findOne({ email: req.body.email }).exec();
     promise.then(function (user) {
         if (!user) {
             res.status(404).send({
@@ -67,26 +67,24 @@ exports.login = function(req, res) {
                                         });
                                     }
 
-                                    // Don't store private stuff in the jwt
-                                    savedUser.password = undefined;
-                                    savedUser.salt = undefined;
-                                    savedUser.provider = undefined;
-                                    savedUser.providerData = undefined;
-                                    savedUser.additionalProviderData = undefined;
-                                    savedUser.active = undefined;
-                                    savedUser.resetPasswordToken = undefined;
-                                    savedUser.resetPasswordExpires = undefined;
-                                    savedUser.pki = undefined;
+                                    let userJwt = {
+                                        id: savedUser._id,
+                                        firstName: savedUser.firstName,
+                                        lastName: savedUser.lastName,
+                                        email: savedUser.email,
+                                        role: savedUser.role,
+                                        apiKey: client.apikey.id
+                                    };
 
                                     // Add reseller info to the user
                                     if (client.reseller) {
-                                        savedUser.reseller = true;
-                                        savedUser.resellerClients = client.resellerClients;
+                                        userJwt.reseller = true;
+                                        userJwt.resellerClients = client.resellerClients;
                                     } else {
-                                        savedUser.reseller = false;
+                                        userJwt.reseller = false;
                                     }
 
-                                    var token = jwt.sign(savedUser.toObject(), privateKey, {
+                                    let token = jwt.sign(userJwt, privateKey, {
                                         algorithm: 'RS256',
                                         expiresIn: '7d'
                                     });
