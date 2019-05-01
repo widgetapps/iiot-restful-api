@@ -68,7 +68,7 @@ exports.login = function(req, res) {
                                     }
 
                                     let userJwt = {
-                                        id: savedUser._id,
+                                        _id: savedUser._id,
                                         firstName: savedUser.firstName,
                                         lastName: savedUser.lastName,
                                         email: savedUser.email,
@@ -177,7 +177,7 @@ exports.authenticate = function(req, res) {
                 }
 
                 let userJwt = {
-                    id: user._id,
+                    _id: user._id,
                     firstName: user.firstName,
                     lastName: user.lastName,
                     email: user.email,
