@@ -178,26 +178,14 @@ exports.authenticate = function(req, res) {
                     return;
                 }
 
-                // Clone the user object to strip out fields that shouldn't be in the JWT
-                let userJwt = _.cloneDeep(user);
-
-                userJwt.id = user._id;
-
-                // Don't store private stuff in the jwt
-                userJwt._id = undefined;
-                userJwt.password = undefined;
-                userJwt.salt = undefined;
-                userJwt.provider = undefined;
-                userJwt.providerData = undefined;
-                userJwt.additionalProviderData = undefined;
-                userJwt.active = undefined;
-                userJwt.resetPasswordToken = undefined;
-                userJwt.resetPasswordExpires = undefined;
-                userJwt.pki = undefined;
-                userJwt.__v = undefined;
-                userJwt.created = undefined;
-                userJwt.updated = undefined;
-                userJwt.phone = undefined;
+                let userJwt = {
+                    id: user._id,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    email: user.email,
+                    role: user.role,
+                    apiKey: client.apikey.id
+                };
 
                 // Add reseller info to the user
                 if (client.reseller) {
@@ -206,8 +194,6 @@ exports.authenticate = function(req, res) {
                 } else {
                     userJwt.reseller = false;
                 }
-
-                userJwt.apiKey = client.apikey.id;
 
                 let token = jwt.sign(userJwt.toObject(), privateKey, {
                     algorithm: 'RS256',
