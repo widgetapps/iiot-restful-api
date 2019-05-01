@@ -32,7 +32,9 @@ module.exports = function(req, res, next) {
                     return;
                 }
 
-                User.findById(decodedUser.id, {pki: 1, client: 1}).exec(function(err, user) {
+                decodedUser._id = decodedUser.id;
+
+                User.findById(decodedUser._id, {pki: 1, client: 1}).exec(function(err, user) {
                     if (!user || err) {
                         res.status(401).send({
                             message: 'Authentication error: User not found.',
