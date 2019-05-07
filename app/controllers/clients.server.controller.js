@@ -668,6 +668,20 @@ exports.insertAsset = function(req, res) {
                 range: [0, 86400],
                 unit: 'seconds',
                 value: 300
+            },{
+                key: 'pressure-on-time',
+                name: 'pressure-on-time',
+                datatype: 'int',
+                range: [1, 86400],
+                unit: 'seconds',
+                value: 1
+            },{
+                key: 'pressure-off-time',
+                name: 'pressure-off-time',
+                datatype: 'int',
+                range: [0, 86400],
+                unit: 'seconds',
+                value: 0
             }];
 
         asset.save(function (err, ass) {
