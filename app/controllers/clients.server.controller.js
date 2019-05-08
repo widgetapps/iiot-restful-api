@@ -499,6 +499,7 @@ exports.getAggregatedTelemetry = function(req, res) {
     let group = getTelemetryGroupStatement(start, end);
     let sort = {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1, '_id.second': 1};
 
+    group.unit= {'$first': '$data.unit'};
     group.count = {'$sum': 1};
     group.min = {'$min': '$data.values.min'};
     group.max = {'$max': '$data.values.max'};
@@ -515,9 +516,11 @@ exports.getAggregatedTelemetry = function(req, res) {
         group.sensor = {'$first': '$sensor'};
     }
 
+    let tags = req.query.tags.split(',');
+
     Telemetry.aggregate([
         {'$match': {
-                'tag.full': tag,
+                'tag.full': {$in: tags},
                 timestamp: {'$gte': moment(req.query.start).toDate(), '$lte': moment(req.query.end).toDate()}
             }},
         {'$group': group},
