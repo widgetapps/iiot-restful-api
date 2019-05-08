@@ -447,9 +447,9 @@ exports.getAggregatedTelemetry = function(req, res) {
         return;
     }
 
-    let now = moment().utc();
-    let start = moment().utc(req.query.start);
-    let end = moment().utc(req.query.end);
+    let now = moment.utc();
+    let start = moment.utc(req.query.start);
+    let end = moment.utc(req.query.end);
 
     let json = {
         now: now,
