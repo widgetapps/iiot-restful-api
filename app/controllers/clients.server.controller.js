@@ -508,6 +508,9 @@ exports.getAggregatedTelemetry = function(req, res) {
     group.data.average = {'$avg': '$data.values.average'};
     group.data.point = {'$avg': '$data.values.point'};
 
+    res.json(group);
+    return;
+
     // NOTE: Doc says exec on an aggregate returns a cursor... we shall see.
 
     Telemetry.aggregate([
