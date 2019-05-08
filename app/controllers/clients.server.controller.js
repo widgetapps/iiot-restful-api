@@ -488,22 +488,7 @@ exports.getAggregatedTelemetry = function(req, res) {
         return;
     }
 
-    let tags = req.query.tags.split(',');
-
-    let fields = {
-        tag: 1,
-        timestamp: 1,
-        data: 1
-    };
-    if (req.query.asset === '1') {
-        fields.asset = 1;
-    }
-    if (req.query.device === '1') {
-        fields.device = 1;
-    }
-    if (req.query.sensor === '1') {
-        fields.sensor = 1;
-    }
+    let tag = req.query.tag;
 
     res.set({
         'Content-Type': 'application/json',
@@ -518,7 +503,7 @@ exports.getAggregatedTelemetry = function(req, res) {
 
     Telemetry.aggregate([
         {'$match': {
-                'tag.full': {$in: tags},
+                'tag.full': tag,
                 timestamp: {'$gte': moment(req.query.start).toDate(), '$lte': moment(req.query.end).toDate()}
             }},
         {'$group': group},
@@ -1136,6 +1121,10 @@ function getTelemetryGroupStatement(start, end) {
                     ]
                 }
             },
+            'tag': {'$first': '$tag.full'},
+            'asset': {'$first': '$asset'},
+            'device': {'$first': '$device'},
+            'sensor': {'$first': '$sensor'},
             'count': {'$sum': 1},
             'min': {'$min': '$data.values.min'},
             'max': {'$max': '$data.values.max'},
@@ -1160,6 +1149,10 @@ function getTelemetryGroupStatement(start, end) {
                     ]
                 }
             },
+            'tag': {'$first': '$tag.full'},
+            'asset': {'$first': '$asset'},
+            'device': {'$first': '$device'},
+            'sensor': {'$first': '$sensor'},
             'count': {'$sum': 1},
             'min': {'$min': '$data.values.min'},
             'max': {'$max': '$data.values.max'},
@@ -1184,6 +1177,10 @@ function getTelemetryGroupStatement(start, end) {
                     ]
                 }
             },
+            'tag': {'$first': '$tag.full'},
+            'asset': {'$first': '$asset'},
+            'device': {'$first': '$device'},
+            'sensor': {'$first': '$sensor'},
             'count': {'$sum': 1},
             'min': {'$min': '$data.values.min'},
             'max': {'$max': '$data.values.max'},
@@ -1207,6 +1204,10 @@ function getTelemetryGroupStatement(start, end) {
                     ]
                 }
             },
+            'tag': {'$first': '$tag.full'},
+            'asset': {'$first': '$asset'},
+            'device': {'$first': '$device'},
+            'sensor': {'$first': '$sensor'},
             'count': {'$sum': 1},
             'min': {'$min': '$data.values.min'},
             'max': {'$max': '$data.values.max'},
