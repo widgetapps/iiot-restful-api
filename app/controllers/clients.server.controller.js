@@ -503,10 +503,10 @@ exports.getAggregatedTelemetry = function(req, res) {
     group.device = {'$first': '$device'};
     group.sensor = {'$first': '$sensor'};
     group.count = {'$sum': 1};
-    group.data.min = {'$min': '$data.values.min'};
-    group.data.max = {'$max': '$data.values.max'};
-    group.data.average = {'$avg': '$data.values.average'};
-    group.data.point = {'$avg': '$data.values.point'};
+    group.min = {'$min': '$data.values.min'};
+    group.max = {'$max': '$data.values.max'};
+    group.average = {'$avg': '$data.values.average'};
+    group.point = {'$avg': '$data.values.point'};
 
     Telemetry.aggregate([
         {'$match': {
@@ -1128,8 +1128,7 @@ function getTelemetryGroupStatement(start, end) {
                         { '$mod': [{ '$second': '$timestamp'}, interval]}
                     ]
                 }
-            },
-            'data': {}
+            }
         };
     }
 
@@ -1149,8 +1148,7 @@ function getTelemetryGroupStatement(start, end) {
                         { '$mod': [{ '$minute': '$timestamp'}, interval]}
                     ]
                 }
-            },
-            'data': {}
+            }
         };
     }
 
@@ -1170,8 +1168,7 @@ function getTelemetryGroupStatement(start, end) {
                         { '$mod': [{ '$minute': '$timestamp'}, interval]}
                     ]
                 }
-            },
-            'data': {}
+            }
         };
     }
 
@@ -1190,8 +1187,7 @@ function getTelemetryGroupStatement(start, end) {
                         { '$mod': [{ '$hour': '$timestamp'}, interval]}
                     ]
                 }
-            },
-            'data': {}
+            }
         };
     }
 
