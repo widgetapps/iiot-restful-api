@@ -474,14 +474,16 @@ exports.getAggregatedTelemetry = function(req, res) {
 
     if (start.diff(end, 'hours') < 1) {
         res.status(400).send({
-            message: 'There must be at least 1 hour between the start and end dates.'
+            message: 'There must be at least 1 hour between the start and end dates.',
+            hours: start.diff(end, 'hours')
         });
         return;
     }
 
     if (start.diff(end, 'days') > 30) {
         res.status(400).send({
-            message: 'There cannot be more than 30 days between the start and end dates.'
+            message: 'There cannot be more than 30 days between the start and end dates.',
+            days: start.diff(end, 'days')
         });
         return;
     }
