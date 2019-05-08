@@ -499,14 +499,21 @@ exports.getAggregatedTelemetry = function(req, res) {
     let group = getTelemetryGroupStatement(start, end);
     let sort = {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1, '_id.second': 1};
 
-    group.asset = {'$first': '$asset'};
-    group.device = {'$first': '$device'};
-    group.sensor = {'$first': '$sensor'};
     group.count = {'$sum': 1};
     group.min = {'$min': '$data.values.min'};
     group.max = {'$max': '$data.values.max'};
     group.average = {'$avg': '$data.values.average'};
     group.point = {'$avg': '$data.values.point'};
+
+    if (req.query.asset === '1') {
+        group.asset = {'$first': '$asset'};
+    }
+    if (req.query.device === '1') {
+        group.device = {'$first': '$device'};
+    }
+    if (req.query.sensor === '1') {
+        group.sensor = {'$first': '$sensor'};
+    }
 
     Telemetry.aggregate([
         {'$match': {
@@ -516,32 +523,6 @@ exports.getAggregatedTelemetry = function(req, res) {
         {'$group': group},
         {'$sort': sort}
     ]).cursor().exec().pipe(JSONStream.stringify()).pipe(res);
-
-/*
-    Telemetry.aggregate([
-        {'$match': {
-                'tag.full': {$in: tags},
-                timestamp: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)}
-            }},
-        {'$group': group},
-        {'$sort': sort}
-    ], function (err, result) {
-        if (err) {
-            res.status(500).send({
-                message: 'Database error.'
-            });
-            return;
-        }
-
-        res.json({
-            match: {'$match': {
-                    'tag.full': {$in: tags},
-                    timestamp: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)}
-                }},
-            group: {'$group': group},
-            sort: {'$sort': sort}
-        });
-    });*/
 };
 
 exports.getLatestTelemetry = function(req, res) {
