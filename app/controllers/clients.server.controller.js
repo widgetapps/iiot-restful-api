@@ -1194,16 +1194,17 @@ function getTelemetryGroupStatement(start, end) {
 
     diff = end.diff(start, 'weeks');
     if (diff > 4) { // Handle > 4w, 2h interval
-        interval = 2; // hours
+        interval = 2 * 60; // hours to minutes
         group = {
             '_id': {
                 'year': { '$year': '$timestamp' },
                 'month': { '$month': '$timestamp' },
                 'day': { '$dayOfMonth': '$timestamp' },
-                'hour': {
+                'hour': { '$hour': '$timestamp' },
+                'minute': {
                     '$subtract': [
-                        { '$hour': '$timestamp' },
-                        { '$mod': [{ '$hour': '$timestamp'}, interval]}
+                        { '$minute': '$timestamp' },
+                        { '$mod': [{ '$minute': '$timestamp'}, interval]}
                     ]
                 }
             },
