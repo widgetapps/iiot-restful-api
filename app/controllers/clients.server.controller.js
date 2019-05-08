@@ -515,7 +515,7 @@ exports.getAggregatedTelemetry = function(req, res) {
     let sort = {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1, '_id.second': 1};
 
     // NOTE: Doc says exec on an aggregate returns a cursor... we shall see.
-    /*
+
     Telemetry.aggregate([
         {'$match': {
                 'tag.full': {$in: tags},
@@ -523,9 +523,9 @@ exports.getAggregatedTelemetry = function(req, res) {
             }},
         {'$group': group},
         {'$sort': sort}
-    ]).cursor().exec().pipe(JSONStream.stringify()).pipe(res);*/
+    ]).cursor().exec().pipe(JSONStream.stringify()).pipe(res);
 
-
+/*
     Telemetry.aggregate([
         {'$match': {
                 'tag.full': {$in: tags},
@@ -542,7 +542,7 @@ exports.getAggregatedTelemetry = function(req, res) {
         }
 
         res.json(group);
-    });
+    });*/
 };
 
 exports.getLatestTelemetry = function(req, res) {
@@ -1112,7 +1112,7 @@ function getTelemetryGroupStatement(start, end) {
 
     let group, diff, interval;
 
-    diff = start.diff(end, 'hours');
+    diff = end.diff(start, 'hours');
     if (diff < 24) { // Handle 1h to 24hrs, 10s interval
         interval = diff * 10; // seconds
         group = {
@@ -1137,7 +1137,7 @@ function getTelemetryGroupStatement(start, end) {
         };
     }
 
-    diff = start.diff(end, 'days');
+    diff = end.diff(start, 'days');
     if (diff >= 1 && diff < 7) { // Handle 1d to 7d, 5m interval
         interval = diff * 5; // minutes
         group = {
@@ -1162,7 +1162,7 @@ function getTelemetryGroupStatement(start, end) {
         };
     }
 
-    diff = start.diff(end, 'weeks');
+    diff = end.diff(start, 'weeks');
     if (diff >= 1 && diff < 4) { // Handle 1w to 4w, 30m interval
         interval = diff * 30; // minutes
         group = {
@@ -1187,7 +1187,7 @@ function getTelemetryGroupStatement(start, end) {
         };
     }
 
-    diff = start.diff(end, 'weeks');
+    diff = end.diff(start, 'weeks');
     if (diff > 4) { // Handle > 4w, 2h interval
         interval = 2; // hours
         group = {
