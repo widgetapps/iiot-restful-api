@@ -519,7 +519,7 @@ exports.getAggregatedTelemetry = function(req, res) {
     Telemetry.aggregate([
         {'$match': {
                 'tag.full': {$in: tags},
-                timestamp: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)}
+                timestamp: {'$gte': moment(req.query.start).toDate(), '$lte': moment(req.query.end).toDate()}
             }},
         {'$group': group},
         {'$sort': sort}
