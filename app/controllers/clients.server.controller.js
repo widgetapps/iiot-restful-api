@@ -515,7 +515,7 @@ exports.getAggregatedTelemetry = function(req, res) {
     let sort = {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1, '_id.second': 1};
 
     // NOTE: Doc says exec on an aggregate returns a cursor... we shall see.
-    /*
+
     Telemetry.aggregate([
         {'$match': {
                 'tag.full': {$in: tags},
@@ -523,9 +523,9 @@ exports.getAggregatedTelemetry = function(req, res) {
             }},
         {'$group': group},
         {'$sort': sort}
-    ]).cursor().exec().pipe(JSONStream.stringify()).pipe(res);*/
+    ]).cursor().exec().pipe(JSONStream.stringify()).pipe(res);
 
-
+/*
     Telemetry.aggregate([
         {'$match': {
                 'tag.full': {$in: tags},
@@ -549,7 +549,7 @@ exports.getAggregatedTelemetry = function(req, res) {
             group: {'$group': group},
             sort: {'$sort': sort}
         });
-    });
+    });*/
 };
 
 exports.getLatestTelemetry = function(req, res) {
