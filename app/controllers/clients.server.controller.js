@@ -1158,8 +1158,7 @@ function getTelemetryGroupStatement(start, end) {
                         { '$minute': '$timestamp' },
                         { '$mod': [{ '$minute': '$timestamp'}, interval]}
                     ]
-                },
-                'second': { '$second': '$timestamp' }
+                }
             },
             'count': {'$sum': 1},
             'min': {'$min': '$data.values.min'},
@@ -1183,8 +1182,7 @@ function getTelemetryGroupStatement(start, end) {
                         { '$minute': '$timestamp' },
                         { '$mod': [{ '$minute': '$timestamp'}, interval]}
                     ]
-                },
-                'second': { '$second': '$timestamp' }
+                }
             },
             'count': {'$sum': 1},
             'min': {'$min': '$data.values.min'},
@@ -1207,9 +1205,7 @@ function getTelemetryGroupStatement(start, end) {
                         { '$hour': '$timestamp' },
                         { '$mod': [{ '$hour': '$timestamp'}, interval]}
                     ]
-                },
-                'minute': { '$minute': '$timestamp' },
-                'second': { '$second': '$timestamp' }
+                }
             },
             'count': {'$sum': 1},
             'min': {'$min': '$data.values.min'},
