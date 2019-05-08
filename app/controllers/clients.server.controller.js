@@ -514,6 +514,13 @@ exports.getAggregatedTelemetry = function(req, res) {
         group.sensor = {'$first': '$sensor'};
     }
 
+    if (!req.query.tags || req.query.tags === '') {
+        res.status(400).send({
+            message: 'No tags where provided.'
+        });
+        return;
+    }
+
     let tags = req.query.tags.split(',');
 
     Telemetry.aggregate([
