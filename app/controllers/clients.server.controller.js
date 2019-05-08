@@ -475,7 +475,7 @@ exports.getAggregatedTelemetry = function(req, res) {
     if (end.diff(start, 'hours') < 1) {
         res.status(400).send({
             message: 'There must be at least 1 hour between the start and end dates.',
-            hours: start.diff(end, 'hours')
+            hours: end.diff(start, 'hours')
         });
         return;
     }
@@ -483,7 +483,7 @@ exports.getAggregatedTelemetry = function(req, res) {
     if (end.diff(start, 'days') > 30) {
         res.status(400).send({
             message: 'There cannot be more than 30 days between the start and end dates.',
-            days: start.diff(end, 'days')
+            days: end.diff(start, 'days')
         });
         return;
     }
@@ -522,7 +522,7 @@ exports.getAggregatedTelemetry = function(req, res) {
             }},
         {'$group': group},
         {'$sort': sort}
-    ]).exec().pipe(JSONStream.stringify()).pipe(res);
+    ]).cursor().pipe(JSONStream.stringify()).pipe(res);
 };
 
 exports.getLatestTelemetry = function(req, res) {
