@@ -541,7 +541,7 @@ exports.getAggregatedTelemetry = function(req, res) {
             return;
         }
 
-        res.json(result);
+        res.json(group);
     });
 };
 
