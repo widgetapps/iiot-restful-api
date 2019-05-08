@@ -300,6 +300,60 @@ exports.listTags = function(req, res) {
     });
 };
 
+exports.listTagsGrouped = function(req, res) {
+    let authorized = false;
+
+    // Make sure the user is allowed see the client
+    switch (req.user.role) {
+        case 'user':
+            if (req.user.client === req.params.id) {
+                authorized = true;
+            }
+            break;
+        case 'manufacturer':
+        case 'manager':
+        case 'admin':
+            if (req.user.client === req.params.id || _.includes(req.user.resellerClients, req.params.id)) {
+                authorized = true;
+            }
+            break;
+        case 'super':
+            authorized = true;
+            break;
+    }
+
+    if (!authorized) {
+        res.status(401).send({
+            message: 'You are not authorized to access this resource.'
+        });
+        return;
+    }
+
+    let clientId = mongoose.Types.ObjectId(req.params.id);
+
+    Tag.aggregate([
+        { $match: {client: clientId, active: true} },
+        { $group : {
+                _id : "$tag.assetTagCode",
+                location: {'$first': '$tag.locationTagCode'},
+                sensors: {'$push': '$tag.sensorTagCode'},
+                description: {'$first': '$description.asset'},
+                device: {'$first': '$device'},
+                asset: {'$first': '$asset'}
+            } },
+        { $sort: {_id: 1} }
+    ], function (err, result) {
+        if (err) {
+            res.status(500).send({
+                message: 'Database error.'
+            });
+            return;
+        }
+
+        res.json(result);
+    });
+};
+
 exports.searchTelemetry = function(req, res) {
     authorize.validate(endpoint, req, res, 'user', function() {
         var authorized = false;

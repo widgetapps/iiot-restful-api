@@ -17,6 +17,9 @@ module.exports = function(app) {
     app.route('/clients/:id/tags')
         .get(clients.listTags);
 
+    app.route('/clients/:id/tags/grouped')
+        .get(clients.listTagsGrouped);
+
     app.route('/clients/:id/telemetries/search')
         .get(clients.searchTelemetry);
 
