@@ -522,7 +522,7 @@ exports.getAggregatedTelemetry = function(req, res) {
             }},
         {'$group': group},
         {'$sort': sort}
-    ]).cursor().pipe(JSONStream.stringify()).pipe(res);
+    ]).pipe(JSONStream.stringify()).pipe(res);
 };
 
 exports.getLatestTelemetry = function(req, res) {
