@@ -1109,6 +1109,7 @@ function getTelemetryGroupStatement(start, end) {
         interval = diff * 10; // seconds
         group = {
             '_id': {
+                'tag': '$tag.full',
                 'year': { '$year': '$timestamp' },
                 'month': { '$month': '$timestamp' },
                 'day': { '$dayOfMonth': '$timestamp' },
@@ -1121,7 +1122,6 @@ function getTelemetryGroupStatement(start, end) {
                     ]
                 }
             },
-            'tag': {'$first': '$tag.full'},
             'asset': {'$first': '$asset'},
             'device': {'$first': '$device'},
             'sensor': {'$first': '$sensor'},
@@ -1138,6 +1138,7 @@ function getTelemetryGroupStatement(start, end) {
         interval = diff * 5; // minutes
         group = {
             '_id': {
+                'tag': '$tag.full',
                 'year': { '$year': '$timestamp' },
                 'month': { '$month': '$timestamp' },
                 'day': { '$dayOfMonth': '$timestamp' },
@@ -1149,7 +1150,6 @@ function getTelemetryGroupStatement(start, end) {
                     ]
                 }
             },
-            'tag': {'$first': '$tag.full'},
             'asset': {'$first': '$asset'},
             'device': {'$first': '$device'},
             'sensor': {'$first': '$sensor'},
@@ -1166,6 +1166,7 @@ function getTelemetryGroupStatement(start, end) {
         interval = diff * 30; // minutes
         group = {
             '_id': {
+                'tag': '$tag.full',
                 'year': { '$year': '$timestamp' },
                 'month': { '$month': '$timestamp' },
                 'day': { '$dayOfMonth': '$timestamp' },
@@ -1177,7 +1178,6 @@ function getTelemetryGroupStatement(start, end) {
                     ]
                 }
             },
-            'tag': {'$first': '$tag.full'},
             'asset': {'$first': '$asset'},
             'device': {'$first': '$device'},
             'sensor': {'$first': '$sensor'},
@@ -1194,6 +1194,7 @@ function getTelemetryGroupStatement(start, end) {
         interval = 2; // hours
         group = {
             '_id': {
+                'tag': '$tag.full',
                 'year': { '$year': '$timestamp' },
                 'month': { '$month': '$timestamp' },
                 'day': { '$dayOfMonth': '$timestamp' },
@@ -1204,7 +1205,6 @@ function getTelemetryGroupStatement(start, end) {
                     ]
                 }
             },
-            'tag': {'$first': '$tag.full'},
             'asset': {'$first': '$asset'},
             'device': {'$first': '$device'},
             'sensor': {'$first': '$sensor'},
