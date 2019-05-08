@@ -541,14 +541,14 @@ exports.getAggregatedTelemetry = function(req, res) {
             return;
         }
 
-        res.json(
-            {'$match': {
+        res.json({
+            match: {'$match': {
                     'tag.full': {$in: tags},
                     timestamp: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)}
                 }},
-            {'$group': group},
-            {'$sort': sort}
-        );
+            group: {'$group': group},
+            sort: {'$sort': sort}
+        });
     });
 };
 
