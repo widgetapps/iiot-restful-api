@@ -488,8 +488,6 @@ exports.getAggregatedTelemetry = function(req, res) {
         return;
     }
 
-    let tag = req.query.tag;
-
     res.set({
         'Content-Type': 'application/json',
         'X-Accel-Buffering': 'no',
