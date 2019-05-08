@@ -451,15 +451,6 @@ exports.getAggregatedTelemetry = function(req, res) {
     let start = moment.utc(req.query.start);
     let end = moment.utc(req.query.end);
 
-    let json = {
-        now: now,
-        start: start,
-        end: end
-    };
-
-    res.json (json);
-    return;
-
     if (!start.isValid() || !end.isValid()) {
         res.status(400).send({
             message: 'Start and/or end date are invalid.'
