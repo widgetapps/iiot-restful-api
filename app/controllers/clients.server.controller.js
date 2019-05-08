@@ -447,6 +447,45 @@ exports.getAggregatedTelemetry = function(req, res) {
         return;
     }
 
+    let now = moment().utc();
+    let start = moment().utc(req.query.start);
+    let end = moment().utc(req.query.end);
+
+    if (!start.isValid() || !end.isValid()) {
+        res.status(400).send({
+            message: 'Start and/or end date are invalid.'
+        });
+        return;
+    }
+
+    if (start.isAfter(now)) {
+        res.status(400).send({
+            message: 'The start date must be in the past.'
+        });
+        return;
+    }
+
+    if (start.isAfter(end)) {
+        res.status(400).send({
+            message: 'The start date must be before the end date.'
+        });
+        return;
+    }
+
+    if (start.diff(end, 'hours') < 1) {
+        res.status(400).send({
+            message: 'There must be at least 1 hour between the start and end dates.'
+        });
+        return;
+    }
+
+    if (start.diff(end, 'days') > 30) {
+        res.status(400).send({
+            message: 'There cannot be more than 30 days between the start and end dates.'
+        });
+        return;
+    }
+
     let tags = req.query.tags.split(',');
 
     let fields = {
@@ -470,42 +509,7 @@ exports.getAggregatedTelemetry = function(req, res) {
         'Cache-Control': 'no-cache'
     });
 
-    /**
-     * Need to validate start/end dates.
-     * 1) Start date must be in the past
-     * 2) Start must be before end.
-     * 3) Must be at least 1hr between them.
-     * 4) Cannot be more than 30 days between them.
-     */
-
-    /**
-     *  Need to create different grouping/sorting based on start and end dates/time. The delta determines the interval.
-     *  1m *= 2h interval
-     *  1w *= 30m interval
-     *  1d *= 5m interval
-     *  1h *= 10s interval
-     */
-
-    let group = {
-        '_id': {
-            'year': { '$year': '$timestamp' },
-            'month': { '$month': '$timestamp' },
-            'day': { '$dayOfMonth': '$timestamp' },
-            'hour': { '$hour': '$timestamp' },
-            'minute': {
-                '$subtract': [
-                    { '$minute': '$timestamp' },
-                    { '$mod': [{ '$minute': '$timestamp' }, 30] }
-                ]
-            },
-            'second': { '$second': '$timestamp' }
-        },
-        'count': {'$sum': 1},
-        'min': {'$min': '$data.values.min'},
-        'max': {'$max': '$data.values.max'},
-        'average': {'$avg': '$data.values.average'},
-        'point': {'$avg': '$data.values.point'}
-    };
+    let group = getTelemetryGroupStatement(start, end);
     let sort = {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1, '_id.second': 1};
 
     // NOTE: Doc says exec on an aggregate returns a cursor... we shall see.
@@ -1081,3 +1085,110 @@ exports.insertUser = function(req, res) {
         });
     });
 };
+
+function getTelemetryGroupStatement(start, end) {
+
+    let group, diff, interval;
+
+    diff = start.diff(end, 'hours');
+    if (diff < 24) { // Handle 1h to 24hrs, 10s interval
+        interval = diff * 10; // seconds
+        group = {
+            '_id': {
+                'year': { '$year': '$timestamp' },
+                'month': { '$month': '$timestamp' },
+                'day': { '$dayOfMonth': '$timestamp' },
+                'hour': { '$hour': '$timestamp' },
+                'minute': { '$minute': '$timestamp' },
+                'second': {
+                    '$subtract': [
+                        { '$second': '$timestamp' },
+                        { '$mod': [{ '$second': '$timestamp'}, interval]}
+                    ]
+                }
+            },
+            'count': {'$sum': 1},
+            'min': {'$min': '$data.values.min'},
+            'max': {'$max': '$data.values.max'},
+            'average': {'$avg': '$data.values.average'},
+            'point': {'$avg': '$data.values.point'}
+        };
+    }
+
+    diff = start.diff(end, 'days');
+    if (diff >= 1 && diff < 7) { // Handle 1d to 7d, 5m interval
+        interval = diff * 5; // minutes
+        group = {
+            '_id': {
+                'year': { '$year': '$timestamp' },
+                'month': { '$month': '$timestamp' },
+                'day': { '$dayOfMonth': '$timestamp' },
+                'hour': { '$hour': '$timestamp' },
+                'minute': {
+                    '$subtract': [
+                        { '$minute': '$timestamp' },
+                        { '$mod': [{ '$minute': '$timestamp'}, interval]}
+                    ]
+                },
+                'second': { '$second': '$timestamp' }
+            },
+            'count': {'$sum': 1},
+            'min': {'$min': '$data.values.min'},
+            'max': {'$max': '$data.values.max'},
+            'average': {'$avg': '$data.values.average'},
+            'point': {'$avg': '$data.values.point'}
+        };
+    }
+
+    diff = start.diff(end, 'weeks');
+    if (diff >= 1 && diff < 4) { // Handle 1w to 4w, 30m interval
+        interval = diff * 30; // minutes
+        group = {
+            '_id': {
+                'year': { '$year': '$timestamp' },
+                'month': { '$month': '$timestamp' },
+                'day': { '$dayOfMonth': '$timestamp' },
+                'hour': { '$hour': '$timestamp' },
+                'minute': {
+                    '$subtract': [
+                        { '$minute': '$timestamp' },
+                        { '$mod': [{ '$minute': '$timestamp'}, interval]}
+                    ]
+                },
+                'second': { '$second': '$timestamp' }
+            },
+            'count': {'$sum': 1},
+            'min': {'$min': '$data.values.min'},
+            'max': {'$max': '$data.values.max'},
+            'average': {'$avg': '$data.values.average'},
+            'point': {'$avg': '$data.values.point'}
+        };
+    }
+
+    diff = start.diff(end, 'weeks');
+    if (diff > 4) { // Handle > 4w, 2h interval
+        interval = 2; // hours
+        group = {
+            '_id': {
+                'year': { '$year': '$timestamp' },
+                'month': { '$month': '$timestamp' },
+                'day': { '$dayOfMonth': '$timestamp' },
+                'hour': {
+                    '$subtract': [
+                        { '$hour': '$timestamp' },
+                        { '$mod': [{ '$hour': '$timestamp'}, interval]}
+                    ]
+                },
+                'minute': { '$minute': '$timestamp' },
+                'second': { '$second': '$timestamp' }
+            },
+            'count': {'$sum': 1},
+            'min': {'$min': '$data.values.min'},
+            'max': {'$max': '$data.values.max'},
+            'average': {'$avg': '$data.values.average'},
+            'point': {'$avg': '$data.values.point'}
+        };
+    }
+
+    return group;
+}
