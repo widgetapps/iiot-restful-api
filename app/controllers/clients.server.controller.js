@@ -499,6 +499,15 @@ exports.getAggregatedTelemetry = function(req, res) {
     let group = getTelemetryGroupStatement(start, end);
     let sort = {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1, '_id.second': 1};
 
+    group.asset = {'$first': '$asset'};
+    group.device = {'$first': '$device'};
+    group.sensor = {'$first': '$sensor'};
+    group.count = {'$sum': 1};
+    group.data.min = {'$min': '$data.values.min'};
+    group.data.max = {'$max': '$data.values.max'};
+    group.data.average = {'$avg': '$data.values.average'};
+    group.data.point = {'$avg': '$data.values.point'};
+
     // NOTE: Doc says exec on an aggregate returns a cursor... we shall see.
 
     Telemetry.aggregate([
@@ -1122,14 +1131,7 @@ function getTelemetryGroupStatement(start, end) {
                     ]
                 }
             },
-            'asset': {'$first': '$asset'},
-            'device': {'$first': '$device'},
-            'sensor': {'$first': '$sensor'},
-            'count': {'$sum': 1},
-            'min': {'$min': '$data.values.min'},
-            'max': {'$max': '$data.values.max'},
-            'average': {'$avg': '$data.values.average'},
-            'point': {'$avg': '$data.values.point'}
+            'data': {}
         };
     }
 
@@ -1150,14 +1152,7 @@ function getTelemetryGroupStatement(start, end) {
                     ]
                 }
             },
-            'asset': {'$first': '$asset'},
-            'device': {'$first': '$device'},
-            'sensor': {'$first': '$sensor'},
-            'count': {'$sum': 1},
-            'min': {'$min': '$data.values.min'},
-            'max': {'$max': '$data.values.max'},
-            'average': {'$avg': '$data.values.average'},
-            'point': {'$avg': '$data.values.point'}
+            'data': {}
         };
     }
 
@@ -1178,14 +1173,7 @@ function getTelemetryGroupStatement(start, end) {
                     ]
                 }
             },
-            'asset': {'$first': '$asset'},
-            'device': {'$first': '$device'},
-            'sensor': {'$first': '$sensor'},
-            'count': {'$sum': 1},
-            'min': {'$min': '$data.values.min'},
-            'max': {'$max': '$data.values.max'},
-            'average': {'$avg': '$data.values.average'},
-            'point': {'$avg': '$data.values.point'}
+            'data': {}
         };
     }
 
@@ -1205,14 +1193,7 @@ function getTelemetryGroupStatement(start, end) {
                     ]
                 }
             },
-            'asset': {'$first': '$asset'},
-            'device': {'$first': '$device'},
-            'sensor': {'$first': '$sensor'},
-            'count': {'$sum': 1},
-            'min': {'$min': '$data.values.min'},
-            'max': {'$max': '$data.values.max'},
-            'average': {'$avg': '$data.values.average'},
-            'point': {'$avg': '$data.values.point'}
+            'data': {}
         };
     }
 
