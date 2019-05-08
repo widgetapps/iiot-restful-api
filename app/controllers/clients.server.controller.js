@@ -334,7 +334,7 @@ exports.listTagsGrouped = function(req, res) {
     Tag.aggregate([
         { $match: {client: clientId, active: true} },
         { $group : {
-                _id : "$tag.assetTagCode",
+                _id : '$tag.assetTagCode',
                 location: {'$first': '$tag.locationTagCode'},
                 sensors: {'$push': '$tag.sensorTagCode'},
                 description: {'$first': '$description.asset'},
@@ -417,6 +417,106 @@ exports.searchTelemetry = function(req, res) {
         .pipe(JSONStream.stringify())
         .pipe(res);
     });
+};
+
+exports.getAggregatedTelemetry = function(req, res) {
+    let authorized = false;
+
+    switch (req.user.role) {
+        case 'user':
+            if (req.user.client === req.params.id) {
+                authorized = true;
+            }
+            break;
+        case 'manufacturer':
+        case 'manager':
+        case 'admin':
+            if (req.user.client === req.params.id || _.includes(req.user.resellerClients, req.params.id)) {
+                authorized = true;
+            }
+            break;
+        case 'super':
+            authorized = true;
+            break;
+    }
+
+    if (!authorized) {
+        res.status(401).send({
+            message: 'You are not authorized to access this resource.'
+        });
+        return;
+    }
+
+    let tags = req.query.tags.split(',');
+
+    let fields = {
+        tag: 1,
+        timestamp: 1,
+        data: 1
+    };
+    if (req.query.asset === '1') {
+        fields.asset = 1;
+    }
+    if (req.query.device === '1') {
+        fields.device = 1;
+    }
+    if (req.query.sensor === '1') {
+        fields.sensor = 1;
+    }
+
+    res.set({
+        'Content-Type': 'application/json',
+        'X-Accel-Buffering': 'no',
+        'Cache-Control': 'no-cache'
+    });
+
+    /**
+     * Need to validate start/end dates.
+     * 1) Start date must be in the past
+     * 2) Start must be before end.
+     * 3) Must be at least 1hr between them.
+     * 4) Cannot be more than 30 days between them.
+     */
+
+    /**
+     *  Need to create different grouping/sorting based on start and end dates/time. The delta determines the interval.
+     *  1m *= 2h interval
+     *  1w *= 30m interval
+     *  1d *= 5m interval
+     *  1h *= 10s interval
+     */
+
+    let group = {
+        '_id': {
+            'year': { '$year': '$timestamp' },
+            'month': { '$month': '$timestamp' },
+            'day': { '$dayOfMonth': '$timestamp' },
+            'hour': { '$hour': '$timestamp' },
+            'minute': {
+                '$subtract': [
+                    { '$minute': '$timestamp' },
+                    { '$mod': [{ '$minute': '$timestamp' }, 30] }
+                ]
+            },
+            'second': { '$second': '$timestamp' }
+        },
+        'count': {'$sum': 1},
+        'min': {'$min': '$data.values.min'},
+        'max': {'$max': '$data.values.max'},
+        'average': {'$avg': '$data.values.average'},
+        'point': {'$avg': '$data.values.point'}
+    };
+    let sort = {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1, '_id.second': 1};
+
+    // NOTE: Doc says exec on an aggregate returns a cursor... we shall see.
+    Telemetry.aggregate([
+        {'$match': {
+                'tag.full': {$in: tags},
+                timestamp: {'$gte': moment(req.query.start), '$lte': moment(req.query.end)}
+            }},
+        {'$group': group},
+        {'$sort': sort}
+    ]).exec().pipe(JSONStream.stringify()).pipe(res);
 };
 
 exports.getLatestTelemetry = function(req, res) {

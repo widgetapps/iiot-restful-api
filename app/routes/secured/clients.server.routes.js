@@ -23,6 +23,9 @@ module.exports = function(app) {
     app.route('/clients/:id/telemetries/search')
         .get(clients.searchTelemetry);
 
+    app.route('/clients/:id/telemetries/aggregated')
+        .get(clients.getAggregatedTelemetry);
+
     app.route('/clients/:id/telemetries/latest/:tag')
         .get(clients.getLatestTelemetry);
 
