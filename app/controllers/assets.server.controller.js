@@ -798,7 +798,7 @@ function sendConfigToDevice(app, asset, callback) {
         }
     }]};
 
-    var promise = Device.findOne({asset: asset._id}).populate('asset').exec();
+    let promise = Device.findOne({asset: asset._id}).populate('asset').exec();
 
     promise.then(function(device) {
 
@@ -807,15 +807,26 @@ function sendConfigToDevice(app, asset, callback) {
             return;
         }
 
-        var configSettings = {};
+        let configSettings = {};
 
         switch (device.type) {
             case 'hydrant':
                 _.forEach(device.asset.settings, function (setting) {
-                    var val = 0;
+                    let val = 0;
+                    let settingKey = setting.key;
+
+                    switch (setting.key) {
+                        case 'pressure-on-time':
+                            settingKey = 'p-on';
+                            break;
+                        case 'pressure-off-time':
+                            settingKey = 'p-off';
+                            break;
+                    }
+
                     switch (setting.datatype) {
                         case 'int':
-                            var multiplier = 1;
+                            let multiplier = 1;
 
                             switch (setting.unit) {
                                 case 'minutes':
@@ -830,14 +841,14 @@ function sendConfigToDevice(app, asset, callback) {
                             if (isNaN(val)) {
                                 val = 0;
                             }
-                            configSettings[setting.key] = val * multiplier;
+                            configSettings[settingKey] = val * multiplier;
                             break;
                         case 'double':
                             val = parseFloat(setting.value);
                             if (isNaN(val)) {
                                 val = 0;
                             }
-                            configSettings[setting.key] = val;
+                            configSettings[settingKey] = val;
                             break;
                         case 'decimal':
                             val = parseFloat(setting.value);
@@ -848,15 +859,15 @@ function sendConfigToDevice(app, asset, callback) {
                                 val = bignumber(val).dp(2);
                             }
 
-                            configSettings[setting.key] = val;
+                            configSettings[settingKey] = val;
                             break;
                         case 'date':
-                            var timestamp = Date.parse(setting.value);
+                            let timestamp = Date.parse(setting.value);
 
                             if (isNaN(timestamp) === false) {
-                                configSettings[setting.key] = new Date(timestamp);
+                                configSettings[settingKey] = new Date(timestamp);
                             } else {
-                                configSettings[setting.key] = new Date('1970-01-01T00:00:00');
+                                configSettings[settingKey] = new Date('1970-01-01T00:00:00');
                             }
                             break;
                     }
@@ -867,7 +878,7 @@ function sendConfigToDevice(app, asset, callback) {
                 return;
         }
 
-        var client  = mqtt.connect(config.mqtt, config.mqttoptions);
+        let client  = mqtt.connect(config.mqtt, config.mqttoptions);
 
         client.on('error', function (error) {
             console.log('Error connecting to MQTT Server with username ' + config.mqttoptions.username + ' - ' + error);
