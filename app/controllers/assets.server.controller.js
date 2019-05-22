@@ -367,14 +367,14 @@ exports.resetSettings = function(req, res) {
                     unit: 'seconds',
                     value: 300
                 },{
-                    key: 'p-on',
+                    key: 'pressure-on-time',
                     name: 'pressure-on-time',
                     datatype: 'int',
                     range: [1, 86400],
                     unit: 'seconds',
                     value: 1
                 },{
-                    key: 'p-off',
+                    key: 'pressure-off-time',
                     name: 'pressure-off-time',
                     datatype: 'int',
                     range: [0, 86400],
