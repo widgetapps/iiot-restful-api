@@ -737,132 +737,13 @@ exports.listAssets = function(req, res) {
 exports.insertAsset = function(req, res) {
     authorize.validate(endpoint, req, res, 'manager', function() {
 
-        var clientId = mongoose.Types.ObjectId(req.params.id);
+        let clientId = mongoose.Types.ObjectId(req.params.id);
 
-        var asset = new Asset(req.body);
+        let asset = new Asset(req.body);
         asset.client = clientId;
         asset.location = mongoose.Types.ObjectId(req.body.location);
 
-        asset.settings = [{
-                key: 'pressure-interval',
-                name: 'pressure-interval',
-                datatype: 'int',
-                range: [1, 1440],
-                unit: 'minutes',
-                value: 5
-            },{
-                key: 'battery-interval',
-                name: 'battery-interval',
-                datatype: 'int',
-                range: [1, 1440],
-                unit: 'minutes',
-                value: 60
-            },{
-                key: 'temperature-interval',
-                name: 'temperature-interval',
-                datatype: 'int',
-                range: [1, 1440],
-                unit: 'minutes',
-                value: 60
-            },{
-                key: 'connect-interval',
-                name: 'connect-interval',
-                datatype: 'int',
-                range: [1, 1440],
-                unit: 'minutes',
-                value: 10
-            },{
-                key: 'high-limit',
-                name: 'high-limit',
-                datatype: 'decimal',
-                range: [-101.3, 2397],
-                unit: 'kPa',
-                value: 2379.46
-            },{
-                key: 'low-limit',
-                name: 'low-limit',
-                datatype: 'decimal',
-                range: [-101.3, 2397],
-                unit: 'kPa',
-                value: -99.98
-            },{
-                key: 'dead-band',
-                name: 'dead-band',
-                datatype: 'decimal',
-                range: [10, 2500],
-                unit: 'kPa',
-                value: 555
-            },{
-                key: 'pre-roll',
-                name: 'pre-roll',
-                datatype: 'int',
-                range: [0, 300],
-                unit: 'seconds',
-                value: 0
-            },{
-                key: 'post-roll',
-                name: 'post-roll',
-                datatype: 'int',
-                range: [0, 300],
-                unit: 'seconds',
-                value: 0
-            },{
-                key: 'start-time',
-                name: 'start-time',
-                datatype: 'date',
-                unit: 'date',
-                range: '',
-                value: ''
-            },{
-                key: 'rssi-interval',
-                name: 'rssi-interval',
-                datatype: 'int',
-                range: [1, 86400],
-                unit: 'seconds',
-                value: 600
-            },{
-                key: 'hydrophone-start',
-                name: 'hydrophone-start',
-                datatype: 'int',
-                range: [0, 86399],
-                unit: 'seconds',
-                value: 25200
-            },{
-                key: 'hydrophone-count',
-                name: 'hydrophone-count',
-                datatype: 'int',
-                range: [0, 3600],
-                unit: 'events per day',
-                value: 5
-            },{
-                key: 'hydrophone-interval',
-                name: 'hydrophone-interval',
-                datatype: 'int',
-                range: [0, 86400],
-                unit: 'seconds',
-                value: 1800
-            },{
-                key: 'hydrophone-on-time',
-                name: 'hydrophone-on-time',
-                datatype: 'int',
-                range: [0, 86400],
-                unit: 'seconds',
-                value: 300
-            },{
-                key: 'pressure-on-time',
-                name: 'pressure-on-time',
-                datatype: 'int',
-                range: [1, 86400],
-                unit: 'seconds',
-                value: 1
-            },{
-                key: 'pressure-off-time',
-                name: 'pressure-off-time',
-                datatype: 'int',
-                range: [0, 86400],
-                unit: 'seconds',
-                value: 0
-            }];
+        asset.settings = [];
 
         asset.save(function (err, ass) {
             if (err) {
@@ -895,32 +776,37 @@ exports.insertAsset = function(req, res) {
 
 exports.listDevices = function(req, res) {
     authorize.validate(endpoint, req, res, 'user', function() {
-        var query;
+        let authorized = false;
 
+        // Make sure the user is allowed see the client
         switch (req.user.role) {
             case 'user':
-                query = {
-                    client: req.user.client
-                };
+                if (req.user.client === req.params.id) {
+                    authorized = true;
+                }
                 break;
             case 'manufacturer':
             case 'manager':
             case 'admin':
-                query = {
-                    $or: [{client: req.user.client}, {resellerClients: req.user.client}]
-                };
+                if (req.user.client === req.params.id || _.includes(req.user.resellerClients, req.params.id)) {
+                    authorized = true;
+                }
                 break;
             case 'super':
-                query = {};
+                authorized = true;
                 break;
-            default:
-                res.status(401).send({
-                    message: 'You are not authorized to access this resource.'
-                });
-                return;
         }
 
-        Device.find( query, {
+        if (!authorized) {
+            res.status(401).send({
+                message: 'You are not authorized to access this resource.'
+            });
+            return;
+        }
+
+        let clientId = mongoose.Types.ObjectId(req.params.id);
+
+        Device.find( {client: clientId}, {
             created: 1,
             updated: 1,
             serialNumber: 1,

@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
     config = require('../../config/config'),
     mqtt = require('mqtt'),
     cbor = require('cbor'),
@@ -20,10 +20,10 @@ var mongoose = require('mongoose'),
 exports.getOne = function(req, res) {
     authorize.validate(endpoint, req, res, 'asset', function() {
 
-        var promise = Asset.findById(req.params.assetId).populate('location').exec();
+        let promise = Asset.findById(req.params.assetId).populate('location').exec();
 
         promise.then(function(asset) {
-            var authorized = false;
+            let authorized = false;
 
             switch (req.user.role) {
                 case 'user':
@@ -67,7 +67,7 @@ exports.update = function(req, res) {
         req.params.assetId,
         function (err, asset) {
 
-            var authorized = false;
+            let authorized = false;
 
             switch (req.user.role) {
                 case 'user':
@@ -134,7 +134,7 @@ exports.remove = function(req, res) {
     Asset.findById(
         req.params.assetId,
         function (err, asset) {
-            var authorized = false;
+            let authorized = false;
 
             switch (req.user.role) {
                 case 'manufacturer':
@@ -206,10 +206,10 @@ exports.listDevices = function(req, res) {
 exports.listSettings = function(req, res) {
     authorize.validate(endpoint, req, res, 'asset', function() {
 
-        var promise = Asset.findById(req.params.assetId).exec();
+        let promise = Asset.findById(req.params.assetId).exec();
 
         promise.then(function(asset) {
-            var authorized = false;
+            let authorized = false;
 
             switch (req.user.role) {
                 case 'user':
@@ -246,163 +246,11 @@ exports.listSettings = function(req, res) {
     });
 };
 
-exports.resetSettings = function(req, res) {
-    if (req.user.role !== 'super') {
-        res.status(401).send({
-            message: 'You are not authorized to access this resource.'
-        });
-        return;
-    }
-
-    // TODO: Need to allow a user manage setting keys for an asset. Maybe use a setting key map by device type? Also add unit for each setting.
-
-    Asset.findOneAndUpdate(
-        { '_id': req.params.assetId},
-        {
-            '$set': {
-                updated: new Date(),
-                settings: [{
-                    key: 'pressure-interval',
-                    name: 'pressure-interval',
-                    datatype: 'int',
-                    range: [1, 1440],
-                    unit: 'minutes',
-                    value: 5
-                },{
-                    key: 'battery-interval',
-                    name: 'battery-interval',
-                    datatype: 'int',
-                    range: [1, 1440],
-                    unit: 'minutes',
-                    value: 60
-                },{
-                    key: 'temperature-interval',
-                    name: 'temperature-interval',
-                    datatype: 'int',
-                    range: [1, 1440],
-                    unit: 'minutes',
-                    value: 60
-                },{
-                    key: 'connect-interval',
-                    name: 'connect-interval',
-                    datatype: 'int',
-                    range: [1, 1440],
-                    unit: 'minutes',
-                    value: 10
-                },{
-                    key: 'high-limit',
-                    name: 'high-limit',
-                    datatype: 'decimal',
-                    range: [-101.3, 2397],
-                    unit: 'kPa',
-                    value: 2379.46
-                },{
-                    key: 'low-limit',
-                    name: 'low-limit',
-                    datatype: 'decimal',
-                    range: [-101.3, 2397],
-                    unit: 'kPa',
-                    value: -99.98
-                },{
-                    key: 'dead-band',
-                    name: 'dead-band',
-                    datatype: 'decimal',
-                    range: [10, 2500],
-                    unit: 'kPa',
-                    value: 555
-                },{
-                    key: 'pre-roll',
-                    name: 'pre-roll',
-                    datatype: 'int',
-                    range: [0, 300],
-                    unit: 'seconds',
-                    value: 0
-                },{
-                    key: 'post-roll',
-                    name: 'post-roll',
-                    datatype: 'int',
-                    range: [0, 300],
-                    unit: 'seconds',
-                    value: 0
-                },{
-                    key: 'start-time',
-                    name: 'start-time',
-                    datatype: 'date',
-                    unit: 'date',
-                    range: '',
-                    value: ''
-                },{
-                    key: 'rssi-interval',
-                    name: 'rssi-interval',
-                    datatype: 'int',
-                    range: [1, 86400],
-                    unit: 'seconds',
-                    value: 600
-                },{
-                    key: 'hydrophone-start',
-                    name: 'hydrophone-start',
-                    datatype: 'int',
-                    range: [0, 86399],
-                    unit: 'seconds',
-                    value: 25200
-                },{
-                    key: 'hydrophone-count',
-                    name: 'hydrophone-count',
-                    datatype: 'int',
-                    range: [0, 3600],
-                    unit: 'events per day',
-                    value: 5
-                },{
-                    key: 'hydrophone-interval',
-                    name: 'hydrophone-interval',
-                    datatype: 'int',
-                    range: [0, 86400],
-                    unit: 'seconds',
-                    value: 1800
-                },{
-                    key: 'hydrophone-on-time',
-                    name: 'hydrophone-on-time',
-                    datatype: 'int',
-                    range: [0, 86400],
-                    unit: 'seconds',
-                    value: 300
-                },{
-                    key: 'pressure-on-time',
-                    name: 'pressure-on-time',
-                    datatype: 'int',
-                    range: [1, 86400],
-                    unit: 'seconds',
-                    value: 1
-                },{
-                    key: 'pressure-off-time',
-                    name: 'pressure-off-time',
-                    datatype: 'int',
-                    range: [0, 86400],
-                    unit: 'seconds',
-                    value: 0
-                }]
-            }
-        },
-        function (err, asset) {
-
-            if (!asset || err) {
-                res.status(404).send({
-                    message: 'Asset not found.'
-                });
-            }
-
-            res.json({
-                message: 'Settings have been reset'
-            });
-        }
-    );
-};
-
 exports.getSetting = function(req, res) {
-    var promise = Asset.findOne({ _id: req.params.assetId, 'settings.key': req.params.settingKey }, {client: 1, 'settings.$': 1}).exec();
+    let promise = Asset.findOne({ _id: req.params.assetId, 'settings.key': req.params.settingKey }, {client: 1, 'settings.$': 1}).exec();
 
     promise.then(function(asset) {
-        var authorized = false;
+        let authorized = false;
 
         switch (req.user.role) {
             case 'user':
@@ -445,10 +293,10 @@ exports.getSetting = function(req, res) {
 };
 
 exports.updateSettings = function (req, res) {
-    var promise = Asset.findOne({ _id: req.params.assetId}, {client: 1, 'settings': 1}).exec();
+    let promise = Asset.findOne({ _id: req.params.assetId}, {client: 1, 'settings': 1}).exec();
 
     promise.then(function(asset) {
-        var authorized = false;
+        let authorized = false;
 
         switch (req.user.role) {
             case 'user':
@@ -549,10 +397,10 @@ exports.updateSetting = function(req, res) {
 
 exports.addDevice = function(req, res) {
     authorize.validate(endpoint, req, res, 'manager', function() {
-        var assetId  = mongoose.Types.ObjectId(req.params.assetId),
+        let assetId  = mongoose.Types.ObjectId(req.params.assetId),
             deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
-        var assetPromise = Asset.findOne({ _id: assetId }).populate('location').exec();
+        let assetPromise = Asset.findOne({ _id: assetId }).populate('location').exec();
         assetPromise.then(function (asset) {
             if (!asset) {
                 res.status(404).send({
@@ -563,12 +411,12 @@ exports.addDevice = function(req, res) {
 
             if (!asset.location || asset.location === null) {
                 res.status(400).send({
-                    message: 'The asset most belong to a location.'
+                    message: 'The asset must be assigned to a location.'
                 });
                 return;
             }
 
-             var devicePromise = Device.findOne({ _id: deviceId }).populate('sensors').exec();
+            let devicePromise = Device.findOne({ _id: deviceId }).populate('sensors').exec();
              devicePromise.then(function (device) {
                  if (!device) {
                      res.status(404).send({
@@ -584,13 +432,20 @@ exports.addDevice = function(req, res) {
                      return;
                  }
 
-                 var clientPromise = Client.findOne({ _id: asset.client}).exec();
+                 let clientPromise = Client.findOne({ _id: asset.client}).exec();
                  clientPromise.then(function (client) {
                      if (!client) {
                          res.status(404).send({
                              message: 'Client not found'
                          });
                          return;
+                     }
+
+                     let defaultSettings = require('../lib/default.settings').settings;
+                     let settings = [];
+
+                     if (defaultSettings[device.type]) {
+                         settings.push(...defaultSettings[device.type].base);
                      }
 
                      device.asset = mongoose.Types.ObjectId(asset._id);
@@ -604,7 +459,11 @@ exports.addDevice = function(req, res) {
                          }
 
                          async.each(device.sensors, function (sensorData, callback) {
-                             var fullTag = asset.location.tagCode + '_' + asset.tagCode + '_' + sensorData.tagCode,
+                             if(defaultSettings[device.type] && defaultSettings[device.type][sensorData.tagCode]) {
+                                 settings.push(...defaultSettings[device.type][sensorData.tagCode]);
+                             }
+
+                             let fullTag = asset.location.tagCode + '_' + asset.tagCode + '_' + sensorData.tagCode,
                                  query = {'tag.full': fullTag},
                                  options = { upsert: true, new: true, setDefaultsOnInsert: true },
                                  update = {
@@ -627,7 +486,6 @@ exports.addDevice = function(req, res) {
                                      device: deviceId,
                                      asset: assetId
                                  };
-                             console.log('Tag: ' + fullTag);
 
                              Tag.findOneAndUpdate(query, update, options, function(err, result) {
                                  if (err) {
@@ -648,11 +506,16 @@ exports.addDevice = function(req, res) {
                                  return;
                              }
 
-                             // TODO: Publish settings to device if it's a hydrant
+                             asset.settings = settings;
+                             asset.save(function (err, assetSaved) {
+                                 if (err) {
+                                     console.log('Error saving settings to the asset: ' + err);
+                                 }
 
-                             sendConfigToDevice(req.app, asset, function() {
-                                 res.status(200).send({
-                                     message: 'Device ' + device.serialNumber + ' assigned to asset ' + asset.tagCode
+                                 sendConfigToDevice(req.app, assetSaved, function() {
+                                     res.status(200).send({
+                                         message: 'Device ' + device.serialNumber + ' assigned to asset ' + assetSaved.tagCode
+                                     });
                                  });
                              });
                          });
@@ -667,14 +530,14 @@ exports.addDevice = function(req, res) {
 
 exports.removeDevice = function(req, res) {
     authorize.validate(endpoint, req, res, 'manager', function() {
-        var deviceId = mongoose.Types.ObjectId(req.params.deviceId);
+        let deviceId = mongoose.Types.ObjectId(req.params.deviceId);
 
-        var tagPromise = Tag.find( { device: deviceId } ).exec();
+        let tagPromise = Tag.find( { device: deviceId } ).exec();
 
         tagPromise.then(function (tags) {
             async.each(tags, function (tag, callback) {
 
-                var historical = {
+                let historical = {
                     start: tag.activeStart,
                     end: new Date(),
                     deviceId: deviceId
@@ -704,7 +567,7 @@ exports.removeDevice = function(req, res) {
                     return;
                 }
 
-                var devicePromise = Device.findOne({ _id: deviceId }).exec();
+                let devicePromise = Device.findOne({ _id: deviceId }).exec();
                 devicePromise.then(function(device) {
                     if (!device) {
                         res.status(404).send({
@@ -712,6 +575,9 @@ exports.removeDevice = function(req, res) {
                         });
                         return;
                     }
+
+                    // Save the assetId to get the asset later.
+                    let assetId = device.asset;
 
                     device.asset = null;
                     device.location = null;
@@ -724,9 +590,23 @@ exports.removeDevice = function(req, res) {
                             return;
                         }
 
-                        sendEmptyConfigToDevice(savedDevice, function() {
-                            res.json({
-                                message: 'Device ' + device.serialNumber + ' removed from asset'
+                        // Find the asset and blank out the settings
+                        Asset.findById(assetId, function(err, asset) {
+                            if (err) {
+                                console.log('Error finding the device asset.');
+                            }
+
+                            asset.settings = [];
+                            asset.save(function (err, assetSaved) {
+                                if (err) {
+                                    console.log('Error saving blanked settings for asset.');
+                                }
+
+                                sendEmptyConfigToDevice(savedDevice, function() {
+                                    res.json({
+                                        message: 'Device ' + device.serialNumber + ' removed from asset'
+                                    });
+                                });
                             });
                         });
 
@@ -744,7 +624,7 @@ function sendEmptyConfigToDevice(device, callback) {
         callback();
     }
 
-    var client  = mqtt.connect(config.mqtt, config.mqttoptions);
+    let client  = mqtt.connect(config.mqtt, config.mqttoptions);
 
     client.on('error', function (error) {
         console.log('Error connecting to MQTT Server with username ' + config.mqttoptions.username + ' - ' + error);
@@ -811,7 +691,7 @@ function sendConfigToDevice(app, asset, callback) {
 
         switch (device.type) {
             case 'hydrant':
-                _.forEach(device.asset.settings, function (setting) {
+                _.forEach(asset.settings, function (setting) {
                     let val = 0;
                     let settingKey = setting.key;
 
