@@ -163,6 +163,11 @@ exports.remove = function(req, res) {
 function authorized(req) {
 
     switch (req.user.role) {
+        case 'user':
+            if (req.user.client.toString() === req.params.id) {
+                return true;
+            }
+            break;
         case 'manager':
             if (_.includes(req.user.resellerClients, req.params.id)) {
                 return true;
