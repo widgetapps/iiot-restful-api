@@ -3,19 +3,18 @@
 /**
  * Module dependencies.
  */
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
     _ = require('lodash'),
     Location = require('@terepac/terepac-models').Location,
     Client = require('@terepac/terepac-models').Client,
     Asset = require('@terepac/terepac-models').Asset;
 
-
 exports.getOne = function(req, res) {
 
-    var promise = Location.findById(req.params.locationId).exec();
+    let promise = Location.findById(req.params.locationId).populate('assets').exec();
 
     promise.then(function(location) {
-        var authorized = false;
+        let authorized = false;
 
         switch (req.user.role) {
             case 'user':
@@ -56,7 +55,7 @@ exports.update = function(req, res) {
     Location.findById(
         req.params.locationId,
         function (err, location) {
-            var authorized = false;
+            let authorized = false;
 
             switch (req.user.role) {
                 case 'user':
@@ -110,7 +109,7 @@ exports.remove = function(req, res) {
     Location.findById(
         req.params.locationId,
         function (err, location) {
-            var authorized = false;
+            let authorized = false;
 
             switch (req.user.role) {
                 case 'manufacturer':

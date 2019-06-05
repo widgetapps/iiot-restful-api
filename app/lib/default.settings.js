@@ -117,6 +117,13 @@ exports.settings = {
             range: [0, 86400],
             unit: 'seconds',
             value: 1800
+        },{
+            key: 'hydrophone-on-time',
+            name: 'hydrophone-on-time',
+            datatype: 'int',
+            range: [0, 86400],
+            unit: 'seconds',
+            value: 300
         }],
         NI: [],
         MI: [{
