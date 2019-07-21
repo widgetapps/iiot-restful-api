@@ -688,6 +688,11 @@ function sendConfigToDevice(app, asset, callback) {
         }
 
         let configSettings = {};
+        // All hydrants need hydrophone settings, even 2 function. Set them up as zero values.
+        configSettings['hydrophone-start'] = 0;
+        configSettings['hydrophone-count'] = 0;
+        configSettings['hydrophone-interval'] = 0;
+        configSettings['hydrophone-on-time'] = 0;
 
         switch (device.type) {
             case 'hydrant':
@@ -695,6 +700,7 @@ function sendConfigToDevice(app, asset, callback) {
                     let val = 0;
                     let settingKey = setting.key;
 
+                    // Correct the setting key for pressure settings - hydrants expect a shortened key.
                     switch (setting.key) {
                         case 'pressure-on-time':
                             settingKey = 'p-on';
