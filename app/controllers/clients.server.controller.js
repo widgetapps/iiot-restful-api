@@ -66,58 +66,67 @@ exports.list = function(req, res) {
 };
 
 exports.insert = function(req, res) {
+    let authorized = false;
 
-    authorize.validate(endpoint, req, res, 'manager', function() {
-
-        // admin & manager roles must be a reseller to add a client
-        if (!req.user.reseller && (req.user.role === 'admin' || req.user.role === 'manager')) {
-            res.status(401).send({
-                message: 'You are not authorized to access this resource.'
-            });
-
-            return;
-        }
-
-        var client = new Client(req.body);
-        client.apikey.id = randomstring.generate({
-            length: 32,
-            charset: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890$-_+!*().,'
-        });
-
-        client.apikey.secret = randomstring.generate({
-            length: 30,
-            charset: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890$-_+!*().,'
-        });
-
-        if (req.user.reseller) {
-            client.resellerParent = mongoose.Types.ObjectId(req.user.client);
-        }
-
-        client.save(function (err, client) {
-            if (err) {
-                res.status(400).send({
-                    message: 'Error inserting the client: ' + err
-                });
-            } else {
-                if (req.user.reseller) {
-                    // Update the resellerClients array
-                    Client.findByIdAndUpdate(
-                        req.user.client,
-                        {$push: {'resellerClients': mongoose.Types.ObjectId(client._id)}},
-                        {safe: true, upsert: true, new : true},
-                        function(err, me) {
-                            res.status(200).send({
-                                _id: client._id
-                            });
-                        }
-                    );
-                } else {
-                    res.status(200).send({
-                        _id: client._id
-                    });
-                }
+    switch (req.user.role) {
+        case 'admin':
+        case 'manager':
+            // admin & manager roles must be a reseller to add a client
+            if (req.user.reseller) {
+                authorized = true;
             }
+            break;
+        case 'super':
+            authorized = true;
+            break;
+    }
+
+    if (!authorized) {
+        res.status(401).send({
+            message: 'You are not authorized to access this resource.'
         });
+        return;
+    }
+
+    let client = new Client(req.body);
+    client.apikey.id = randomstring.generate({
+        length: 32,
+        charset: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890$-_+!*().,'
+    });
+
+    client.apikey.secret = randomstring.generate({
+        length: 30,
+        charset: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890$-_+!*().,'
+    });
+
+    if (req.user.reseller) {
+        client.resellerParent = mongoose.Types.ObjectId(req.user.client);
+    }
+
+    client.save(function (err, client) {
+        if (err) {
+            res.status(400).send({
+                message: 'Error inserting the client: ' + err
+            });
+        } else {
+            if (req.user.reseller) {
+                // Update the resellerClients array
+                Client.findByIdAndUpdate(
+                    req.user.client,
+                    {$push: {'resellerClients': mongoose.Types.ObjectId(client._id)}},
+                    {safe: true, upsert: true, new : true},
+                    function(err, me) {
+                        res.status(200).send({
+                            _id: client._id
+                        });
+                    }
+                );
+            } else {
+                res.status(200).send({
+                    _id: client._id
+                });
+            }
+        }
     });
 
 };
