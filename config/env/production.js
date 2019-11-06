@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://10.240.0.21,10.240.0.22,10.240.0.23,10.240.162.13,10.240.253.155/one-platform?replicaSet=rs0',
+	db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://10.240.162.13,10.240.253.155/one-platform?replicaSet=rs0',
     mqttoptions: {
         clientId: 'worker_hydrant',
         username: 'worker',
