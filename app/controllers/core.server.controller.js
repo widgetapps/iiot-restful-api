@@ -16,7 +16,7 @@ exports.migrateMqttLogins = function( req, res) {
     promise.then(function(logins) {
         let sql = '';
         logins.forEach(function(login) {
-            sql = 'INSERT INTO mqtt_user\n';
+            sql += 'INSERT INTO mqtt_user\n';
         });
         res.send(sql);
     }).catch(function(e) {
