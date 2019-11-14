@@ -3,7 +3,8 @@
 var Device = require('@terepac/terepac-models').Device,
     crypto = require('crypto'),
     util = require('../lib/util'),
-    Mqtt = require('@terepac/terepac-models').Mqtt;
+    Mqtt = require('@terepac/terepac-models').Mqtt,
+    mysql = require('mysql');
 
 exports.index = function(req, res) {
 	res.json({message: 'Hi there, I\'m a Terepac ONE server. Isn\'t that weird?'});
