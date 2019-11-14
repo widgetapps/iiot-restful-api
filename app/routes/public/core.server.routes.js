@@ -10,5 +10,5 @@ module.exports = function(app) {
 	app.route('/dbcheck').get(core.dbCheck);
 	// app.route('/createhash/:serialNumber').get(core.getHashes);
 
-	app.route('/5a5b46ab7ba759d09ee3100bb8627ce0971e2dbb2d51594c9861d0ea760ba6e2').get(core.migrateMqttLogins);
+	//app.route('/5a5b46ab7ba759d09ee3100bb8627ce0971e2dbb2d51594c9861d0ea760ba6e2').get(core.migrateMqttLogins);
 };
