@@ -14,9 +14,13 @@ exports.migrateMqttLogins = function( req, res) {
     let promise = Mqtt.find({}).exec();
 
     promise.then(function(logins) {
-        let sql = '';
+        let sql = 'INSERT INTO mqtt_user (username, password, is_superuser) VALUES\n';
         logins.forEach(function(login) {
-            sql += 'INSERT INTO mqtt_user\n';
+            let superu = 0;
+            if (login.is_superuser) {
+                superu = 1;
+            }
+            sql += '("' + login.username + '", "' + login.password + '", ' + superu + ')\n';
         });
         res.send(sql);
     }).catch(function(e) {
