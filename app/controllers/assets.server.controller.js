@@ -365,6 +365,56 @@ exports.updateSettings = function (req, res) {
     });
 };
 
+exports.resendSettings = function(req, res) {
+    authorize.validate(endpoint, req, res, 'asset', function() {
+
+        let promise = Asset.findById(req.params.assetId).exec();
+
+        promise.then(function(asset) {
+            let authorized = false;
+
+            switch (req.user.role) {
+                case 'user':
+                    if (req.user.client.toString() === asset.client.toString()) {
+                        authorized = true;
+                    }
+                    break;
+                case 'manufacturer':
+                case 'admin':
+                case 'manager':
+                    if (req.user.client.toString() === asset.client.toString() || _.includes(req.user.resellerClients, asset.client)) {
+                        authorized = true;
+                    }
+                    break;
+                case 'super':
+                    authorized = true;
+                    break;
+            }
+
+            if (!authorized) {
+                res.status(401).send({
+                    message: 'You are not authorized to access this resource.'
+                });
+                return;
+            }
+
+            sendConfigToDevice(req.app, asset, function() {
+
+                res.json({
+                    message: 'Setting resent to the device.'
+                });
+
+            });
+
+        }).catch(function(error) {
+            res.status(400).send({
+                message: 'Error with the database.'
+            });
+        });
+    });
+
+};
+
 exports.updateSetting = function(req, res) {
     Asset.findOneAndUpdate(
         { '_id': req.params.assetId, 'settings.key': req.params.settingKey},

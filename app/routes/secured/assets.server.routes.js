@@ -13,6 +13,9 @@ module.exports = function(app) {
         .get(assets.listSettings)
         .put(assets.updateSettings);
 
+    app.router('/assets/:assetId/settings/resend')
+        .get(assets.resendSettings);
+
     app.route('/assets/:assetId/settings/:settingKey')
         .get(assets.getSetting)
         .put(assets.updateSetting);
