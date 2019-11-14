@@ -20,7 +20,7 @@ exports.migrateMqttLogins = function( req, res) {
             if (login.is_superuser) {
                 superu = 1;
             }
-            sql += '("' + login.username + '", "' + login.password + '", ' + superu + ')\n';
+            sql += '("' + login.username + '", "' + login.password + '", ' + superu + '),\n';
         });
         res.send(sql);
     }).catch(function(e) {
