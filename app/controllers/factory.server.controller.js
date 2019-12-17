@@ -187,7 +187,7 @@ exports.remove = function(req, res) {
                 return;
             }
 
-            var assetId = device.asset;
+            let assetId = device.asset;
 
             if (device.client.toString() === '5c55bb32e46c3b302f4d2bd8' && (!assetId || device.asset === null)) {
                 device.remove(function (err, deletedDevice) {
