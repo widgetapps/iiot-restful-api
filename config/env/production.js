@@ -2,6 +2,12 @@
 
 module.exports = {
 	db: process.env.MONGO_STRING || process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://10.240.162.13,10.240.253.155/one-platform?replicaSet=rs0',
+	authdb: {
+		host: process.env.AUTHDB_HOST || '',
+		user: process.env.AUTHDB_USER || '',
+		password: process.env.AUTHDB_PASS || '',
+		database: process.env.AUTHDB_NAME || ''
+	},
     mqttoptions: {
         clientId: 'worker_hydrant',
         username: 'worker',

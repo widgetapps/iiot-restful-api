@@ -2,6 +2,12 @@
 
 module.exports = {
 	db: 'mongodb://localhost/one-platform-dev',
+	authdb: {
+		host: '10.240.0.25',
+		user: 'yourusername',
+		password: 'yourpassword',
+		database: 'mqtt_auth'
+	},
 	app: {
 		title: 'terepac-api - Development Environment'
 	},
