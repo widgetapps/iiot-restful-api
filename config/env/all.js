@@ -8,7 +8,7 @@ module.exports = {
 	},
 	port: process.env.PORT || 3101,
 	ip: process.env.IP || '127.0.0.1',
-    mqtt: process.env.MQTT || 'https://mqtt.terepac.one:8883',
+    mqtt: process.env.MQTT || 'mqtt://10.240.0.20:1883',
 	templateEngine: 'swig',
 	sessionSecret: 'MEAN',
 	sessionCollection: 'sessions'
