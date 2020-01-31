@@ -72,7 +72,12 @@ exports.insert = function(req, res) {
             let mydb = mysql.createConnection(config.authdb);
 
             mydb.connect(function(err) {
-                if (err) throw err;
+                if (err) {
+                    res.status(400).send({
+                        message: 'The device was added but there was an error connecting to the MQTT AUTH database: ' + err,
+                        _id: d._id
+                    });
+                }
 
                 let sql = 'INSERT INTO mqtt_user (username, password) VALUES (?, ?)';
                 let values = [
@@ -93,38 +98,6 @@ exports.insert = function(req, res) {
                     });
                 });
             });
-            /*
-            var mqtt = new Mqtt({
-                username: req.body['mqtt-username'],
-                password: crypto.createHash('sha256').update(req.body['mqtt-password']).digest('hex'),
-                is_superuser: false,
-                publish: [
-                    '+/v1/pressure',
-                    '+/v1/temperature',
-                    '+/v1/battery',
-                    '+/v1/reset',
-                    '+/v1/location',
-                    '+/v1/pressure-event',
-                    '+/v1/rssi',
-                    '+/v1/hydrophone',
-                    '+/v1/hydrophone-summary'
-                ],
-                subscribe: ['+/v1/configuration']
-            });
-
-            mqtt.save(function (err, mu) {
-                if (err) {
-                    res.status(400).send({
-                        message: 'The device was added but there was an error saving the device MQTT credentials: ' + err,
-                        _id: d._id
-                    });
-                }
-
-                res.status(200).send({
-                    _id: d._id
-                });
-            });
-             */
         }
     });
 };
@@ -141,7 +114,11 @@ exports.changePassword = function(req, res) {
     let mydb = mysql.createConnection(config.authdb);
 
     mydb.connect(function(err) {
-        if (err) throw err;
+        if (err) {
+            res.status(400).send({
+                message: 'Error connecting to the MQTT AUTH database: ' + err
+            });
+        }
 
         let sql = 'UPDATE mqtt_user SET password = ? WHERE username = ?';
         let values = [
@@ -201,7 +178,11 @@ exports.remove = function(req, res) {
                     let mydb = mysql.createConnection(config.authdb);
 
                     mydb.connect(function(err) {
-                        if (err) throw err;
+                        if (err) {
+                            res.status(400).send({
+                                message: 'The device has been deleted but there was an error connecting to the MQTT AUTH database: ' + err
+                            });
+                        }
 
                         let sql = 'DELETE FROM mqtt_user WHERE username = ?';
                         let values = [
