@@ -551,7 +551,12 @@ exports.getAggregatedTelemetry = function(req, res) {
             }},
         {'$group': group},
         //{'$addFields': addFields},
-        {'$sort': sort}
+        {'$sort': sort},
+        {
+            '$project': {
+                'documents': '$$ROOT'
+            }
+        }
     ]).cursor().exec().pipe(JSONStream.stringify()).pipe(res);
 };
 
