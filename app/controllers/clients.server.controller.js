@@ -1085,5 +1085,5 @@ function getTelemetryGroupStatement(start, end) {
         return group;
     }
 
-    return null;
+    return group;
 }
