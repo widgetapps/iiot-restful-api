@@ -1012,9 +1012,10 @@ function getTelemetryGroupStatement(start, end) {
                         { '$mod': [{ '$second': '$timestamp'}, interval]}
                     ]
                 }
-            },
-            'interval': '10s'
+            }
         };
+
+        return group;
     }
 
     diff = end.diff(start, 'days');
@@ -1033,8 +1034,7 @@ function getTelemetryGroupStatement(start, end) {
                         { '$mod': [{ '$minute': '$timestamp'}, interval]}
                     ]
                 }
-            },
-            'interval': '5m'
+            }
         };
 
         return group;
@@ -1056,8 +1056,7 @@ function getTelemetryGroupStatement(start, end) {
                         { '$mod': [{ '$minute': '$timestamp'}, interval]}
                     ]
                 }
-            },
-            'interval': '30m'
+            }
         };
 
         return group;
@@ -1078,12 +1077,11 @@ function getTelemetryGroupStatement(start, end) {
                         { '$mod': [{ '$hour': '$timestamp'}, interval]}
                     ]
                 }
-            },
-            'interval': '2h'
+            }
         };
 
         return group;
     }
 
-    return group;
+    return null;
 }
