@@ -515,6 +515,7 @@ exports.getAggregatedTelemetry = function(req, res) {
         'data.values.avg': {'$avg': '$data.values.average'},
         'data.values.point': {'$avg': '$data.values.point'}
     };
+     */
 
     group.unit= {'$first': '$data.unit'};
     group.count = {'$sum': 1};
@@ -522,8 +523,6 @@ exports.getAggregatedTelemetry = function(req, res) {
     group.max = {'$max': '$data.values.max'};
     group.average = {'$avg': '$data.values.average'};
     group.point = {'$avg': '$data.values.point'};
-
-     */
 
     if (req.query.asset === '1') {
         group.asset = {'$first': '$asset'};
@@ -551,17 +550,7 @@ exports.getAggregatedTelemetry = function(req, res) {
             }},
         {'$group': group},
         //{'$addFields': addFields},
-        {'$sort': sort},
-        {
-            '$project': {
-                'data.unit': {'$first': '$data.unit'},
-                'data.count': {'$num': 1},
-                'data.values.min': {'$min': '$data.values.min'},
-                'data.values.max': {'$max': '$data.values.max'},
-                'data.values.avg': {'$avg': '$data.values.average'},
-                'data.values.point': {'$avg': '$data.values.point'}
-            }
-        }
+        {'$sort': sort}
     ]).cursor().exec().pipe(JSONStream.stringify()).pipe(res);
 };
 
