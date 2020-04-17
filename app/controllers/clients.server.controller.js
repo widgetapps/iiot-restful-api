@@ -525,6 +525,15 @@ exports.getAggregatedTelemetry = function(req, res) {
 
      */
 
+    group.data = {
+        'unit': {'$first': '$data.unit'},
+        'count': {'$sum': 1},
+        'values.min': {'$min': '$data.values.min'},
+        'values.max': {'$max': '$data.values.max'},
+        'values.average': {'$avg': '$data.values.average'},
+        'values.point': {'$avg': '$data.values.point'}
+    };
+
     if (req.query.asset === '1') {
         group.asset = {'$first': '$asset'};
     }
@@ -1026,7 +1035,7 @@ function getTelemetryGroupStatement(start, end) {
                     ]
                 }
             },
-            'data.unit': {'$first': '$data.unit'}
+
         };
 
         return group;
@@ -1048,8 +1057,7 @@ function getTelemetryGroupStatement(start, end) {
                         { '$mod': [{ '$minute': '$timestamp'}, interval]}
                     ]
                 }
-            },
-            'data.unit': {'$first': '$data.unit'}
+            }
         };
 
         return group;
@@ -1071,8 +1079,7 @@ function getTelemetryGroupStatement(start, end) {
                         { '$mod': [{ '$minute': '$timestamp'}, interval]}
                     ]
                 }
-            },
-            'data.unit': {'$first': '$data.unit'}
+            }
         };
 
         return group;
@@ -1093,8 +1100,7 @@ function getTelemetryGroupStatement(start, end) {
                         { '$mod': [{ '$hour': '$timestamp'}, interval]}
                     ]
                 }
-            },
-            'data.unit': {'$first': '$data.unit'}
+            }
         };
 
         return group;
