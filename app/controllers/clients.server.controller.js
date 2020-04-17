@@ -554,7 +554,12 @@ exports.getAggregatedTelemetry = function(req, res) {
         {'$sort': sort},
         {
             '$project': {
-                'documents': '$$ROOT'
+                'data.unit': {'$first': '$data.unit'},
+                'data.count': {'$num': 1},
+                'data.values.min': {'$min': '$data.values.min'},
+                'data.values.max': {'$max': '$data.values.max'},
+                'data.values.avg': {'$avg': '$data.values.average'},
+                'data.values.point': {'$avg': '$data.values.point'}
             }
         }
     ]).cursor().exec().pipe(JSONStream.stringify()).pipe(res);
