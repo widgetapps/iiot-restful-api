@@ -507,7 +507,7 @@ exports.getAggregatedTelemetry = function(req, res) {
     let sort = {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1, '_id.second': 1};
 
     let addFields = {
-        'data.unit': {'$first': '$data.unit'},
+        //'data.unit': {'$first': '$data.unit'},
         'data.count': {'$num': 1},
         'data.values.min': {'$min': '$data.values.min'},
         'data.values.max': {'$max': '$data.values.max'},
