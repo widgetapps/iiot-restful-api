@@ -524,7 +524,7 @@ exports.getAggregatedTelemetry = function(req, res) {
     };
      */
 
-    group.unit= {'$first': '$data.unit'};
+    group.test.unit= {'$first': '$data.unit'};
     group.count = {'$sum': 1};
     group.min = {'$min': '$data.values.min'};
     group.max = {'$max': '$data.values.max'};
