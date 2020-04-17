@@ -506,12 +506,12 @@ exports.getAggregatedTelemetry = function(req, res) {
     let group = getTelemetryGroupStatement(start, end);
     let sort = {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1, '_id.second': 1};
 
-    group.data.unit= {'$first': '$data.unit'};
-    group.data.count = {'$sum': 1};
-    group.data.value.min = {'$min': '$data.values.min'};
-    group.data.value.max = {'$max': '$data.values.max'};
-    group.data.value.average = {'$avg': '$data.values.average'};
-    group.data.value.point = {'$avg': '$data.values.point'};
+    group.unit= {'$first': '$data.unit'};
+    group.count = {'$sum': 1};
+    group.min = {'$min': '$data.values.min'};
+    group.max = {'$max': '$data.values.max'};
+    group.average = {'$avg': '$data.values.average'};
+    group.point = {'$avg': '$data.values.point'};
 
     if (req.query.asset === '1') {
         group.asset = {'$first': '$asset'};
