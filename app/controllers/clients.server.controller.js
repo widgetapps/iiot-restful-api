@@ -1024,7 +1024,7 @@ function getTelemetryGroupStatement(start, end) {
                     ]
                 }
             },
-
+            'data': {}
         };
 
         return group;
@@ -1046,7 +1046,8 @@ function getTelemetryGroupStatement(start, end) {
                         { '$mod': [{ '$minute': '$timestamp'}, interval]}
                     ]
                 }
-            }
+            },
+            'data': {}
         };
 
         return group;
@@ -1068,7 +1069,8 @@ function getTelemetryGroupStatement(start, end) {
                         { '$mod': [{ '$minute': '$timestamp'}, interval]}
                     ]
                 }
-            }
+            },
+            'data': {}
         };
 
         return group;
@@ -1089,7 +1091,8 @@ function getTelemetryGroupStatement(start, end) {
                         { '$mod': [{ '$hour': '$timestamp'}, interval]}
                     ]
                 }
-            }
+            },
+            'data': {}
         };
 
         return group;
