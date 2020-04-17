@@ -513,6 +513,7 @@ exports.getAggregatedTelemetry = function(req, res) {
     let group = getTelemetryGroupStatement(start, end);
     let sort = {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1, '_id.second': 1};
 
+    /*
     let addFields = {
         'unit': {'$first': '$data.unit'},
         'count': {'$num': 1},
@@ -521,14 +522,14 @@ exports.getAggregatedTelemetry = function(req, res) {
         'avg': {'$avg': '$data.values.average'},
         'point': {'$avg': '$data.values.point'}
     };
-/*
+     */
+
     group.unit= {'$first': '$data.unit'};
     group.count = {'$sum': 1};
     group.min = {'$min': '$data.values.min'};
     group.max = {'$max': '$data.values.max'};
     group.average = {'$avg': '$data.values.average'};
     group.point = {'$avg': '$data.values.point'};
- */
 
     if (req.query.asset === '1') {
         group.asset = {'$first': '$asset'};
@@ -548,7 +549,7 @@ exports.getAggregatedTelemetry = function(req, res) {
                 timestamp: {'$gte': moment(req.query.start).toDate(), '$lte': moment(req.query.end).toDate()}
             }},
         {'$group': group},
-        {'$addFields': addFields},
+        //{'$addFields': addFields},
         {'$sort': sort}
     ]).cursor().exec().pipe(JSONStream.stringify()).pipe(res);
 };
