@@ -269,7 +269,7 @@ exports.getSummarizedTelemetry = function(req, res) {
     intervalGroup.group    = interval[interval.length - 1];
     intervalGroup.interval = parseInt(interval.substring(0, interval.length - 1));
 
-    if (!_.contain(['s', 'm', 'h', 'd'], intervalGroup.group)) {
+    if (!_.contains(['s', 'm', 'h', 'd'], intervalGroup.group)) {
         res.status(400).send({
             message: 'Invalid interval group (s, m, h, d).'
         });
