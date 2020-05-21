@@ -271,6 +271,8 @@ exports.getSummarizedTelemetry = function(req, res) {
         return;
     }
 
+    let tags = req.query.tags.split(',');
+
     let dates = validateDates(req);
 
     if (!dates.valid) {
@@ -293,9 +295,13 @@ exports.getSummarizedTelemetry = function(req, res) {
         return;
     }
 
-    let tags = req.query.tags.split(',');
+    let includeValues = true;
 
-    let aggregationStages = getSummaryStages(tags, dates, intervalGroup, true);
+    if (!req.query.includeValues || req.query.includeValues !== '1') {
+        includeValues = false;
+    }
+
+    let aggregationStages = getSummaryStages(tags, dates, intervalGroup, includeValues);
 
     res.set({
         'Content-Type': 'application/json',
