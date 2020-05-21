@@ -4,21 +4,12 @@
  * Module dependencies.
  */
 let mongoose = require('mongoose'),
-    Client = require('@terepac/terepac-models').Client,
-    Tag = require('@terepac/terepac-models').Tag,
     Telemetry = require('@terepac/terepac-models').Telemetry,
-    User = require('@terepac/terepac-models').User,
-    Device = require('@terepac/terepac-models').Device,
-    Location = require('@terepac/terepac-models').Location,
-    Asset = require('@terepac/terepac-models').Asset,
-    Event = require('@terepac/terepac-models').Event,
-    Mqtt = require('@terepac/terepac-models').Mqtt,
     _ = require('lodash'),
     moment = require('moment'),
     authorize = require('../lib/authorize.server.lib'),
     endpoint = 'client',
     JSONStream = require('JSONStream');
-
 
 
 function getTelemetryGroupStatementInterval(start, end, interval) {
@@ -189,7 +180,24 @@ exports.getSummarizedTelemetry = function(req, res) {
     intervalGroup.group    = interval[interval.length - 1];
     intervalGroup.interval = parseInt(interval.substring(0, interval.length - 1));
 
-    res.json(intervalGroup);
+    let tags = req.query.tags.split(',');
+
+    let aggregationStages = {};
+    aggregationStages.match = {
+        'tag.full': {$in: tags},
+        timestamp: {'$gte': dates.start.toDate(), '$lt': dates.end.toDate()}
+    };
+
+
+    res.set({
+        'Content-Type': 'application/json',
+        'X-Accel-Buffering': 'no',
+        'Cache-Control': 'no-cache'
+    });
+
+    Telemetry.aggregate([
+        {'$match': aggregationStages.match}
+    ]).cursor().exec().pipe(JSONStream.stringify()).pipe(res);
 };
 
 exports.getAggregatedTelemetry = function(req, res) {
