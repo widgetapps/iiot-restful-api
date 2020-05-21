@@ -12,7 +12,7 @@ let mongoose = require('mongoose'),
     JSONStream = require('JSONStream');
 
 
-function getSummaryStages(tags, dates, intervalGroup) {
+function getSummaryStages(tags, dates, intervalGroup, includeValues) {
     /*
     Remove last char of interval
     Check to make sure it's valid letter (s, m, h, d)
@@ -94,7 +94,6 @@ function getSummaryStages(tags, dates, intervalGroup) {
         'date': {'$dateFromParts': dateParts},
         'data.unit': '$unit',
         'data.count': '$count',
-        'data.values': '$median',
         'data.summary.first': '$first',
         'data.summary.last': '$last',
         'data.summary.min': '$min',
@@ -119,6 +118,10 @@ function getSummaryStages(tags, dates, intervalGroup) {
         'data.summary.sum': '$sum',
         '_id': 0
     };
+
+    if (includeValues) {
+        aggregationStages.project.data.values = '$median';
+    }
 
     return aggregationStages;
 }
@@ -292,7 +295,7 @@ exports.getSummarizedTelemetry = function(req, res) {
 
     let tags = req.query.tags.split(',');
 
-    let aggregationStages = getSummaryStages(tags, dates, intervalGroup);
+    let aggregationStages = getSummaryStages(tags, dates, intervalGroup, true);
 
     res.set({
         'Content-Type': 'application/json',
