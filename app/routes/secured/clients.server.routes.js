@@ -3,6 +3,7 @@
 module.exports = function(app) {
 	// Root routing
     var clients = require('../../../app/controllers/clients.server.controller'),
+        telemetry = require('../../../app/controllers/telemetry.server.controller'),
         alerts = require('../../../app/controllers/alerts.server.controller'),
         alertGroups = require('../../../app/controllers/alertgroups.server.controller');
 
@@ -21,13 +22,16 @@ module.exports = function(app) {
         .get(clients.listTagsGrouped);
 
     app.route('/clients/:id/telemetries/search')
-        .get(clients.searchTelemetry);
+        .get(telemetry.searchTelemetry);
 
     app.route('/clients/:id/telemetries/aggregated')
-        .get(clients.getAggregatedTelemetry);
+        .get(telemetry.getAggregatedTelemetry);
+
+    app.route('/clients/:id/telemetries/summary')
+        .get(telemetry.getSummarizedTelemetry);
 
     app.route('/clients/:id/telemetries/latest/:tag')
-        .get(clients.getLatestTelemetry);
+        .get(telemetry.getLatestTelemetry);
 
     app.route('/clients/:id/locations')
         .get(clients.listLocations)
