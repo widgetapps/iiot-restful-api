@@ -210,6 +210,7 @@ exports.getSummarizedTelemetry = function(req, res) {
         'sum': {'$sum': '$data.values.average'},
         'median': {'$push': '$data.values.average'}
     };
+    aggregationStages.sort = {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1, '_id.second': 1};
 
 
     res.set({
@@ -220,7 +221,8 @@ exports.getSummarizedTelemetry = function(req, res) {
 
     Telemetry.aggregate([
         {'$match': aggregationStages.match},
-        {'$group': aggregationStages.group}
+        {'$group': aggregationStages.group},
+        {'$sort': aggregationStages.sort}
     ]).cursor().exec().pipe(JSONStream.stringify()).pipe(res);
 };
 
