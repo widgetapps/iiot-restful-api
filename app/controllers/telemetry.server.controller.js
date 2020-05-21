@@ -12,13 +12,73 @@ let mongoose = require('mongoose'),
     JSONStream = require('JSONStream');
 
 
-function getTelemetryGroupStatementInterval(start, end, interval) {
+function getSummaryStages(tags, dates, intervalGroup) {
     /*
     Remove last char of interval
     Check to make sure it's valid letter (s, m, h, d)
     Calculate the number of days between start and end
     Check the interval makes sense for the days to limit retured data
      */
+
+    let aggregationStages = {};
+    aggregationStages.match = {
+        'tag.full': {$in: tags},
+        timestamp: {'$gte': dates.start.toDate(), '$lt': dates.end.toDate()}
+    };
+    aggregationStages.group = {
+        '_id': {
+            'tag': '$tag.full',
+            'year': {'$year': '$timestamp'},
+            'month': {'$month': '$timestamp'},
+            'day': {'$dayOfMonth': '$timestamp'},
+            'hour': {
+                '$subtract': [
+                    {'$hour': '$timestamp' },
+                    {'$mod': [ {'$hour': '$timestamp'}, 1 ]}
+                ]
+            }
+        },
+        'unit': {'$first': '$data.unit'},
+        'count': {'$sum': 1},
+        'min': {'$min': '$data.values.min'},
+        'max': {'$max': '$data.values.max'},
+        'mean': {'$avg': '$data.values.average'},
+        'first': {'$first': '$data.values.average'},
+        'last': {'$last': '$data.values.average'},
+        'sum': {'$sum': '$data.values.average'},
+        'median': {'$push': '$data.values.average'}
+    };
+    aggregationStages.sort = {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1, '_id.second': 1};
+    aggregationStages.project = {
+        'tag': '$_id.tag',
+        'date': {'$dateFromParts': {'year': '$_id.year', 'month': '$_id.month', 'day': '$_id.day', 'hour': '$_id.hour'}},
+        'data.unit': '$unit',
+        'data.count': '$count',
+        'data.values': '$median',
+        'data.summary.first': '$first',
+        'data.summary.last': '$last',
+        'data.summary.min': '$min',
+        'data.summary.max': '$max',
+        'data.summary.mean': '$mean',
+        'data.summary.median': {
+            '$cond': {
+                'if': {
+                    '$eq': [ {$mod: [ {$size: '$median'}, 2 ]}, 0 ]
+                },
+                'then': {
+                    $avg: [
+                        {$arrayElemAt: [ '$median', {$subtract:[ {$divide: [ {$size:'$median'}, 2 ]}, 1 ]} ]},
+                        {$arrayElemAt: [ '$median', {$divide: [ {$size:'$median'}, 2 ]} ]}
+                    ]
+                },
+                'else': {
+                    $arrayElemAt: [ '$median', {$floor : {$divide: [ {$size: '$median'}, 2 ]}} ]
+                }
+            }
+        },
+        'data.summary.sum': '$sum',
+        '_id': 0
+    };
 }
 
 function getTelemetryGroupStatement(start, end) {
@@ -182,66 +242,7 @@ exports.getSummarizedTelemetry = function(req, res) {
 
     let tags = req.query.tags.split(',');
 
-    let aggregationStages = {};
-    aggregationStages.match = {
-        'tag.full': {$in: tags},
-        timestamp: {'$gte': dates.start.toDate(), '$lt': dates.end.toDate()}
-    };
-    aggregationStages.group = {
-        '_id': {
-            'tag': '$tag.full',
-            'year': {'$year': '$timestamp'},
-            'month': {'$month': '$timestamp'},
-            'day': {'$dayOfMonth': '$timestamp'},
-            'hour': {
-                '$subtract': [
-                    {'$hour': '$timestamp' },
-                    {'$mod': [ {'$hour': '$timestamp'}, 1 ]}
-                ]
-            }
-        },
-        'unit': {'$first': '$data.unit'},
-        'count': {'$sum': 1},
-        'min': {'$min': '$data.values.min'},
-        'max': {'$max': '$data.values.max'},
-        'mean': {'$avg': '$data.values.average'},
-        'first': {'$first': '$data.values.average'},
-        'last': {'$last': '$data.values.average'},
-        'sum': {'$sum': '$data.values.average'},
-        'median': {'$push': '$data.values.average'}
-    };
-    aggregationStages.sort = {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1, '_id.second': 1};
-    aggregationStages.project = {
-        'tag': '$_id.tag',
-        'date': {'$dateFromParts': {'year': '$_id.year', 'month': '$_id.month', 'day': '$_id.day', 'hour': '$_id.hour'}},
-        'data.unit': '$unit',
-        'data.count': '$count',
-        'data.values': '$median',
-        'data.summary.first': '$first',
-        'data.summary.last': '$last',
-        'data.summary.min': '$min',
-        'data.summary.max': '$max',
-        'data.summary.mean': '$mean',
-        'data.summary.median': {
-            '$cond': {
-                'if': {
-                    '$eq': [ {$mod: [ {$size: '$median'}, 2 ]}, 0 ]
-                },
-                'then': {
-                    $avg: [
-                        {$arrayElemAt: [ '$median', {$subtract:[ {$divide: [ {$size:'$median'}, 2 ]}, 1 ]} ]},
-                        {$arrayElemAt: [ '$median', {$divide: [ {$size:'$median'}, 2 ]} ]}
-                    ]
-                },
-                'else': {
-                    $arrayElemAt: [ '$median', {$floor : {$divide: [ {$size: '$median'}, 2 ]}} ]
-                }
-            }
-        },
-        'data.summary.sum': '$sum',
-        '_id': 0
-    };
-
+    let aggregationStages = getSummaryStages(tags, dates, intervalGroup);
 
     res.set({
         'Content-Type': 'application/json',
