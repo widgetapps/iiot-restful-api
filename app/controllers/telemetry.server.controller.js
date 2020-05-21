@@ -188,6 +188,8 @@ exports.getSummarizedTelemetry = function(req, res) {
     let intervalGroup = {};
     intervalGroup.group    = interval[interval.length - 1];
     intervalGroup.interval = parseInt(interval.substring(0, interval.length - 1));
+
+    res.json(intervalGroup);
 };
 
 exports.getAggregatedTelemetry = function(req, res) {
