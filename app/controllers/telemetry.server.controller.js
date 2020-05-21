@@ -120,7 +120,7 @@ function getSummaryStages(tags, dates, intervalGroup, includeValues) {
     };
 
     if (includeValues) {
-        aggregationStages.project.data.values = '$median';
+        aggregationStages.project.data= {'values': '$median'};
     }
 
     return aggregationStages;
