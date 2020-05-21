@@ -20,7 +20,9 @@ function getSummaryStages(tags, dates, intervalGroup) {
     Check the interval makes sense for the days to limit retured data
      */
 
-    let diff, interval;
+    let diff, dateParts;
+
+    let interval = intervalGroup.interval;
     let aggregationStages = {};
     aggregationStages.match = {
         'tag.full': {$in: tags},
@@ -46,8 +48,7 @@ function getSummaryStages(tags, dates, intervalGroup) {
 
     switch (intervalGroup.group) {
         case 'd':
-            diff = dates.end.diff(dates.start, 'days');
-            interval = intervalGroup.interval;
+            dateParts = {'year': '$_id.year', 'month': '$_id.month', 'day': '$_id.day'};
             aggregationStages.group._id.day = {
                 '$subtract': [
                     {'$dayOfMonth': '$timestamp'},
@@ -56,8 +57,7 @@ function getSummaryStages(tags, dates, intervalGroup) {
             };
             break;
         case 'h':
-            diff = dates.end.diff(dates.start, 'hours');
-            interval = intervalGroup.interval;
+            dateParts = {'year': '$_id.year', 'month': '$_id.month', 'day': '$_id.day', 'hour': '$_id.hour'};
             aggregationStages.group._id.hour = {
                 '$subtract': [
                     {'$hour': '$timestamp'},
@@ -66,19 +66,15 @@ function getSummaryStages(tags, dates, intervalGroup) {
             };
             break;
         case 'm':
-            diff = dates.end.diff(dates.start, 'minutes');
-            interval = diff * intervalGroup.interval;
             break;
         case 's':
-            diff = dates.end.diff(dates.start, 'seconds');
-            interval = diff * intervalGroup.interval;
             break;
     }
 
     aggregationStages.sort = {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1, '_id.second': 1};
     aggregationStages.project = {
         'tag': '$_id.tag',
-        'date': {'$dateFromParts': {'year': '$_id.year', 'month': '$_id.month', 'day': '$_id.day', 'hour': '$_id.hour'}},
+        'date': {'$dateFromParts': dateParts},
         'data.unit': '$unit',
         'data.count': '$count',
         'data.values': '$median',
