@@ -79,6 +79,8 @@ function getSummaryStages(tags, dates, intervalGroup) {
         'data.summary.sum': '$sum',
         '_id': 0
     };
+
+    return aggregationStages;
 }
 
 function getTelemetryGroupStatement(start, end) {
