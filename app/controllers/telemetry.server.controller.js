@@ -20,6 +20,7 @@ function getSummaryStages(tags, dates, intervalGroup) {
     Check the interval makes sense for the days to limit retured data
      */
 
+    let diff, interval;
     let aggregationStages = {};
     aggregationStages.match = {
         'tag.full': {$in: tags},
@@ -30,13 +31,7 @@ function getSummaryStages(tags, dates, intervalGroup) {
             'tag': '$tag.full',
             'year': {'$year': '$timestamp'},
             'month': {'$month': '$timestamp'},
-            'day': {'$dayOfMonth': '$timestamp'},
-            'hour': {
-                '$subtract': [
-                    {'$hour': '$timestamp' },
-                    {'$mod': [ {'$hour': '$timestamp'}, 1 ]}
-                ]
-            }
+            'day': {'$dayOfMonth': '$timestamp'}
         },
         'unit': {'$first': '$data.unit'},
         'count': {'$sum': 1},
@@ -48,6 +43,38 @@ function getSummaryStages(tags, dates, intervalGroup) {
         'sum': {'$sum': '$data.values.average'},
         'median': {'$push': '$data.values.average'}
     };
+
+    switch (intervalGroup.group) {
+        case 'd':
+            diff = dates.end.diff(dates.start, 'days');
+            interval = diff * intervalGroup.interval;
+            aggregationStages.group._id.day = {
+                '$subtract': [
+                    {'$dayOfMonth': '$timestamp'},
+                    {'$mod': [{'$dayOfMonth': '$timestamp'}, interval]}
+                ]
+            };
+            break;
+        case 'h':
+            diff = dates.end.diff(dates.start, 'hours');
+            interval = diff * intervalGroup.interval;
+            aggregationStages.group._id.hour = {
+                '$subtract': [
+                    {'$hour': '$timestamp'},
+                    {'$mod': [{'$hour': '$timestamp'}, interval]}
+                ]
+            };
+            break;
+        case 'm':
+            diff = dates.end.diff(dates.start, 'minutes');
+            interval = diff * intervalGroup.interval;
+            break;
+        case 's':
+            diff = dates.end.diff(dates.start, 'seconds');
+            interval = diff * intervalGroup.interval;
+            break;
+    }
+
     aggregationStages.sort = {'_id.year': 1, '_id.month': 1, '_id.day': 1, '_id.hour': 1, '_id.minute': 1, '_id.second': 1};
     aggregationStages.project = {
         'tag': '$_id.tag',
@@ -241,6 +268,14 @@ exports.getSummarizedTelemetry = function(req, res) {
     let intervalGroup = {};
     intervalGroup.group    = interval[interval.length - 1];
     intervalGroup.interval = parseInt(interval.substring(0, interval.length - 1));
+
+    if (!_.contain(['s', 'm', 'h', 'd'], intervalGroup.group)) {
+        res.status(400).send({
+            message: 'Invalid interval group (s, m, h, d).'
+        });
+
+        return;
+    }
 
     let tags = req.query.tags.split(',');
 
