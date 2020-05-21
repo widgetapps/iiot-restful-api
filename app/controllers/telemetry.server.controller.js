@@ -187,6 +187,29 @@ exports.getSummarizedTelemetry = function(req, res) {
         'tag.full': {$in: tags},
         timestamp: {'$gte': dates.start.toDate(), '$lt': dates.end.toDate()}
     };
+    aggregationStages.group = {
+        '_id': {
+            'tag': '$tag.full',
+            'year': {'$year': '$timestamp'},
+            'month': {'$month': '$timestamp'},
+            'day': {'$dayOfMonth': '$timestamp'},
+            'hour': {
+                '$subtract': [
+                    {'$hour': '$timestamp' },
+                    {'$mod': [ {'$hour': '$timestamp'}, 1 ]}
+                ]
+            }
+        },
+        'unit': {'$first': '$data.unit'},
+        'count': {'$sum': 1},
+        'min': {'$min': '$data.values.min'},
+        'max': {'$max': '$data.values.max'},
+        'mean': {'$avg': '$data.values.average'},
+        'first': {'$first': '$data.values.average'},
+        'last': {'$last': '$data.values.average'},
+        'sum': {'$sum': '$data.values.average'},
+        'median': {'$push': '$data.values.average'}
+    };
 
 
     res.set({
@@ -196,7 +219,8 @@ exports.getSummarizedTelemetry = function(req, res) {
     });
 
     Telemetry.aggregate([
-        {'$match': aggregationStages.match}
+        {'$match': aggregationStages.match},
+        {'$group': aggregationStages.group}
     ]).cursor().exec().pipe(JSONStream.stringify()).pipe(res);
 };
 
