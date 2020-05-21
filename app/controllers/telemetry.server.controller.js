@@ -66,8 +66,25 @@ function getSummaryStages(tags, dates, intervalGroup) {
             };
             break;
         case 'm':
+            dateParts = {'year': '$_id.year', 'month': '$_id.month', 'day': '$_id.day', 'hour': '$_id.hour', 'minute': '$_id.minute'};
+            aggregationStages.group._id.hour = { '$hour': '$timestamp' };
+            aggregationStages.group._id.minute = {
+                '$subtract': [
+                    {'$minute': '$timestamp'},
+                    {'$mod': [{'$minute': '$timestamp'}, interval]}
+                ]
+            };
             break;
         case 's':
+            dateParts = {'year': '$_id.year', 'month': '$_id.month', 'day': '$_id.day', 'hour': '$_id.hour', 'minute': '$_id.minute', 'second': '$_id.second'};
+            aggregationStages.group._id.hour = { '$hour': '$timestamp' };
+            aggregationStages.group._id.minute = { '$minute': '$timestamp' };
+            aggregationStages.group._id.second = {
+                '$subtract': [
+                    {'$second': '$timestamp'},
+                    {'$mod': [{'$second': '$timestamp'}, interval]}
+                ]
+            };
             break;
     }
 
