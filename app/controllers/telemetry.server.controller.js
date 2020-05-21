@@ -47,7 +47,7 @@ function getSummaryStages(tags, dates, intervalGroup) {
     switch (intervalGroup.group) {
         case 'd':
             diff = dates.end.diff(dates.start, 'days');
-            interval = diff * intervalGroup.interval;
+            interval = intervalGroup.interval;
             aggregationStages.group._id.day = {
                 '$subtract': [
                     {'$dayOfMonth': '$timestamp'},
@@ -57,7 +57,7 @@ function getSummaryStages(tags, dates, intervalGroup) {
             break;
         case 'h':
             diff = dates.end.diff(dates.start, 'hours');
-            interval = diff * intervalGroup.interval;
+            interval = intervalGroup.interval;
             aggregationStages.group._id.hour = {
                 '$subtract': [
                     {'$hour': '$timestamp'},
