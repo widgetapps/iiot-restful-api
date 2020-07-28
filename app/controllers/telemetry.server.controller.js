@@ -37,13 +37,13 @@ function getSummaryStages(tags, dates, intervalGroup, includeValues) {
         },
         'unit': {'$first': '$data.unit'},
         'count': {'$sum': 1},
-        'min': {'$min': '$data.values.min'},
-        'max': {'$max': '$data.values.max'},
-        'mean': {'$avg': '$data.values.average'},
-        'first': {'$first': '$data.values.average'},
-        'last': {'$last': '$data.values.average'},
-        'sum': {'$sum': '$data.values.average'},
-        'median': {'$push': '$data.values.average'}
+        'min': {'$min': {'$ifNull': ['$data.values.min', '$data.values.point']}},
+        'max': {'$max': {'$ifNull': ['$data.values.max', '$data.values.point']}},
+        'mean': {'$avg': {'$ifNull': ['$data.values.average', '$data.values.point']}},
+        'first': {'$first': {'$ifNull': ['$data.values.average', '$data.values.point']}},
+        'last': {'$last': {'$ifNull': ['$data.values.average', '$data.values.point']}},
+        'sum': {'$sum': {'$ifNull': ['$data.values.average', '$data.values.point']}},
+        'median': {'$push': {'$ifNull': ['$data.values.average', '$data.values.point']}}
     };
 
     switch (intervalGroup.group) {
