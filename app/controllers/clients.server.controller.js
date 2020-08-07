@@ -342,7 +342,7 @@ exports.listTagsGrouped = function(req, res) {
 
     Tag.aggregate([
         { $match: {client: clientId, active: true} },
-        { $sort: { '$tag.sensorTagCode': 1}},
+        { $sort: { 'tag.sensorTagCode': 1}},
         { $group : {
                 _id : '$tag.assetTagCode',
                 location: {'$first': '$tag.locationTagCode'},
