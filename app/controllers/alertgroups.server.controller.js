@@ -55,7 +55,7 @@ exports.insert = function(req, res) {
                 return;
             }
 
-            res.json(client.alertGroups);
+            res.json(client.alertGroups[client.alertGroups.length - 1]);
         });
     });
 };
