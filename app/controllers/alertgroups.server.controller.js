@@ -89,10 +89,12 @@ exports.update = function(req, res) {
     // TODO: Need to validate phone numbers with google-libphonenumber for E.164 formatting
     getClient(req, res, function (client) {
         let updatedAlertGroups = [];
+        let updatedGroup;
 
         _.forEach(client.alertGroups, function (alertGroup) {
             if (alertGroup.code === req.params.code) {
-                updatedAlertGroups.push(_.assignIn(alertGroup, req.body));
+                updatedGroup = _.assignIn(alertGroup, req.body);
+                updatedAlertGroups.push(updatedGroup);
             } else {
                 updatedAlertGroups.push(alertGroup);
             }
@@ -101,7 +103,7 @@ exports.update = function(req, res) {
         client.alertGroups = updatedAlertGroups;
 
         client.save(function(err, updatedClient) {
-            res.json(updatedClient.alertGroups);
+            res.json(updatedGroup);
         });
     });
 };
