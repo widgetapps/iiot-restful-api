@@ -100,10 +100,8 @@ exports.update = function(req, res) {
 
         client.alertGroups = updatedAlertGroups;
 
-        client.save(function(err, client) {
-            res.status(200).send({
-                message: 'Alert groups have been updated.'
-            });
+        client.save(function(err, updatedClient) {
+            res.json(updatedClient.alertGroups);
         });
     });
 };
