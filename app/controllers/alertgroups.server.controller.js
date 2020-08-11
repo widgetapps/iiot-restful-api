@@ -140,7 +140,10 @@ exports.remove = function(req, res) {
         client.alertGroups = updatedAlertGroups;
 
         client.save(function(err, newClient) {
-            res.json(client.alertGroups);
+            res.json({
+                message: 'The alert code has been deleted.',
+                code: req.params.code
+            });
         });
     });
 };
