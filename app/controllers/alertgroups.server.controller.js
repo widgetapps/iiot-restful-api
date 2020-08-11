@@ -3,7 +3,7 @@
 /**
  * Module dependencies.
  */
-var mongoose = require('mongoose'),
+let mongoose = require('mongoose'),
     authorize = require('../lib/authorize.server.lib'),
     Client = require('@terepac/terepac-models').Client,
     _ = require('lodash'),
@@ -31,6 +31,16 @@ exports.insert = function(req, res) {
             });
             return;
         }
+
+        // Make sure the code is unique for this client
+        _.forEach(client.alertGroups, function (alertGroup) {
+            if (alertGroup.code === req.body.code) {
+                res.status(400).send({
+                    message: 'Alert group code already exists.'
+                });
+                return;
+            }
+        });
 
         if (!req.body.name || req.body.name === '') {
             res.status(400).send({
@@ -78,7 +88,7 @@ exports.get = function(req, res) {
 exports.update = function(req, res) {
     // TODO: Need to validate phone numbers with google-libphonenumber for E.164 formatting
     getClient(req, res, function (client) {
-        var updatedAlertGroups = [];
+        let updatedAlertGroups = [];
 
         _.forEach(client.alertGroups, function (alertGroup) {
             if (alertGroup.code === req.params.code) {
@@ -100,9 +110,9 @@ exports.update = function(req, res) {
 
 exports.remove = function(req, res) {
     getClient(req, res, function (client) {
-        var updatedAlertGroups = [];
-        var code = req.params.code;
-        var isId = false;
+        let updatedAlertGroups = [];
+        let code = req.params.code;
+        let isId = false;
 
         try {
             code = mongoose.Types.ObjectId(code);
@@ -140,7 +150,7 @@ function getClient(req, res, callback) {
 
     authorize.validate(endpoint, req, res, 'user', function() {
 
-        var authorized = false;
+        let authorized = false;
 
         // Make sure the user is allowed see the client
         switch (req.user.role) {
@@ -165,7 +175,7 @@ function getClient(req, res, callback) {
             return;
         }
 
-        var clientId = mongoose.Types.ObjectId(req.params.id);
+        let clientId = mongoose.Types.ObjectId(req.params.id);
 
         Client.findOne(
             { _id: clientId }, function(err, client) {
