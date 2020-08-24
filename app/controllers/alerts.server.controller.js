@@ -126,14 +126,14 @@ exports.update = function(req, res) {
 
             alert = _.assignIn(alert, req.body);
 
-            alert.save(function(err, newAlert) {
+            alert.save(function(err, updatedAlert) {
                 if (err){
                     res.status(400).send({
                         message: 'Error saving alert.'
                     });
                 }
 
-                res.json(newAlert);
+                res.json(updatedAlert);
             });
 
         }
@@ -158,7 +158,8 @@ exports.remove = function(req, res) {
             }
 
             res.status(200).send({
-                message: 'Alert has been deleted.'
+                message: 'Alert has been deleted.',
+                id: alert._id
             });
         }
     );
