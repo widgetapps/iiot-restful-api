@@ -58,7 +58,7 @@ exports.changePassword = function(req, res) {
 
     var promise = User.findOne({ _id:  mongoose.Types.ObjectId(req.params.id) }).exec();
     promise.then(function (user) {
-        user.pasword = req.body.password;
+        user.password = req.body.password;
 
         user.save(function (err, user) {
             if (err) {
