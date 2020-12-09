@@ -69,35 +69,44 @@ exports.insert = function(req, res) {
                 message: 'Error inserting the device: ' + err
             });
         } else {
-            let mydb = mysql.createConnection(config.authdb);
+            /**
+             * If this is a hydrant device, save the MQTT auth record to MySQL
+             */
+            if (req.params.type === 'hydrant2' || req.params.type === 'hydrant4') {
+                let mydb = mysql.createConnection(config.authdb);
 
-            mydb.connect(function(err) {
-                if (err) {
-                    res.status(400).send({
-                        message: 'The device was added but there was an error connecting to the MQTT AUTH database: ' + err,
-                        _id: d._id
-                    });
-                }
-
-                let sql = 'INSERT INTO mqtt_user (username, password) VALUES (?, ?)';
-                let values = [
-                    req.body['mqtt-username'],
-                    crypto.createHash('sha256').update(req.body['mqtt-password']).digest('hex')
-                ];
-
-                mydb.query(sql, values, function (err, result) {
+                mydb.connect(function(err) {
                     if (err) {
                         res.status(400).send({
-                            message: 'The device was added but there was an error saving the device MQTT credentials: ' + err,
+                            message: 'The device was added but there was an error connecting to the MQTT AUTH database: ' + err,
                             _id: d._id
                         });
                     }
 
-                    res.status(200).send({
-                        _id: d._id
+                    let sql = 'INSERT INTO mqtt_user (username, password) VALUES (?, ?)';
+                    let values = [
+                        req.body['mqtt-username'],
+                        crypto.createHash('sha256').update(req.body['mqtt-password']).digest('hex')
+                    ];
+
+                    mydb.query(sql, values, function (err, result) {
+                        if (err) {
+                            res.status(400).send({
+                                message: 'The device was added but there was an error saving the device MQTT credentials: ' + err,
+                                _id: d._id
+                            });
+                        }
+
+                        res.status(200).send({
+                            _id: d._id
+                        });
                     });
                 });
-            });
+            } else {
+                res.status(200).send({
+                    _id: d._id
+                });
+            }
         }
     });
 };
@@ -166,7 +175,12 @@ exports.remove = function(req, res) {
 
             let assetId = device.asset;
 
-            if (device.client.toString() === '5c55bb32e46c3b302f4d2bd8' && (!assetId || device.asset === null)) {
+            /**
+             * If the device is assigned to the factory...
+             * DWS Factory ID: 5c55bb32e46c3b302f4d2bd8
+             * Dapagee Factory ID: 5fd10f7bd22e5044360b33b6
+             **/
+            if ((device.client.toString() === '5c55bb32e46c3b302f4d2bd8' || device.client.toString() === '5fd10f7bd22e5044360b33b6') && (!assetId || device.asset === null)) {
                 device.remove(function (err, deletedDevice) {
                     if (err) {
                         res.status(500).send({
@@ -175,31 +189,37 @@ exports.remove = function(req, res) {
                         return;
                     }
 
-                    let mydb = mysql.createConnection(config.authdb);
+                    if (device.type === 'hydrant') {
+                        let mydb = mysql.createConnection(config.authdb);
 
-                    mydb.connect(function(err) {
-                        if (err) {
-                            res.status(400).send({
-                                message: 'The device has been deleted but there was an error connecting to the MQTT AUTH database: ' + err
-                            });
-                        }
-
-                        let sql = 'DELETE FROM mqtt_user WHERE username = ?';
-                        let values = [
-                            req.params.serialNumber
-                        ];
-
-                        mydb.query(sql, values, function (err, result) {
+                        mydb.connect(function(err) {
                             if (err) {
                                 res.status(400).send({
-                                    message: 'Error updating password: ' + err
+                                    message: 'The device has been deleted but there was an error connecting to the MQTT AUTH database: ' + err
                                 });
                             }
-                            res.json({
-                                message: 'The device has been deleted.'
+
+                            let sql = 'DELETE FROM mqtt_user WHERE username = ?';
+                            let values = [
+                                req.params.serialNumber
+                            ];
+
+                            mydb.query(sql, values, function (dberr, result) {
+                                if (dberr) {
+                                    res.status(400).send({
+                                        message: 'The device has been deleted, but there was an error deleting MQTT auth record: ' + dberr
+                                    });
+                                }
+                                res.json({
+                                    message: 'The device has been deleted.'
+                                });
                             });
                         });
-                    });
+                    } else {
+                        res.json({
+                            message: 'The device has been deleted.'
+                        });
+                    }
                 });
             } else {
                 res.status(400).send({

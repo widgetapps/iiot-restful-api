@@ -202,7 +202,12 @@ exports.onboard = function(req, res) {
             return;
         }
 
-        if (device.client.toString() === '5c55bb32e46c3b302f4d2bd8') {
+        /**
+         * If the device is assigned to the factory...
+         * DWS Factory ID: 5c55bb32e46c3b302f4d2bd8
+         * Dapagee Factory ID: 5fd10f7bd22e5044360b33b6
+         **/
+        if (device.client.toString() === '5c55bb32e46c3b302f4d2bd8' || device.client.toString() === '5fd10f7bd22e5044360b33b6') {
 
             if (device.asset && (device.asset !== null || device.asset !=='')) {
                 res.status(400).send({
@@ -275,12 +280,22 @@ exports.offboard = function(req, res) {
             return;
         }
 
-        device.client = mongoose.Types.ObjectId('5c55bb32e46c3b302f4d2bd8');
+        /**
+         * Assign back to the relevant factory...
+         * DWS Factory ID: 5c55bb32e46c3b302f4d2bd8
+         * Dapagee Factory ID: 5fd10f7bd22e5044360b33b6
+         **/
+        if (device.type === 'hydrant') {
+            device.client = mongoose.Types.ObjectId('5c55bb32e46c3b302f4d2bd8');
+        } else {
+            device.client = mongoose.Types.ObjectId('5fd10f7bd22e5044360b33b6');
+        }
+
         device.location = null;
 
         device.save(function (err, updatedDevice) {
             res.json({
-                message: 'The device is now assigned to the factory.'
+                message: 'The ' + device.type + ' is now assigned to the factory.'
             });
         });
     });
