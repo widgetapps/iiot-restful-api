@@ -366,32 +366,38 @@ exports.listTagsGrouped = function(req, res) {
 
 exports.listLocations = function(req, res) {
     authorize.validate(endpoint, req, res, 'user', function() {
-        var query;
 
+        let authorized = false;
+
+        // Make sure the user is allowed see the client
         switch (req.user.role) {
             case 'user':
-                query = {
-                    client: req.user.client
-                };
+                if (req.user.client === req.params.id) {
+                    authorized = true;
+                }
                 break;
             case 'manufacturer':
             case 'manager':
             case 'admin':
-                query = {
-                    $or: [{client: req.user.client}, {resellerClients: req.user.client}]
-                };
+                if (req.user.client === req.params.id || _.includes(req.user.resellerClients, req.params.id)) {
+                    authorized = true;
+                }
                 break;
             case 'super':
-                query = {};
+                authorized = true;
                 break;
-            default:
-                res.status(401).send({
-                    message: 'You are not authorized to access this resource.'
-                });
-                return;
         }
 
-        Location.find( query, {
+        if (!authorized) {
+            res.status(401).send({
+                message: 'You are not authorized to access this resource.'
+            });
+            return;
+        }
+
+        let clientId = mongoose.Types.ObjectId(req.params.id);
+
+        Location.find( { client: clientId }, {
                 tagCode: 1,
                 description: 1,
                 geolocation: 1,
