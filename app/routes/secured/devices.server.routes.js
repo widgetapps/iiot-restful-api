@@ -4,6 +4,9 @@ module.exports = function(app) {
 	// Root routing
     const devices = require('../../../app/controllers/devices.server.controller');
 
+    app.route('/devices/hydrants/')
+        .get(devices.getHydrants);
+
     app.route('/devices/:deviceId')
         .get(devices.getOne)
         .put(devices.updateDevice);
@@ -20,7 +23,4 @@ module.exports = function(app) {
     app.route('/devices/:deviceId/onboard/:clientId')
         .post(devices.onboard)
         .put(devices.onboard);
-
-    app.route('/devices/hydrants')
-        .get(devices.getHydrants);
 };
