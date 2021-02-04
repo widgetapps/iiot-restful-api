@@ -124,7 +124,8 @@ exports.getHydrants = function(req, res) {
         .exec(function(err, hydrants) {
             if (err) {
                 res.status(500).send({
-                    message: 'Database error.'
+                    message: 'Database error.',
+                    error: err
                 });
                 return;
             }
