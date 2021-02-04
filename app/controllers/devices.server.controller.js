@@ -75,6 +75,45 @@ exports.getHydrants = function(req, res) {
     let authorized = false;
 
     switch (req.user.role) {
+        case 'super':
+            authorized = true;
+            break;
+    }
+
+    if (!authorized) {
+        res.status(401).send({
+            message: 'You are not authorized to access this resource.'
+        });
+        return;
+    }
+
+    Device.find({type: 'hydrant'}, {
+        'serialNumber': 1,
+        'asset': 1
+    })
+        .populate('asset', {
+            '_id': 1,
+            'tagCode': 1,
+            'name': 1,
+            'description': 1
+        })
+        .exec(function(err, hydrants) {
+            if (err) {
+                res.status(500).send({
+                    message: 'Database error.',
+                    error: err
+                });
+                return;
+            }
+
+            res.json(hydrants);
+        });
+};
+
+exports.getResetEndpoints = function(req, res) {
+    let authorized = false;
+
+    switch (req.user.role) {
         case 'manufacturer':
         case 'super':
             authorized = true;

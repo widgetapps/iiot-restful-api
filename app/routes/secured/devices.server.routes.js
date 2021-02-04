@@ -7,6 +7,9 @@ module.exports = function(app) {
     app.route('/devices/hydrants/')
         .get(devices.getHydrants);
 
+    app.route('/devices/hydrants/getresetendpoints')
+        .get(devices.getResetEndpoints);
+
     app.route('/devices/:deviceId')
         .get(devices.getOne)
         .put(devices.updateDevice);
