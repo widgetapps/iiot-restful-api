@@ -171,7 +171,13 @@ exports.getResetEndpoints = function(req, res) {
                 return;
             }
 
-            res.json(hydrants);
+            let endpoints = [];
+
+            _.forEach(hydrants, function (hydrant) {
+                endpoints.push('{{endpoint}}/assets/' + hydrant._id + '/settings/resend');
+            });
+
+            res.json(endpoints);
         });
 };
 
