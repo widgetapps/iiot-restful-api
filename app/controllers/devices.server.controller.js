@@ -174,7 +174,7 @@ exports.getResetEndpoints = function(req, res) {
             let endpoints = [];
 
             _.forEach(hydrants, function (hydrant) {
-                endpoints.push('{{endpoint}}/assets/' + hydrant._id + '/settings/resend');
+                endpoints.push('{{endpoint}}/assets/' + hydrant.asset._id + '/settings/resend');
             });
 
             res.json(endpoints);
