@@ -150,7 +150,10 @@ exports.getResetEndpoints = function(req, res) {
         return;
     }
 
-    Device.find({type: 'hydrant'}, {
+    Device.find({
+        type: 'hydrant',
+        asset: {$ne: null}
+    }, {
         'serialNumber': 1,
         'asset': 1
     })
