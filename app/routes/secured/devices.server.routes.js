@@ -20,4 +20,7 @@ module.exports = function(app) {
     app.route('/devices/:deviceId/onboard/:clientId')
         .post(devices.onboard)
         .put(devices.onboard);
+
+    app.route('/devices/hydrants')
+        .get(devices.getHydrants);
 };
