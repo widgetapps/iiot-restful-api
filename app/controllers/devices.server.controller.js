@@ -152,36 +152,12 @@ exports.getResetEndpoints = function(req, res) {
 
     Device.find({type: 'hydrant'}, {
         'serialNumber': 1,
-        'topicId': 1,
-        'description': 1,
-        'lastTransmission': 1,
-        'sensors': 1,
-        'client': 1,
-        'asset': 1,
-        'location': 1
+        'asset': 1
     })
-        .populate('sensors', {
-            'tagCode': 1,
-            'type': 1,
-            'typeString': 1,
-            'description': 1,
-            'unit': 1
-        })
-        .populate('client', {
-            'tagCode': 1,
-            'companyName': 1,
-            'address': 1,
-            'contact': 1
-        })
         .populate('asset', {
             'tagCode': 1,
             'name': 1,
             'description': 1
-        })
-        .populate('location', {
-            'tagCode': 1,
-            'description': 1,
-            'geolocation.coordinates': 1
         })
         .exec(function(err, hydrants) {
             if (err) {
